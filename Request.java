@@ -20,4 +20,4 @@ public abstract class Request { //actually why abstract? what are some unimpleme
 	  public void getRequestDate(int requestDate) {
 	    this.requestDate = requestDate;
 	  }
-}
+}//hhh
