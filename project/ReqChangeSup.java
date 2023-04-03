@@ -5,15 +5,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class ReqChangeTitle extends Request{
+public class ReqChangeSup extends Request{
 	private String supID;
-	private String newProjTitle;
+	private String newSupID;
 	
-	public ReqChangeTitle(boolean approvalStatus, String studentID, String projTitle, String supID, String newProjTitle){
+	public ReqChangeSup(boolean approvalStatus, String studentID, String projTitle, String supID, String newSupID){
 		super(approvalStatus, studentID, projTitle);
-		this.setType(RequestType.ReqChangeTitle);
+		this.setType(RequestType.ReqChangeSup);
 		this.supID = supID;
-		this.newProjTitle = newProjTitle;
+		this.newSupID = newSupID;
 	}
 	
 	public String getSupID() {
@@ -22,22 +22,22 @@ public class ReqChangeTitle extends Request{
 	public void setSupID(String supID) {
 		this.supID = supID;
 	}
-	public String getNewProjTitle() {
-		return newProjTitle;
+	public String getNewSupID() {
+		return newSupID;
 	}
-	public void setNewProjTitle(String newProjTitle) {
-		this.newProjTitle = newProjTitle;
+	public void setNewSupID(String newSupID) {
+		this.newSupID = newSupID;
 	}
 	
 	public void addRequest()
 	{
-		final String FILENAME = "C:\\Users\\ryank\\Downloads\\request.csv";
-		try (FileWriter fw = new FileWriter(FILENAME, true);
+		Filepath f = new Filepath();
+		try (FileWriter fw = new FileWriter(f.getPath(), true);
 	             BufferedWriter bw = new BufferedWriter(fw);
 	             PrintWriter out = new PrintWriter(bw)) 
 		{
 	            // Add a new row to the bottom of the file
-	            out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supID,this.newProjTitle).println();
+	            out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supID,this.newSupID).println();
 	            System.out.println("Data appended to file successfully!");
 
         } catch (IOException e) 

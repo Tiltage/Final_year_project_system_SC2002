@@ -1,4 +1,5 @@
 package OOP;
+import project.*;
 
 public class Supervisor extends User {
 	
@@ -22,8 +23,8 @@ public class Supervisor extends User {
 	
 	public void viewReqHist() {}
 	
-	public ReqChangeTitle approveReq() {
-		return null;
+	public ReqChangeTitle approveReq(ReqChangeTitle r) {
+		return r;
 		}
 	
 	

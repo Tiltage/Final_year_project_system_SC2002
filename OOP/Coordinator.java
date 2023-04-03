@@ -1,11 +1,13 @@
 package OOP;
 
+import project.*;
+
 public class Coordinator extends Supervisor {
 	
 	public Coordinator() {}
 	
-	public ReqChangeSup approveReq() {
-		return null;
+	public ReqChangeSup approveReq(ReqChangeSup r) {
+		return r;
 	}
 	
 	public void viewAllProjs() {}

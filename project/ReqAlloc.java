@@ -5,17 +5,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class ReqDeregister extends Request{
+public class ReqAlloc extends Request{
 
-	public ReqDeregister(boolean approvalStatus, String studentID, String projTitle){
+	public ReqAlloc(boolean approvalStatus, String studentID, String projTitle){
 		super(approvalStatus, studentID, projTitle);
-		this.setType(RequestType.ReqDeregister);
+		this.setType(RequestType.ReqAlloc);
 	}
 	
 	public void addRequest()
 	{
-		final String FILENAME = "C:\\Users\\ryank\\Downloads\\request.csv";
-		try (FileWriter fw = new FileWriter(FILENAME, true);
+		Filepath f = new Filepath();
+		try (FileWriter fw = new FileWriter(f.getPath(), true);
 	             BufferedWriter bw = new BufferedWriter(fw);
 	             PrintWriter out = new PrintWriter(bw)) 
 		{
