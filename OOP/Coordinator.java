@@ -4,7 +4,10 @@ import project.*;
 
 public class Coordinator extends Supervisor {
 	
-	public Coordinator() {}
+	public Coordinator() 
+	{
+		
+	}
 	
 	public ReqChangeSup approveReq(ReqChangeSup r) {
 		return r;

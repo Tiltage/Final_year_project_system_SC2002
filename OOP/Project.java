@@ -11,7 +11,22 @@ public class Project {
 	private String projTitle;
 	private Status status;
 	
-	
+	public Project(String studentID, String studentEmail, int projID, String supervisorName, String supervisorEmail,
+			String projTitle, Status status) 
+	{
+		this.studentID = studentID;
+		this.studentEmail = studentEmail;
+		this.projID = projID;
+		this.supervisorName = supervisorName;
+		this.supervisorEmail = supervisorEmail;
+		this.projTitle = projTitle;
+		this.status = status;
+	}
+
+	public Project(String string) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getStudentID() {
 		return studentID;
 	}
