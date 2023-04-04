@@ -1,3 +1,5 @@
+package Main;
+
 public class Coordinator extends Supervisor {
 	
 	public Coordinator() 

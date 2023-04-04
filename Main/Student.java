@@ -1,4 +1,4 @@
-
+package Main;
 
 public class Student extends User{
 	

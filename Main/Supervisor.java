@@ -1,5 +1,4 @@
-package OOP;
-import project.*;
+package Main;
 import java.io.*;
 import java.util.*;
 

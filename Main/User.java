@@ -1,4 +1,4 @@
-
+package Main;
 
 public abstract class User {
 	
