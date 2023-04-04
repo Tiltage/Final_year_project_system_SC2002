@@ -17,6 +17,17 @@ public class Request {
 		this.projTitle = projTitle;
 	}
 	
+	public void addRequest()
+	{
+		//To be overridden in inherited classes
+	}
+	
+	public void updateRequest(boolean status)
+	{
+		//Iterate through request csv file to identify line to edit approvalStatus. 
+		//While addRequest needed to be overridden, this one probably does not.
+	}
+	
 	public boolean isApprovalStatus() {
 		return approvalStatus;
 	}
