@@ -1,9 +1,7 @@
 package Main;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.*;
 
 public class Project {
 	
@@ -31,28 +29,64 @@ public class Project {
 		this.status = Status.Available; // Default status set to available
 	}
 
-	public Project(String projTitle) {
-		//Generate Project class from 1 parameter (projTitle) -> Requires to read through file to extract all other attributes to build instance
-	}
-	
-	public void addProject(Project p) //Parameter should be a Project class itself, not attributes of a project class
-	// End state is to call p.addProject to add all its attributes into the csv file 
+	public Project(String projTitle) 
 	{
 		Filepath f = new Filepath();
-		try (FileWriter fw = new FileWriter(f.getPath(), true);
-	             BufferedWriter bw = new BufferedWriter(fw);
-	             PrintWriter out = new PrintWriter(bw)) 
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getPath())))
 		{
-
-	            // Add a new row to the bottom of the file
-	            out.printf("%s, %s, %s", p.supervisorName, p.projTitle, Status.Available).println(); //So on so forth for other attributes
-	            System.out.println("Data appended to file successfully!");
+			String sup = "";
+			String status = "";
+			int found = 0;
+				String line = r.readLine();
+				while(line!=null && found == 0)
+				{
+					// Add a new row to the bottom of the file
+		            String[] parts = line.split(",");
+		            if (parts[1].equals(projTitle))
+		            {
+		            	this.supervisorName = parts[0];
+		            	this.status = Status.valueOf(parts[2]);
+		            	found = 1;
+		            }
+		            line = r.readLine();
+				}
+				System.out.println("Project not found!!");
+	            
 
         } catch (IOException e) 
 			{
 	            e.printStackTrace();
 	        }
 	}
+	
+	public void addProject(Project p) //Parameter should be a Project class itself, not attributes of a project class
+	// End state is to call p.addProject to add all its attributes into the csv file 
+	{
+		Filepath f = new Filepath();
+		try(FileWriter fw = new FileWriter(f.getPath(), true);
+	             BufferedWriter bw = new BufferedWriter(fw);
+				 BufferedReader r = new BufferedReader(new FileReader(f.getPath()));
+	             PrintWriter out = new PrintWriter(bw)) 
+		
+		{
+				String line = r.readLine();
+				while(line!=null)
+				{
+					// Add a new row to the bottom of the file
+		            String[] parts = line.split(",");
+		            line = r.readLine();
+					out.printf("%s, %s, %s", p.supervisorName, p.projTitle, Status.Available).println(); //So on so forth for other attributes
+		            System.out.println("Data appended to file successfully!");
+				}
+				
+	            
+
+        } catch (IOException e) 
+			{
+	            e.printStackTrace();
+	        }
+	}
+	*/
 	
 	public void editProject(String projTitle, Status status)
 	{
@@ -110,9 +144,12 @@ public class Project {
 	
 	//set status method need?
 	// get methods need? maybe for returning
-	
-	
-	
-	
+	public static void main(String[] args) 
+	{
+		Project p = new Project("Sonification of geometry 1");
+		System.out.println(p.getSupervisorName());
+		System.out.println(p.getStatus());
+	}
 
 }
+
