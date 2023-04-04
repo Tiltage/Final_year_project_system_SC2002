@@ -1,4 +1,4 @@
-package project;
+
 
 public class Filepath {
 	// Edit your filepath here manually

@@ -1,7 +1,3 @@
-package OOP;
-
-import project.*;
-
 public class Coordinator extends Supervisor {
 	
 	public Coordinator() 
