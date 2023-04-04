@@ -1,5 +1,10 @@
 package OOP;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 public class Project {
 	
 	enum Status {Available, Unavailable, Allocated, Reserved}
@@ -12,19 +17,51 @@ public class Project {
 	private Status status;
 	
 	public Project(String studentID, String studentEmail, int projID, String supervisorName, String supervisorEmail,
-			String projTitle, Status status) 
+			String projTitle) 
 	{
 		this.studentID = studentID;
 		this.studentEmail = studentEmail;
-		this.projID = projID;
+		this.projID = projID; 
+		// Need to consider how to store last known project ID to +1 to previous
+		// 1) While iterating, do a count and ++ to last known value
+		// 2) Store number somewhere in csv (I think this is harder)
 		this.supervisorName = supervisorName;
 		this.supervisorEmail = supervisorEmail;
 		this.projTitle = projTitle;
-		this.status = status;
+		this.status = Status.Available; // Default status set to available
 	}
 
-	public Project(String string) {
-		// TODO Auto-generated constructor stub
+	public Project(String projTitle) {
+		//Generate Project class from 1 parameter (projTitle) -> Requires to read through file to extract all other attributes to build instance
+	}
+	
+	public void addProject(Project p) //Parameter should be a Project class itself, not attributes of a project class
+	// End state is to call p.addProject to add all its attributes into the csv file 
+	{
+		Filepath f = new Filepath();
+		try (FileWriter fw = new FileWriter(f.getPath(), true);
+	             BufferedWriter bw = new BufferedWriter(fw);
+	             PrintWriter out = new PrintWriter(bw)) 
+		{
+
+	            // Add a new row to the bottom of the file
+	            out.printf("%s, %s, %s", p.supervisorName, p.projTitle, Status.Available).println(); //So on so forth for other attributes
+	            System.out.println("Data appended to file successfully!");
+
+        } catch (IOException e) 
+			{
+	            e.printStackTrace();
+	        }
+	}
+	
+	public void editProject(String projTitle, Status status)
+	{
+		//Edit Project Status -> E.g a student reserved this project, supervisor reached limit of projs etc
+	}
+	
+	public void editProject(String projTitle, String newProjTitle)
+	{
+		//Edit Project Name -> Upon approval of ReqChangeTitle
 	}
 
 	public String getStudentID() {
