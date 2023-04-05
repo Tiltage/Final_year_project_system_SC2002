@@ -12,13 +12,13 @@ public class Supervisor extends User {
 	
 	
 	
-	public Supervisor(String facultyID, String supervisorName, String supervisorEmail, int numProj) throws FileNotFoundException, IOException 
+	public Supervisor(String facultyID, String supervisorName, String supervisorEmail) throws FileNotFoundException, IOException 
 	{
 		this.facultyID = facultyID;
 		this.supervisorName = supervisorName;
 		this.supervisorEmail = supervisorEmail;
 		this.projArr = generateProjArr();
-		this.numProj = numProj;
+		this.numProj = projArr.length;
 	}
 	public Supervisor()
 	{
