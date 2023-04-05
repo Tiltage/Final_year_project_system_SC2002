@@ -24,8 +24,10 @@ public class Supervisor extends User {
 	{
 		
 	}
-	public Supervisor(String facultyID)
+	public Supervisor(String facultyID) throws FileNotFoundException, IOException
 	{
+		this.facultyID = facultyID;
+		this.projArr = generateProjArr();
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getFACFILENAME())))
 		{
@@ -43,10 +45,10 @@ public class Supervisor extends User {
 		            	parts[x] = email[x].split("@");
 			
 		            }
-		            if (parts[0][0].equals(facultyID))
+		            if (parts[1][0].equals(facultyID))
 		            {
 		            	this.supervisorName = parts[0][0];
-		            	this.supervisorEmail = parts[1][0];
+		            	this.supervisorEmail = email[1];
 		            	System.out.println(this.supervisorName);
 		            	System.out.println(this.supervisorEmail);
 		            	found = 1;
@@ -234,14 +236,21 @@ public class Supervisor extends User {
 		default:
 		}
 	}
-	public static void main(String[] args) throws FileNotFoundException, IOException 
-	{
-		Supervisor s = new Supervisor("BOAN","Bo An","BOAN@NTU.EDU.SG",5);
-		for (int i=0;i<s.getProjArr().length;i++)
-		{
-			System.out.println("Project " + i + ": " + s.getProjArr()[i].getProjTitle());
-		}
-
+	
+	public void requestTransfer() {
+		String projectName;
+		String newSupName;
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Please enter name of project: ");
+		projectName=sc.nextLine();
+		sc.nextLine();
+		System.out.println("Please enter name of new supervisor: ");
+		newSupName=sc.nextLine();
+		System.out.println("Input: " + projectName + "," + newSupName);
+		
+		ReqChangeSup r = new ReqChangeSup(Request.ApprovalStatus.Pending, "na", projectName, this.facultyID, newSupName);
+		r.addRequest();
 		
 	}
 

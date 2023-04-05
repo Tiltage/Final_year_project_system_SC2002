@@ -18,7 +18,7 @@ public class ReqDeregister extends Request{
 	public void addRequest()
 	{
 		Filepath f = new Filepath();
-		try (FileWriter fw = new FileWriter(f.getPath(), true);
+		try (FileWriter fw = new FileWriter(f.REQFILENAME, true);
 	             BufferedWriter bw = new BufferedWriter(fw);
 	             PrintWriter out = new PrintWriter(bw)) 
 		{
