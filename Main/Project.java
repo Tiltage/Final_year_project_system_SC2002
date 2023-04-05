@@ -93,15 +93,96 @@ public class Project {
 	        }
 	}
 	
-	public void editProject(String projTitle, Status status)
+	public void editProject(String projTitle)
 	{
 		//Edit Project Status -> E.g a student reserved this project, supervisor reached limit of projs etc
 	}
 	
 	public void editProject(String projTitle, String newProjTitle)
 	{
-		//Edit Project Name -> Upon approval of ReqChangeTitle
-	}
+/*		Filepath f = new Filepath();
+		try(FileWriter fw = new FileWriter(f.getPROJFILENAME(), true);
+				BufferedReader br = new BufferedReader(new FileReader(f.getPROJFILENAME()));
+		        PrintWriter out = new PrintWriter(fw)) 
+		{
+			int found = 0;
+            int lineNumber = 0;
+            String line = br.readLine();
+            while(line!=null && found == 0)
+            {
+            	if (line.trim().isEmpty()) 
+            	{
+            		break;
+            	}
+            	lineNumber++;
+            	String[] parts = line.split(",");
+	            if (parts[1].equals(projTitle))
+	            {
+	            	this.projTitle = newProjTitle;
+	            	
+	            	found = 1;
+	            }
+
+            	out.printf("%s,%s,%s", this.supervisorName,this.projTitle, this.status); 
+            	out.close();
+            }		
+				
+        }
+		catch (IOException e) 
+			{
+	            e.printStackTrace();
+	        }
+	        */
+
+		        
+		        // Read the file into memory
+		        Filepath f = new Filepath();
+		        List<String> lines = new ArrayList<>();
+		        try(BufferedReader br = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+		       	{
+		            String line;
+		            String newData = "x,x,x";
+		            int found = 0;
+		            int lineNumber = 0;
+		            while ((line = br.readLine()) != null) 
+		            {
+		            	if (line.trim().isEmpty()) 
+		            	{
+		            		break;
+		            	}
+		                lines.add(line);
+		                if (found == 0)
+		                {
+		                	lineNumber++;
+			            	String[] parts = line.split(",");
+				            if (parts[1].equals(projTitle))
+				            {
+				            	newData = String.format("%s,%s,%s", parts[0], newProjTitle, parts[2]);
+				            	found = 1;
+				            }
+		                }
+		            }
+		            	br.close();
+			            System.out.println(lineNumber);
+			            System.out.println(newData);
+		        // Modify the data as needed
+		        // the line number to overwrite (starting from 0)
+		          //  System.out.println(lineNumber);
+		            lines.set(lineNumber-1, newData);
+		            FileWriter fw = new FileWriter(f.getPROJFILENAME());    
+		        // Write the modified data back to the file
+		        	PrintWriter out = new PrintWriter(fw); 
+		            for (String line2 : lines) 
+		            {
+		                out.println(line2);
+		            }
+		            out.close();
+		        }
+		        catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		   }
+	
 
 	public String getStudentID() {
 		return studentID;
@@ -148,13 +229,12 @@ public class Project {
 
 	//set status method need?
 	// get methods need? maybe for returning
-/*	public static void main(String[] args) 
+	public static void main(String[] args) 
 	{
 		Project p1 = new Project("1", "xyz@e", 69, "Li Fang", "lifang123@e", "helloWorld");
 		p1.addProject();
-		Project p2 = new Project("2", "abc@e", 42, "Li Yi", "liyi69@e", "i<3SC2002");
-		p2.addProject();
+		p1.editProject("helloWorld", "I<3 SC2002");
 	}
-	*/
+	
 }
 	
