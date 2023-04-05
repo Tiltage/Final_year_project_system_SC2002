@@ -19,7 +19,7 @@ public class Project {
 	{
 		this.studentID = studentID;
 		this.studentEmail = studentEmail;
-		this.projID = projID; 
+		this.projID = projID;
 		// Need to consider how to store last known project ID to +1 to previous
 		// 1) While iterating, do a count and ++ to last known value
 		// 2) Store number somewhere in csv (I think this is harder)
@@ -32,10 +32,8 @@ public class Project {
 	public Project(String projTitle) 
 	{
 		Filepath f = new Filepath();
-		try(BufferedReader r = new BufferedReader(new FileReader(f.getPath())))
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 		{
-			String sup = "";
-			String status = "";
 			int found = 0;
 				String line = r.readLine();
 				while(line!=null && found == 0)
@@ -45,12 +43,15 @@ public class Project {
 		            if (parts[1].equals(projTitle))
 		            {
 		            	this.supervisorName = parts[0];
+		            	this.projTitle = parts[1];
 		            	this.status = Status.valueOf(parts[2]);
 		            	found = 1;
 		            }
 		            line = r.readLine();
+		            
 				}
-				System.out.println("Project not found!!");
+				r.close();
+			//	System.out.println("Project not found!!");
 	            
 
         } catch (IOException e) 
@@ -59,34 +60,38 @@ public class Project {
 	        }
 	}
 	
-	public void addProject(Project p) //Parameter should be a Project class itself, not attributes of a project class
+	public void addProject() //Parameter should be a Project class itself, not attributes of a project class
 	// End state is to call p.addProject to add all its attributes into the csv file 
-	{
+	{	
 		Filepath f = new Filepath();
-		try(FileWriter fw = new FileWriter(f.getPath(), true);
-	             BufferedWriter bw = new BufferedWriter(fw);
-				 BufferedReader r = new BufferedReader(new FileReader(f.getPath()));
-	             PrintWriter out = new PrintWriter(bw)) 
+		try(FileWriter fw = new FileWriter(f.getPROJFILENAME(), true);
+			BufferedReader br = new BufferedReader(new FileReader(f.getPROJFILENAME()));
+	        PrintWriter out = new PrintWriter(fw)) 
 		
 		{
-				String line = r.readLine();
-				while(line!=null)
-				{
-					// Add a new row to the bottom of the file
-		            String[] parts = line.split(",");
-		            line = r.readLine();
-					out.printf("%s, %s, %s", p.supervisorName, p.projTitle, Status.Available).println(); //So on so forth for other attributes
-		            System.out.println("Data appended to file successfully!");
-				}
+			String line;
+            int lineNumber = 0;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) {
+                    break;
+                }
+                lineNumber++;
+            }
+            br.close();
+            if (lineNumber>0)
+            {
+            	out.println();
+            }
+            
+            out.printf("%s,%s,%s", this.supervisorName,this.projTitle, this.status); 
+            out.close();
+		}
 				
-	            
-
-        } catch (IOException e) 
+	     catch (IOException e) 
 			{
 	            e.printStackTrace();
 	        }
 	}
-	*/
 	
 	public void editProject(String projTitle, Status status)
 	{
@@ -141,15 +146,15 @@ public class Project {
 		this.status = status;
 	}
 
-	
 	//set status method need?
 	// get methods need? maybe for returning
-	public static void main(String[] args) 
+/*	public static void main(String[] args) 
 	{
-		Project p = new Project("Sonification of geometry 1");
-		System.out.println(p.getSupervisorName());
-		System.out.println(p.getStatus());
+		Project p1 = new Project("1", "xyz@e", 69, "Li Fang", "lifang123@e", "helloWorld");
+		p1.addProject();
+		Project p2 = new Project("2", "abc@e", 42, "Li Yi", "liyi69@e", "i<3SC2002");
+		p2.addProject();
 	}
-
+	*/
 }
-
+	
