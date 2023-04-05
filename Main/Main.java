@@ -1,16 +1,18 @@
 package Main;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, IOException {
 		
 	int userType;
 	int menuChoice;
 	boolean access = false;
 	String password;
-	String UserID;
+	String UserID=null;
 	System.out.println("Enter User type ");
 	System.out.println("1. Student");
 	System.out.println("2. Supervisor");
@@ -18,6 +20,8 @@ public class Main {
 	
 	Scanner sc = new Scanner(System.in);
 	userType = sc.nextInt();
+	sc.nextLine();
+	
 	
 	while (userType == 1 || userType==2 || userType ==3) {
 		
@@ -58,21 +62,21 @@ public class Main {
 		access=false;
 		while (access==false) {
 			System.out.println("Please input Supervisor UserID : ");
-			UserID=sc.next(); //nextline vs next 
+			UserID=sc.nextLine(); //nextline vs next 
 		/* if (UserID not in excel){
 			System.out.println("Invalid UserID");
 			continue;
 			}*/
 			
 			System.out.println("Please input password : ");
-			password=sc.next();
+			password=sc.nextLine();
 		/* if (UserID in excel and the password is incorrect ){
 		  	System.out.println("Invalid Password");
 			continue;
 			}		 */
 			access=true;
 		}
-		Supervisor sp = new Supervisor();
+		Supervisor sp = new Supervisor(UserID);
 		menuChoice=SupervisorMenu.display();
 		
 		while (menuChoice != 5) {

@@ -6,12 +6,13 @@ import java.nio.file.Paths;
 
 public class Request {
 	enum RequestType {ReqAlloc, ReqDeregister, ReqChangeTitle, ReqChangeSup};
-	private boolean approvalStatus;
+	enum ApprovalStatus {Pending,Rejected,Approved};
 	private RequestType type;
+	private ApprovalStatus approvalStatus;
 	private String studentID;
 	private String projTitle;
 	
-	public Request(boolean approvalStatus, String studentID, String projTitle){
+	public Request(ApprovalStatus approvalStatus, String studentID, String projTitle){
 		this.approvalStatus = approvalStatus;
 		this.studentID = studentID;
 		this.projTitle = projTitle;
@@ -28,10 +29,10 @@ public class Request {
 		//While addRequest needed to be overridden, this one probably does not.
 	}
 	
-	public boolean isApprovalStatus() {
+	public ApprovalStatus isApprovalStatus() {
 		return approvalStatus;
 	}
-	public void setApprovalStatus(boolean approvalStatus) {
+	public void setApprovalStatus(ApprovalStatus approvalStatus) {
 		this.approvalStatus = approvalStatus;
 	}
 	public RequestType getType() {
@@ -57,13 +58,13 @@ public class Request {
 	
 	public static void main(String[] args) 
 	{
-		ReqAlloc r = new ReqAlloc(false, "Ben", "Calculator app");
+		ReqAlloc r = new ReqAlloc(Request.ApprovalStatus.Pending, "Ben", "Calculator app");
 		r.addRequest();
-		ReqDeregister r2 = new ReqDeregister(false, "Ben", "Calculator app");
+		ReqDeregister r2 = new ReqDeregister(Request.ApprovalStatus.Pending, "Ben", "Calculator app");
 		r2.addRequest();
-		ReqChangeTitle r3 = new ReqChangeTitle(false, "Ben", "Calculator app", "li fang", "Calc app");
+		ReqChangeTitle r3 = new ReqChangeTitle(Request.ApprovalStatus.Pending, "Ben", "Calculator app", "li fang", "Calc app");
 		r3.addRequest();
-		ReqChangeSup r4 = new ReqChangeSup(false, "Ben", "Calculator app", "li fang", "TA tan");
+		ReqChangeSup r4 = new ReqChangeSup(Request.ApprovalStatus.Pending, "Ben", "Calculator app", "li fang", "TA tan");
 		r4.addRequest();
 
 	}

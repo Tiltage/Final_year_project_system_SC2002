@@ -9,7 +9,7 @@ public class ReqChangeSup extends Request{
 	private String supID;
 	private String newSupID;
 	
-	public ReqChangeSup(boolean approvalStatus, String studentID, String projTitle, String supID, String newSupID){
+	public ReqChangeSup(ApprovalStatus approvalStatus, String studentID, String projTitle, String supID, String newSupID){
 		super(approvalStatus, studentID, projTitle);
 		this.setType(RequestType.ReqChangeSup);
 		this.supID = supID;

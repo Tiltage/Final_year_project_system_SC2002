@@ -9,7 +9,7 @@ public class ReqChangeTitle extends Request{
 	private String supID;
 	private String newProjTitle;
 	
-	public ReqChangeTitle(boolean approvalStatus, String studentID, String projTitle, String supID, String newProjTitle){
+	public ReqChangeTitle(ApprovalStatus approvalStatus, String studentID, String projTitle, String supID, String newProjTitle){
 		super(approvalStatus, studentID, projTitle);
 		this.setType(RequestType.ReqChangeTitle);
 		this.supID = supID;
