@@ -17,37 +17,80 @@ public class Supervisor extends User {
 		this.facultyID = facultyID;
 		this.supervisorName = supervisorName;
 		this.supervisorEmail = supervisorEmail;
-		System.out.println("Constructing");
-		this.projArr = getProjArr();
+		this.projArr = generateProjArr();
 		this.numProj = numProj;
 	}
 	public Supervisor()
 	{
 		
 	}
-	
-	public Project[] getProjArr() throws FileNotFoundException, IOException
+	public Supervisor(String facultyID)
 	{
-		System.out.println("File found");
+		Filepath f = new Filepath();
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getFACFILENAME())))
+		{
+			String csvSplitBy = ",";
+			int found = 0;
+				String line = r.readLine();
+				while(line!=null && found == 0)
+				{
+					// Add a new row to the bottom of the file
+		            String[] email = line.split(csvSplitBy);
+		            String supervisorEmail = email[0];
+		            String parts[][] = new String[email.length][];
+		            for (int x = 0; x < email.length; x++)
+		            {
+		            	parts[x] = email[x].split("@");
+			
+		            }
+		            if (parts[0][0].equals(facultyID))
+		            {
+		            	this.supervisorName = parts[0][0];
+		            	this.supervisorEmail = parts[1][0];
+		            	System.out.println(this.supervisorName);
+		            	System.out.println(this.supervisorEmail);
+		            	found = 1;
+		            }
+		            line = r.readLine();
+				}
+	            
+
+        } catch (IOException e) 
+			{
+	            e.printStackTrace();
+	        }
+	}
+	
+	public Project[] generateProjArr() throws FileNotFoundException, IOException
+	{
 		List<Project> list = new ArrayList<>();
 		Filepath f = new Filepath();
-		try (BufferedReader r = new BufferedReader(new FileReader(f.getPath())))
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 		{
 			String line = r.readLine();
+			System.out.println(this.supervisorName);
 			while (line != null)
 			{
 				String[] parts = line.split(",");
 				System.out.println(parts[0]);
-				//if (parts[0] == this.facultyID)
-				//{
-				//	Project p = new Project(parts[1]);
-				//	list.add(p);
-				//}
+				if (parts[0].equals(this.supervisorName))
+				{
+					System.out.println(parts[1]);
+					Project p = new Project(parts[1]);
+					System.out.println("Added!");
+					list.add(p);
+				}
 				line = r.readLine();
 			}
 		}
 		
-		Project[] projs = (Project[]) list.toArray();
+		int n = list.size();
+        Project[] projs = new Project[n];
+        for(int i=0; i<n; i++) 
+        {
+            projs[i] = list.get(i);
+            System.out.println(projs[i].getStudentID());
+        }
 		return projs;
 	}
 	
@@ -59,7 +102,58 @@ public class Supervisor extends User {
 	
 	public void viewReq() {}
 	
-	public void viewReqHist() {}
+	public void viewReqHist() throws FileNotFoundException, IOException {
+		int choice;
+		System.out.println("File found");
+		Filepath f = new Filepath();
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Request type:");
+		System.out.println("(1) View Change project title Requests");
+		System.out.println("(2) View Change supervisor Requests");
+		choice=sc.nextInt();
+		
+		switch (choice) {
+		
+		// Change ProjTitle
+		case 1 : 
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+			{
+				String line = r.readLine();
+				String[] header = line.split(",");
+				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "New Title");
+				while (line != null) {
+					String[] parts = line.split(",");
+					if (parts[4].equals(this.facultyID)&&!parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
+					{
+						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[5]);
+					}
+					line = r.readLine();
+				}
+			}
+			break;
+		
+		// Change Sup
+		case 2 : 
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+			{
+				String line = r.readLine();
+				String[] header = line.split(",");
+				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "Old Supervisor" + "  ||  " + "New Supervisor");
+				while (line != null) {
+					String[] parts = line.split(",");
+					if (parts[4].equals(this.facultyID)&&!parts[0].equals("Pending")&&parts[1].equals("ReqChangeSup"))
+					{
+						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[4] + "  ||  " + parts[5]);
+					}
+					line = r.readLine();
+				}
+			}
+			break;
+		
+		default:
+		}
+	}
 	
 	public ReqChangeTitle approveReq(ReqChangeTitle r) {
 		return r;
@@ -83,10 +177,71 @@ public class Supervisor extends User {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public Project[] getProjArr()
+	{
+		return this.projArr;
+	}
 
-	@Override
-	public void viewRequest() {
-		// TODO Auto-generated method stub
+	public void viewRequest() throws FileNotFoundException, IOException
+	{
+		int choice;
+		System.out.println("File found");
+		Filepath f = new Filepath();
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Request type:");
+		System.out.println("(1) Incoming Requests to change project title");
+		System.out.println("(2) Outgoing Requests to change supervisor");
+		choice=sc.nextInt();
+		
+		switch (choice) {
+		
+		case 1 : 
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+			{
+				String line = r.readLine();
+				String[] header = line.split(",");
+				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "New Title");
+				while (line != null) {
+					String[] parts = line.split(",");
+					if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
+					{
+						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[5]);
+					}
+					line = r.readLine();
+				}
+			}
+			break;
+		
+		case 2 : 
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+			{
+				String line = r.readLine();
+				String[] header = line.split(",");
+				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "Old Supervisor" + "  ||  " + "New Supervisor");
+				while (line != null) {
+					String[] parts = line.split(",");
+					if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeSup"))
+					{
+						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[4] + "  ||  " + parts[5]);
+					}
+					line = r.readLine();
+				}
+			}
+			break;
+		
+		default:
+		}
+	}
+	public static void main(String[] args) throws FileNotFoundException, IOException 
+	{
+		Supervisor s = new Supervisor("BOAN","Bo An","BOAN@NTU.EDU.SG",5);
+		for (int i=0;i<s.getProjArr().length;i++)
+		{
+			System.out.println("Project " + i + ": " + s.getProjArr()[i].getProjTitle());
+		}
+
 		
 	}
 
