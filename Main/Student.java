@@ -12,30 +12,64 @@ public class Student extends User{
 	
 	private String studentID;
 	private String studentName;
-	private Status status;
-	private Project proj;
-	private Project[] deRegisProjs; 
+	private String studentEmail;
+	private Status status; //need initialise to unassigned?
+	private Project proj; //unimplemented
+	private Project[] deRegisProjs; //unimplemented
 	
 	Scanner sc = new Scanner (System.in);
 	
 	
 	public Student() {}
 	
-	public void viewProject() {
-		
-		//need check that request is approved firs6t
-		//add student name into a new column student name in projects csv
-		//return the supervisor and title
-		//need instantiate anyt ? 
-		
-		
-	}
-	
-	public void viewHistory() {
-		
-		
+	public Student(String studentID, String studentName, String studentEmail) throws FileNotFoundException, IOException 
+	{
+		this.studentID = studentID;
+		this.studentName = studentName;
+		this.studentEmail = studentEmail;
+		//this.projArr = generateProjArr();
+		//this.numProj = projArr.length;
 	}
 
+	public Student(String studentID) throws FileNotFoundException, IOException //copy kendrea constructor
+	{
+		this.studentID = studentID;
+		//this.projArr = generateProjArr();
+		Filepath f = new Filepath();
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+		{
+			String csvSplitBy = ",";
+			int found = 0;
+				String line = r.readLine();
+				while(line!=null && found == 0)
+				{
+					// Add a new row to the bottom of the file
+		            String[] email = line.split(csvSplitBy);
+		            String studentEmail = email[0];             //not sure what to add here
+		            String parts[][] = new String[email.length][];
+		            for (int x = 0; x < email.length; x++)
+		            {
+		            	parts[x] = email[x].split("@");
+			
+		            }
+		            if (parts[1][0].equals(studentID))
+		            {
+		            	this.studentName = parts[0][0];
+		            	this.studentEmail = email[1];
+		            	System.out.println(this.studentName);
+		            	System.out.println(this.studentEmail);
+		            	found = 1;
+		            }
+		            line = r.readLine();
+				}
+	            
+
+        } catch (IOException e) 
+			{
+	            e.printStackTrace();
+	        }
+	}
+	
 	@Override
 	public void changePW() {
 		// TODO Auto-generated method stub
@@ -53,17 +87,13 @@ public class Student extends User{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
-	@Override
-	public void viewRequest() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public void viewAvailableProjects() {
 		int count=1;
 		Filepath f = new Filepath();
-		try (BufferedReader r = new BufferedReader(new FileReader(f.getPath())))
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 		{
 			String line = r.readLine();
 			line=r.readLine();
@@ -91,11 +121,24 @@ public class Student extends User{
 		
 	}
 
-	public void reqProj() {
-		// TODO Auto-generated method stub
+	public void reqProj(boolean req) {
+
+		if (req==true)                 //for req project allocation
+		{
 		int index;
 		String projectTitle = "NA";
 		int valid=0;
+		
+		if (this.status==Status.Pending) {
+			System.out.println("You have a pending request for a project"); //sanity check
+			return;
+		}
+		
+		if (this.status==Status.Assigned) {
+			System.out.println("You have been assigned a project"); //sanity check
+			return;
+		}
+		
 		
 		while (valid==0) {
 			System.out.println("Enter the Number ID of the project you want to be allocated : ");
@@ -103,13 +146,13 @@ public class Student extends User{
 			index=sc.nextInt();
 			
 			Filepath f = new Filepath();
-			try (BufferedReader r = new BufferedReader(new FileReader(f.getPath())))
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 			{
 				String line = r.readLine();
 				
 				
 				for (int i=0;i<index;i++) {
-					line=r.readLine();
+					line=r.readLine();			          //iterate the csv until the index of requested project
 				}
 				
 				String[] parts = line.split(",");
@@ -117,9 +160,9 @@ public class Student extends User{
 				if (parts[2].equals("Available"))
 				{
 					projectTitle = parts[1];
-					System.out.println(projectTitle);
+					System.out.println(projectTitle);    //if available, we print out again and break out
 					System.out.println();
-					valid=1;
+					valid=1;                             //this for breaking
 					
 				}
 
@@ -133,14 +176,213 @@ public class Student extends User{
 		}
 		
 		ReqAlloc r = new ReqAlloc(Request.ApprovalStatus.Pending, this.studentID, projectTitle);
-		r.addRequest(); //should go to request csv but currently goes to project csv
+		r.addRequest();
+		}
+		
+		
+		else {          //for request de-allocation
+			
+			if (this.status==Status.Pending) {
+				System.out.println("You have a pending request for a project"); //sanity check
+				return;
+			}
+			
+			if (this.status==Status.Unassigned) {
+				System.out.println("You have not been assigned a project"); //sanity check
+				return;
+			}
+			
+			String title="NA";
+			int count=1;
+			Filepath f = new Filepath();
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+			{	
+				String line = r.readLine();
+				line=r.readLine();
+				while (line != null)
+				{
+					String[] parts = line.split(",");
+					
+					if (parts[2].equals(this.studentID))
+					{
+						title=parts[3];                //iterate to find the current title new (need it to pass in as parameter)
+						break;
+						
+					}
+					count++;
+					line = r.readLine();
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println();
+			
+			ReqDeregister r = new ReqDeregister(Request.ApprovalStatus.Pending, this.studentID, title);
+			r.addRequest();
+			}	
+		}
+	
+	public void viewProject() {
+		
+		
+		if (this.status != Status.Assigned) {
+			System.out.println("You have not been assigned a project");    //sanity check
+			return;
+		}
+		int count=1;
+		Filepath f = new Filepath();
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+		{
+			String line = r.readLine();
+			line=r.readLine();
+			while (line != null)
+			{
+				String[] parts = line.split(",");
+				
+				if (parts[0].equals(this.studentName))             //just printing out the details
+				{	
+					System.out.println("Your project details ");
+					System.out.println("Project title : " + parts[3]);
+					System.out.println("Your Supervisor name : " + parts[4]);
+					
+				}
+				count++;
+				line = r.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println();
+		
+	}
+
+	@Override
+	public void viewRequest() {
+			
+		int count=1; 
+		int recent=-1;
+		Filepath f = new Filepath();
+		System.out.println("Recent request status");
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+		{
+			String line = r.readLine();
+			line=r.readLine();
+			while (line != null)
+			{
+				String[] parts = line.split(",");
+				
+				if ( (!parts[1].equals("ChangeSup")) && parts[2].equals(this.studentID)) //Check for student id and the relevant request type
+				{
+					if (parts[0].equals("Pending")) {
+						System.out.println("Request type :" + parts[1] + " is " + parts[0]); //we print all all the pending (new)
+					}
+					recent=count; //will set the index last request into recent
+						
+				}
+				count++;
+				line = r.readLine();
+			}
+				
+			if (recent==-1) {
+				System.out.println("You have not sent in a request"); //after iterating if never find matches, means never request
+				return;
+			}
+				
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		System.out.println();
+			
+			
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+		{
+			String line = r.readLine();
+			line=r.readLine();
+			System.out.println("Request history");
+			while (line != null)
+			{
+				String[] parts = line.split(",");
+					
+				if ((!parts[1].equals("ChangeSup")) && parts[2].equals(this.studentID))
+				{	
+					if (!parts[0].equals("Pending")) {
+						System.out.println("Request type :" + parts[1] + " is " + parts[0]); //print out all the approved/rejected
+					}
+				}
+				count++;
+				line = r.readLine();
+			}
+				
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
 
 	}
 
 	public void reqChangeTitle() {
+		
+		if (this.status!=Status.Assigned) {
+			System.out.println("You have not been assigned a project");
+			return;
+		}
+		
+		String oldTitle="NA";
+		String newTitle="NA";
+		String SupervisorID="NA";
+		
+		System.out.println("Please enter the new title name :");
+		newTitle=sc.next();
+		
+		Filepath f = new Filepath();
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+		{	
+			int count=1;
+			String line = r.readLine();
+			line=r.readLine();
+			while (line != null)
+			{
+				String[] parts = line.split(",");
+				
+				if (parts[0].equals(this.studentID)) //Check for student id and the correct request type
+				{
+					oldTitle=parts[3];               //store relevant data so can pass in as parameters later
+					SupervisorID=parts[4];
+					break;
+				}
+				count++;
+				line = r.readLine();
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+		ReqChangeTitle r3 = new ReqChangeTitle(Request.ApprovalStatus.Pending, this.studentID , oldTitle, SupervisorID, newTitle);
+		r3.addRequest();
 		
 	}
+
 	
 	
 	
