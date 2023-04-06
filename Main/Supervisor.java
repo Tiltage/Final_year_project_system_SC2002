@@ -96,7 +96,13 @@ public class Supervisor extends User {
 		return projs;
 	}
 	
-	public void createProj() {}
+	public void createProj() {
+		Project p1 = new Project("1", "xyz@e", 69, "Liu", "lifang123@e", "elephant");
+		p1.addProject();
+		//p1.editProject("helloWorld", "I H8 SC2002");
+		System.out.println("eujbqibgiqe");
+	}
+	
 	
 	public void viewProj() {}
 	
