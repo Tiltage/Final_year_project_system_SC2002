@@ -27,14 +27,35 @@ public class Student extends User{
 		this.studentID = studentID;
 		this.studentName = studentName;
 		this.studentEmail = studentEmail;
+		this.proj = getProj(studentID);
 		//this.projArr = generateProjArr();
 		//this.numProj = projArr.length;
+	}
+
+	private Project getProj(String studentID) throws IOException {
+		Filepath f = new Filepath();
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+		{
+			String line = r.readLine();
+			while(line!=null)
+			{
+				String[] parts = line.split(",");
+				System.out.println(parts[4]);
+				if (parts[4] != null && parts[3].equals(studentID))
+				{
+					Project p = new Project(parts[4]);
+					System.out.println("Proj: " + p.getProjTitle());
+					return p;
+				}
+				line = r.readLine();
+			}
+		}
+		return null;
 	}
 
 	public Student(String studentID) throws FileNotFoundException, IOException //copy kendrea constructor
 	{
 		this.studentID = studentID;
-		//this.projArr = generateProjArr();
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
 		{
@@ -56,6 +77,20 @@ public class Student extends User{
 		            {
 		            	this.studentName = parts[0][0];
 		            	this.studentEmail = email[1];
+		            	String[] lineparts = line.split(",");
+		            	System.out.println(lineparts[0] + lineparts[4]);
+		            	if (!lineparts[4].equals("null"))
+		            	{
+		            		Project p = new Project(lineparts[4]);
+		            		System.out.println("Proj: " + p.getProjTitle());
+		            		System.out.println("Sup: " + p.getSupervisorName());
+		            		this.proj = p;
+		            	}
+		            	else
+		            	{
+		            		System.out.println("Project is null");
+		            		this.proj = null;
+		            	}
 		            	System.out.println(this.studentName);
 		            	System.out.println(this.studentEmail);
 		            	found = 1;

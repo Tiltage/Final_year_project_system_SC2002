@@ -45,7 +45,7 @@ public class Main {
 			}		 */
 			access=true;
 		}
-		Student s = new Student();
+		Student s = new Student(UserID);
 		menuChoice=StudentMenu.display();
 		
 		while (menuChoice != 8) {
