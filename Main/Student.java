@@ -82,13 +82,13 @@ public class Student extends User{
 		            	if (!lineparts[4].equals("null"))
 		            	{
 		            		Project p = new Project(lineparts[4]);
-		            		System.out.println("Proj: " + p.getProjTitle());
-		            		System.out.println("Sup: " + p.getSupervisorName());
+		            		//System.out.println("Proj: " + p.getProjTitle());
+		            		//System.out.println("Sup: " + p.getSupervisorName());
 		            		this.proj = p;
 		            	}
 		            	else
 		            	{
-		            		System.out.println("Project is null");
+		            		//System.out.println("Project is null");
 		            		this.proj = null;
 		            	}
 		            	System.out.println(this.studentName);
@@ -281,8 +281,8 @@ public class Student extends User{
 				if (parts[0].equals(this.studentName))             //just printing out the details
 				{	
 					System.out.println("Your project details ");
-					System.out.println("Project title : " + parts[3]);
-					System.out.println("Your Supervisor name : " + parts[4]);
+					System.out.println("Project title : " + parts[4]);
+					System.out.println("Your Supervisor name : " + parts[5]);
 					
 				}
 				count++;
