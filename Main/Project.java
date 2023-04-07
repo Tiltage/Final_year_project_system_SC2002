@@ -78,10 +78,7 @@ public class Project {
                 lineNumber++;
             }
             br.close();
-            if (lineNumber>0)
-            {
-            	out.println();
-            }
+     
             
             out.printf("%s,%s,%s", this.supervisorName,this.projTitle, this.status); 
             out.close();
@@ -93,9 +90,54 @@ public class Project {
 	        }
 	}
 	
-	public void editProject(String projTitle)
+	public void editProject(String projTitle, Status status)
 	{
 		//Edit Project Status -> E.g a student reserved this project, supervisor reached limit of projs etc
+		 Filepath f = new Filepath();
+	        List<String> lines = new ArrayList<>();
+	        try(BufferedReader br = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+	       	{
+	            String line;
+	            String newData = "x,x,x";
+	            int found = 0;
+	            int lineNumber = 0;
+	            while ((line = br.readLine()) != null) 
+	            {
+	            	if (line.trim().isEmpty()) 
+	            	{
+	            		break;
+	            	}
+	                lines.add(line);
+	                if (found == 0)
+	                {
+	                	lineNumber++;
+		            	String[] parts = line.split(",");
+			            if (parts[1].equals(projTitle))
+			            {
+			            	newData = String.format("%s,%s,%s", parts[0], parts[1], status);
+			            	found = 1;
+			            }
+	                }
+	            }
+	            if (found == 0)
+	            {
+	            	System.out.println("File not found!");
+	            }
+	            	br.close();
+	        
+	            lines.set(lineNumber-1, newData);			// the line number to overwrite (starting from 0)
+	            FileWriter fw = new FileWriter(f.getPROJFILENAME());    
+	        	PrintWriter out = new PrintWriter(fw); 
+	            for (String line2 : lines) 
+	            {
+	                out.println(line2);					// Write the modified data back to the file
+	            }
+	            out.close();
+	        }
+	        catch (IOException e) {
+	            e.printStackTrace();
+	        }
+
 	}
 	
 	public void editProject(String projTitle, String newProjTitle)
@@ -162,19 +204,18 @@ public class Project {
 				            }
 		                }
 		            }
+		            if (found == 0)
+		            {
+		            	System.out.println("File not found!");
+		            }
 		            	br.close();
-			            System.out.println(lineNumber);
-			            System.out.println(newData);
-		        // Modify the data as needed
-		        // the line number to overwrite (starting from 0)
-		          //  System.out.println(lineNumber);
-		            lines.set(lineNumber-1, newData);
+		        
+		            lines.set(lineNumber-1, newData);			// the line number to overwrite (starting from 0)
 		            FileWriter fw = new FileWriter(f.getPROJFILENAME());    
-		        // Write the modified data back to the file
 		        	PrintWriter out = new PrintWriter(fw); 
 		            for (String line2 : lines) 
 		            {
-		                out.println(line2);
+		                out.println(line2);					// Write the modified data back to the file
 		            }
 		            out.close();
 		        }
@@ -232,8 +273,8 @@ public class Project {
 	public static void main(String[] args) 
 	{
 		Project p1 = new Project("1", "xyz@e", 69, "Li Fang", "lifang123@e", "helloWorld");
-		p1.addProject();
-		p1.editProject("helloWorld", "I<3 SC2002");
+	//	p1.addProject();
+		p1.editProject("Sonification of geometry 1", Status.Allocated);
 	}
 	
 }
