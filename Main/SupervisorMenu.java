@@ -1,4 +1,6 @@
 package Main;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class SupervisorMenu {
@@ -12,7 +14,7 @@ public class SupervisorMenu {
 		
 		System.out.println("Supervisor menu page :");
 		System.out.println("1 : Change password ");
-		System.out.println("2 : Create/Update/View Projects ");
+		System.out.println("2 : Create/View/Update Projects ");
 		System.out.println("3 : Approve/Reject/View requests");
 		System.out.println("4 : Request to transfer student");
 		System.out.println("5 : Quit");
@@ -43,7 +45,7 @@ public class SupervisorMenu {
 		return choice;
 	}
 	
-	public static void execution(int c,Supervisor sp) {
+	public static void execution(int c,Supervisor sp) throws FileNotFoundException, IOException {
 		
 		switch (c) {
 		
@@ -54,7 +56,7 @@ public class SupervisorMenu {
 			break;
 		
 		case 6 : 
-			sp.createNewProj();
+			sp.createProj();
 			break;
 			
 		case 7 : 
@@ -75,11 +77,11 @@ public class SupervisorMenu {
 			break;
 			
 		case 11 : 
-			sp.approveReq();
+//			sp.approveReq();
 			break;
 		
 		case 12 : 
-			sp.approveReq();
+//			sp.rejectReq();
 			break;
 			
 		case 4 : 

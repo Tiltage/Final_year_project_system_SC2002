@@ -1,5 +1,8 @@
 package Main;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public abstract class User {
 	
 	private String UserID;
@@ -14,7 +17,7 @@ public abstract class User {
 	
 	public abstract String getID();
 	
-	public abstract void viewRequest();
+	public abstract void viewRequest() throws FileNotFoundException, IOException;
 
 
 }

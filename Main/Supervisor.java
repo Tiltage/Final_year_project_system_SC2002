@@ -97,18 +97,142 @@ public class Supervisor extends User {
 	}
 	
 	public void createProj() {
-		Project p1 = new Project("1", "xyz@e", 69, "Liu", "lifang123@e", "elephant");
+		String projTitle;
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Please enter project title:");
+		projTitle = sc.nextLine();
+		
+		Project p1 = new Project("na","na", this.supervisorName, this.facultyID, projTitle);
 		p1.addProject();
-		//p1.editProject("helloWorld", "I H8 SC2002");
-		System.out.println("eujbqibgiqe");
 	}
 	
+	public void viewProj() {
+		int count=1;
+		Filepath f = new Filepath();
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+		{
+			String line = r.readLine();
+			line=r.readLine();
+			System.out.println("The title of the available projects are : ");
+			while (line != null)
+			{
+				String[] parts = line.split(",");
+				
+				if (parts[0].equals(this.supervisorName))
+				{
+					System.out.println(count + " : " + parts[1]);
+					
+				}
+				count++;
+				line = r.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println();
+	}
 	
-	public void viewProj() {}
+	public void modifyProj() {
+		int projNumber;
+		String line;
+		String projTitle, newProjTitle;
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Enter project number to modify");
+		projNumber = sc.nextInt();
+		
+		Filepath f = new Filepath();
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+		{
+			line = r.readLine();
+			for(int i=0;i<projNumber;i++)
+			{
+				line = r.readLine();
+			}
+			
+			String[] parts = line.split(",");
+			
+			if (parts[0].equals(this.supervisorName)) {
+				projTitle = parts[1];
+				System.out.println("Project: " + projTitle);
+			}
+			else {
+				System.out.println("Invalid project");
+				return;
+			}
+			
+			System.out.println("Please enter new project title:");
+			sc.nextLine();
+			newProjTitle = sc.nextLine();
+			Project p = new Project(projTitle);
+			p.editProject(projTitle, newProjTitle);
+			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
-	public void modifyProj() {}
-	
-	public void viewReq() {}
+	public void viewRequest() throws FileNotFoundException, IOException
+	{
+		int choice;
+		System.out.println("File found");
+		Filepath f = new Filepath();
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Request type:");
+		System.out.println("(1) Incoming Requests to change project title");
+		System.out.println("(2) Outgoing Requests to change supervisor");
+		choice=sc.nextInt();
+		
+		switch (choice) {
+		
+		case 1 : 
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+			{
+				String line = r.readLine();
+				String[] header = line.split(",");
+				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "New Title");
+				while (line != null) {
+					String[] parts = line.split(",");
+					if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
+					{
+						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[5]);
+					}
+					line = r.readLine();
+				}
+			}
+			break;
+		
+		case 2 : 
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+			{
+				String line = r.readLine();
+				String[] header = line.split(",");
+				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "Old Supervisor" + "  ||  " + "New Supervisor");
+				while (line != null) {
+					String[] parts = line.split(",");
+					if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeSup"))
+					{
+						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[4] + "  ||  " + parts[5]);
+					}
+					line = r.readLine();
+				}
+			}
+			break;
+		
+		default:
+		}
+	}
 	
 	public void viewReqHist() throws FileNotFoundException, IOException {
 		int choice;
@@ -163,9 +287,13 @@ public class Supervisor extends User {
 		}
 	}
 	
-	public ReqChangeTitle approveReq(ReqChangeTitle r) {
-		return r;
-		}
+	public void approveReq() {
+		return;
+	}
+	
+	public void rejectReq() {
+		return;
+	}
 	
 	
 	@Override
@@ -182,65 +310,12 @@ public class Supervisor extends User {
 
 	@Override
 	public String getID() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.facultyID;
 	}
 	
 	public Project[] getProjArr()
 	{
 		return this.projArr;
-	}
-
-	public void viewRequest() throws FileNotFoundException, IOException
-	{
-		int choice;
-		System.out.println("File found");
-		Filepath f = new Filepath();
-		Scanner sc = new Scanner(System.in);
-		
-		System.out.println("Request type:");
-		System.out.println("(1) Incoming Requests to change project title");
-		System.out.println("(2) Outgoing Requests to change supervisor");
-		choice=sc.nextInt();
-		
-		switch (choice) {
-		
-		case 1 : 
-			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
-			{
-				String line = r.readLine();
-				String[] header = line.split(",");
-				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "New Title");
-				while (line != null) {
-					String[] parts = line.split(",");
-					if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
-					{
-						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[5]);
-					}
-					line = r.readLine();
-				}
-			}
-			break;
-		
-		case 2 : 
-			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
-			{
-				String line = r.readLine();
-				String[] header = line.split(",");
-				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "Old Supervisor" + "  ||  " + "New Supervisor");
-				while (line != null) {
-					String[] parts = line.split(",");
-					if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeSup"))
-					{
-						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[4] + "  ||  " + parts[5]);
-					}
-					line = r.readLine();
-				}
-			}
-			break;
-		
-		default:
-		}
 	}
 	
 	public void requestTransfer() {
