@@ -81,7 +81,7 @@ public class SupervisorMenu {
 			break;
 		
 		case 12 : 
-//			sp.rejectReq();
+			sp.rejectReq();
 			break;
 			
 		case 4 : 
