@@ -70,7 +70,7 @@ public class CoordinatorMenu {
 			break;
 			
 		case 11 : 
-			co.viewRequest();
+			//co.viewRequest(); dk why got error, probably its in the supervisor class
 			break;
 			
 		case 12 :
@@ -78,11 +78,11 @@ public class CoordinatorMenu {
 			break;
 			
 		case 13 : 
-			co.approveReq();
+			co.approveReq(true);
 			break;
 		
 		case 14 : 
-			co.approveReq();
+			co.approveReq(false);
 			break;
 			
 		case 4 : 
@@ -90,49 +90,23 @@ public class CoordinatorMenu {
 			break;
 			
 		case 5 : 
-			co.viewPendingReq();
-			System.out.println("Enter selection : ");
-			System.out.println("1 : Allocation request");
-			System.out.println("2 : Deallocation request ");
-			System.out.println("3 : Transfer student request ");
-			System.out.println("4 : Quit ");
-			choice2=sc.nextInt();
 			
-			while (choice2!=4) {
-				switch (choice2) {
-				
-				case 1: 
-					co.approveAlloc();
-					break;
-				
-				case 2: 
-					co.approveDealloc();
-					break;
-					
-				case 3: 
-					co.approveTransferStudent();
-					break;
-					
-				default: 
-					break;
-				}
-				System.out.println("Enter selection : ");
-				System.out.println("1 : Allocation request");
-				System.out.println("2 : Deallocation request ");
-				System.out.println("3 : Transfer student request ");
-				System.out.println("4 : Quit ");
-				choice2=sc.nextInt();
-
-			}
-
-			break;	
+			//first we print out all the requests (maybe including history)
+			co.viewPendingReq();
+			//then we will prompt for either approve/reject
+			//then we call the functions
+			
+			
+			
+			
+		
 			
 		case 6 : 
 			co.viewAllProjs(); //by title and availability
 			while (keyword.compareTo("0")!=0) {
 				System.out.println("Search by keywords (Enter 0 to quit) :");
 				keyword=sc.next();
-				co.viewProj(keyword);
+				co.viewProj();
 			}
 			
 			
