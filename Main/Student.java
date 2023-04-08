@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Student extends User{
@@ -15,7 +17,7 @@ public class Student extends User{
 	private String studentEmail;
 	private Status status; //need initialise to unassigned?
 	private Project proj; //unimplemented
-	private Project[] deRegisProjs; //unimplemented
+	//private String[] deRegisProjs ; //i think i shall use a local var instead
 	
 	Scanner sc = new Scanner (System.in);
 	
@@ -173,6 +175,44 @@ public class Student extends User{
 			System.out.println("You have been assigned a project"); //sanity check
 			return;
 		}
+
+		List<String> DeRegisProj = new ArrayList<>();          //declare an araylis of deregistered projects
+		
+		int count=1;
+		Filepath f = new Filepath();
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+		{
+			String line = r.readLine();
+			line=r.readLine();
+			while (line != null)
+			{
+				String[] parts = line.split(",");
+				if (parts[0].equals("Approved") && parts[1].equals("ReqDealloc") && parts[2].equals(this.studentID))
+				{
+					DeRegisProj.add(parts[3]); 						//adding all the deregistered project into array
+				}
+				line = r.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("List of De-registered Projects : ");
+		if (DeRegisProj.size()==0) {
+			System.out.println("None");   
+		}
+		else {
+		for (int i=0;i<DeRegisProj.size();i++) {
+				System.out.println(DeRegisProj.get(i));                //prints out all the previously registered projects
+				}
+			}
+		System.out.println();
+		
+		
 		
 		
 		while (valid==0) {
@@ -180,7 +220,6 @@ public class Student extends User{
 			System.out.println();
 			index=sc.nextInt();
 			
-			Filepath f = new Filepath();
 			try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 			{
 				String line = r.readLine();
@@ -193,7 +232,18 @@ public class Student extends User{
 				String[] parts = line.split(",");
 				
 				if (parts[2].equals("Available"))
-				{
+				{	
+					
+					for (int j=0;j<DeRegisProj.size();j++) {
+						
+						if (parts[1].equals(DeRegisProj.get(j))){
+							
+							System.out.println("You have registered for this project before !");   //check if they registered for the project before
+							continue;							
+						}
+						
+					}
+
 					projectTitle = parts[1];
 					System.out.println(projectTitle);    //if available, we print out again and break out
 					System.out.println();

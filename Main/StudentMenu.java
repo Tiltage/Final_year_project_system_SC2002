@@ -38,11 +38,11 @@ public class StudentMenu {
 			break;
 			
 		case 3 : 
-			s.reqProj();
+			s.reqProj(true);
 			break;
 			
 		case 4 : 
-			s.viewHistory();
+			s.viewProject();
 			break;
 			
 		case 5 : 
@@ -55,7 +55,7 @@ public class StudentMenu {
 			break;
 			
 		case 7 : 
-			s.reqDeregisterProject();
+			s.reqProj(false);
 			break;
 			
 		default:
