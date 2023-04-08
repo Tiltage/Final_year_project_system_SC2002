@@ -338,7 +338,36 @@ public class Supervisor extends User {
 		return;
 	}
 	
-	public void rejectReq() {
+	public void rejectReq() throws FileNotFoundException, IOException {
+		int choice;
+		System.out.println("File found");
+		Filepath f = new Filepath();
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Enter request number to accept: ");
+		choice=sc.nextInt();
+		
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+		{
+			int count=1;
+			String line = r.readLine();
+			String[] header = line.split(",");
+			System.out.println("");
+			
+			while (line != null) {
+				String[] parts = line.split(",");
+				if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
+				{
+					if(choice==count) {
+						ReqChangeTitle request = new ReqChangeTitle(Request.ApprovalStatus.Rejected, "", "", "", "");
+						request.updateRequest(parts[3], Request.ApprovalStatus.Rejected);
+					}
+					
+					count++;
+				}
+				line = r.readLine();
+			}
+		}
 		return;
 	}
 	
