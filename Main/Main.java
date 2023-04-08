@@ -107,7 +107,7 @@ public class Main {
 			access=true;
 		
 		
-		Coordinator co = new Coordinator();
+		Coordinator co = new Coordinator(UserID);
 		menuChoice=CoordinatorMenu.display();
 		
 		while (menuChoice != 7) {

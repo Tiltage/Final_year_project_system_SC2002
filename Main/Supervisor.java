@@ -199,14 +199,21 @@ public class Supervisor extends User {
 		case 1 : 
 			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
 			{
+				int count=1;
 				String line = r.readLine();
 				String[] header = line.split(",");
-				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "New Title");
+				System.out.println("");
+				
 				while (line != null) {
 					String[] parts = line.split(",");
 					if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
 					{
-						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[5]);
+						System.out.println("Pending request "+count);
+						System.out.println("Student: " +parts[2]);
+						System.out.println("Project Title: " +parts[3]);
+						System.out.println("New Title: " +parts[5]);
+						System.out.println("");
+						count++;
 					}
 					line = r.readLine();
 				}
@@ -216,14 +223,22 @@ public class Supervisor extends User {
 		case 2 : 
 			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
 			{
+				int count=1;
 				String line = r.readLine();
 				String[] header = line.split(",");
-				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "Old Supervisor" + "  ||  " + "New Supervisor");
+				System.out.println("");
+				
 				while (line != null) {
 					String[] parts = line.split(",");
 					if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeSup"))
 					{
-						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[4] + "  ||  " + parts[5]);
+						System.out.println("Pending request "+count);
+						System.out.println("Student: " +parts[2]);
+						System.out.println("Project Title: " +parts[3]);
+						System.out.println("Current Supervisor: " +parts[4]);
+						System.out.println("New Supervisor: " +parts[5]);
+						System.out.println("");
+						count++;
 					}
 					line = r.readLine();
 				}
@@ -287,7 +302,39 @@ public class Supervisor extends User {
 		}
 	}
 	
-	public void approveReq() {
+	public void approveReq() throws FileNotFoundException, IOException {
+		int choice;
+		System.out.println("File found");
+		Filepath f = new Filepath();
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Enter request number to accept: ");
+		choice=sc.nextInt();
+		
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+		{
+			int count=1;
+			String line = r.readLine();
+			String[] header = line.split(",");
+			System.out.println("");
+			
+			while (line != null) {
+				String[] parts = line.split(",");
+				if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
+				{
+					if(choice==count) {
+						Project p = new Project(parts[3]);
+						p.editProject(parts[3],parts[5]);
+						
+						ReqChangeTitle request = new ReqChangeTitle(Request.ApprovalStatus.Approved, "", "", "", "");
+						request.updateRequest(parts[3], Request.ApprovalStatus.Approved);
+					}
+					
+					count++;
+				}
+				line = r.readLine();
+			}
+		}
 		return;
 	}
 	

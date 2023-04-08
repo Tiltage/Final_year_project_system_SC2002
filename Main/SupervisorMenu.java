@@ -77,7 +77,7 @@ public class SupervisorMenu {
 			break;
 			
 		case 11 : 
-//			sp.approveReq();
+			sp.approveReq();
 			break;
 		
 		case 12 : 
