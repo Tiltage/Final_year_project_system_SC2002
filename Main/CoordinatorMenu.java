@@ -1,21 +1,24 @@
 package Main;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class CoordinatorMenu {
 	static int choice;
 	static int choice2;
 	static String keyword="x";
-	//Coordinator co = new Coordinator();
 	static Scanner sc = new Scanner(System.in);
 	
 	
 	public static int display() {
 		
+		//Testing
+		
 		System.out.println("Coordinator menu page :");
 		System.out.println("1 : Change password ");
-		System.out.println("2 : Create/Update/View your Projects ( AS SUPERVISOR ) "); //supervisor
-		System.out.println("3 : Approve/Reject/View your Requests ( AS SUPERVISOR )");
+		System.out.println("2 : Create/Update/View your Projects ( AS COORDINATOR ) "); //supervisor
+		System.out.println("3 : Approve/Reject/View your Requests ( AS COORDINATOR )");
 		System.out.println("4 : Request to transfer student");
 		System.out.println("5 : View all Requests ( AS COORDINATOR )");
 		System.out.println("6 : View all projects ( AS COORDINATOR )");
@@ -47,7 +50,7 @@ public class CoordinatorMenu {
 		return choice;
 	}
 	
-	public static void execution(int c,Coordinator co) {
+	public static void execution(int c,Coordinator co) throws FileNotFoundException, IOException {
 		
 		switch (c) {
 		
@@ -58,7 +61,7 @@ public class CoordinatorMenu {
 			break;
 		
 		case 8 : 
-			co.createNewProj();
+			co.createProj();
 			break;
 			
 		case 9 : 
@@ -70,7 +73,7 @@ public class CoordinatorMenu {
 			break;
 			
 		case 11 : 
-			//co.viewRequest(); dk why got error, probably its in the supervisor class
+			co.viewPendingReq();
 			break;
 			
 		case 12 :
@@ -93,6 +96,7 @@ public class CoordinatorMenu {
 			
 			//first we print out all the requests (maybe including history)
 			co.viewPendingReq();
+			break;
 			//then we will prompt for either approve/reject
 			//then we call the functions
 			

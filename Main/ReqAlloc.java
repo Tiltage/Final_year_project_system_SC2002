@@ -1,6 +1,7 @@
 package Main;
 
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,11 +10,13 @@ public class ReqAlloc extends Request{
 	private String supID;
 	private String newSupID;
 
-	public ReqAlloc(ApprovalStatus approvalStatus, String studentID, String projTitle){
+	public ReqAlloc(ApprovalStatus approvalStatus, String studentID, String projTitle) throws FileNotFoundException, IOException{
 		super(approvalStatus, studentID, projTitle);
 		this.setType(RequestType.ReqAlloc);
-		this.supID = "na";
-		this.newSupID = "na";
+		Project temp = new Project(projTitle);
+		Supervisor tempsup = new Supervisor(temp.getSupervisorName());
+		this.supID = tempsup.getFacultyID();
+		this.newSupID = "NA";
 	}
 	
 	public void addRequest()
@@ -32,5 +35,7 @@ public class ReqAlloc extends Request{
 	            e.printStackTrace();
 	        }
 	}
+	
+	
 	
 }

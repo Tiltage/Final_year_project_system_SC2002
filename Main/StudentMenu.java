@@ -1,5 +1,7 @@
 package Main;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class StudentMenu {
@@ -23,7 +25,7 @@ public class StudentMenu {
 
 	}
 	
-	public static void execution(int c,Student s) {
+	public static void execution(int c,Student s) throws FileNotFoundException, IOException {
 		
 		switch (c) {
 		

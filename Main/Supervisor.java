@@ -29,7 +29,7 @@ public class Supervisor extends User {
 		this.facultyID = facultyID;
 		this.projArr = generateProjArr();
 		Filepath f = new Filepath();
-		try(BufferedReader r = new BufferedReader(new FileReader(f.getFACFILENAME())))
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
 		{
 			String csvSplitBy = ",";
 			int found = 0;
@@ -49,8 +49,6 @@ public class Supervisor extends User {
 		            {
 		            	this.supervisorName = parts[0][0];
 		            	this.supervisorEmail = email[1];
-		            	System.out.println(this.supervisorName);
-		            	System.out.println(this.supervisorEmail);
 		            	found = 1;
 		            }
 		            line = r.readLine();
@@ -63,6 +61,11 @@ public class Supervisor extends User {
 	        }
 	}
 	
+	/**
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public Project[] generateProjArr() throws FileNotFoundException, IOException
 	{
 		List<Project> list = new ArrayList<>();
@@ -70,16 +73,12 @@ public class Supervisor extends User {
 		try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 		{
 			String line = r.readLine();
-			System.out.println(this.supervisorName);
 			while (line != null)
 			{
 				String[] parts = line.split(",");
-				System.out.println(parts[0]);
 				if (parts[0].equals(this.supervisorName))
 				{
-					System.out.println(parts[1]);
 					Project p = new Project(parts[1]);
-					System.out.println("Added!");
 					list.add(p);
 				}
 				line = r.readLine();
@@ -96,6 +95,14 @@ public class Supervisor extends User {
 		return projs;
 	}
 	
+	public String getFacultyID()
+	{
+		return facultyID;
+	}
+	public void setFacultyID(String facultyID)
+	{
+		this.facultyID = facultyID;
+	}
 	public void createProj() {
 		String projTitle;
 		Scanner sc = new Scanner(System.in);
@@ -114,14 +121,14 @@ public class Supervisor extends User {
 		{
 			String line = r.readLine();
 			line=r.readLine();
-			System.out.println("The title of the available projects are : ");
+			System.out.println("The projects under you are: ");
 			while (line != null)
 			{
 				String[] parts = line.split(",");
 				
 				if (parts[0].equals(this.supervisorName))
 				{
-					System.out.println(count + " : " + parts[1]);
+					System.out.println("ID: " + count + " : " + parts[1] + " -- " + "Status: " + parts[2]);
 					
 				}
 				count++;
@@ -271,7 +278,7 @@ public class Supervisor extends User {
 				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "New Title");
 				while (line != null) {
 					String[] parts = line.split(",");
-					if (parts[4].equals(this.facultyID)&&!parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
+					if (parts[4].equals(this.facultyID) && !parts[0].equals("Pending") && parts[1].equals("ReqChangeTitle"))
 					{
 						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[5]);
 					}

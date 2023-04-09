@@ -3,7 +3,9 @@ package Main;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,46 +17,13 @@ public class Student extends User{
 	private String studentID;
 	private String studentName;
 	private String studentEmail;
+	private String password;
 	private Status status; //need initialise to unassigned?
 	private Project proj; //unimplemented
 	//private String[] deRegisProjs ; //i think i shall use a local var instead
 	
 	Scanner sc = new Scanner (System.in);
 	
-	
-	public Student() {}
-	
-	public Student(String studentID, String studentName, String studentEmail) throws FileNotFoundException, IOException 
-	{
-		this.studentID = studentID;
-		this.studentName = studentName;
-		this.studentEmail = studentEmail;
-		this.proj = getProj(studentID);
-		//this.projArr = generateProjArr();
-		//this.numProj = projArr.length;
-	}
-
-	private Project getProj(String studentID) throws IOException {
-		Filepath f = new Filepath();
-		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
-		{
-			String line = r.readLine();
-			while(line!=null)
-			{
-				String[] parts = line.split(",");
-				System.out.println(parts[4]);
-				if (parts[4] != null && parts[3].equals(studentID))
-				{
-					Project p = new Project(parts[4]);
-					System.out.println("Proj: " + p.getProjTitle());
-					return p;
-				}
-				line = r.readLine();
-			}
-		}
-		return null;
-	}
-
 	public Student(String studentID) throws FileNotFoundException, IOException //copy kendrea constructor
 	{
 		this.studentID = studentID;
@@ -79,50 +48,92 @@ public class Student extends User{
 		            {
 		            	this.studentName = parts[0][0];
 		            	this.studentEmail = email[1];
-		            	String[] lineparts = line.split(",");
-		            	System.out.println(lineparts[0] + lineparts[4]);
-		            	if (!lineparts[4].equals("null"))
-		            	{
-		            		Project p = new Project(lineparts[4]);
-		            		//System.out.println("Proj: " + p.getProjTitle());
-		            		//System.out.println("Sup: " + p.getSupervisorName());
-		            		this.proj = p;
-		            	}
-		            	else
-		            	{
-		            		//System.out.println("Project is null");
-		            		this.proj = null;
-		            	}
-		            	System.out.println(this.studentName);
-		            	System.out.println(this.studentEmail);
+		            	this.proj = getProj(studentID);
+		            	//System.out.println(this.studentName);
+		            	//System.out.println(this.studentEmail);
+		            	//System.out.println(this.studentID);
+		            	//System.out.println(this.password);
+		            	//System.out.println(this.status);
+		            	//System.out.println(this.proj.getProjTitle());
 		            	found = 1;
 		            }
 		            line = r.readLine();
 				}
 	            
+        } 
+		catch (IOException e) 
+		{
+            e.printStackTrace();
+        }
+	}
 
-        } catch (IOException e) 
+	private Project getProj(String studentID) throws IOException {
+		Filepath f = new Filepath();
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+		{
+			String line = r.readLine();
+			String stat = null;
+			String password = null;
+			while(line!=null)
 			{
-	            e.printStackTrace();
-	        }
+				String[] parts = line.split(",");
+				System.out.println(parts[4]);
+				if (parts[4] != null && parts[3].equals(studentID))
+				{
+					Project p = new Project(parts[4]);
+					//System.out.println("Proj: " + p.getProjTitle());
+					stat = parts[6];
+					password = parts[2];
+					this.setStatus(stat);
+					this.password = password;
+					return p;
+				}
+				line = r.readLine();
+			}
+		}
+		return null;
+	}
+	
+	private Status setStatus (String status)
+	{
+		this.status = Status.valueOf(status);
+		return this.status;
 	}
 	
 	@Override
-	public void changePW() {
-		// TODO Auto-generated method stub
+	public void changePW() 
+	{
+		String newPW;
+		String checkPW = null;
+		System.out.println("Please enter your current password: ");
+		Scanner sc = new Scanner(System.in);
+		checkPW = sc.next();
+		System.out.println("Password: " + checkPW);
+		System.out.println("Current PW: " + this.getPW());
+		System.out.println(this.getPW().equals(checkPW) == false);
+		while (this.getPW().equals(checkPW) == false);
+		{
+			System.out.println("Incorrect password, please try again.");
+			checkPW = sc.next();
+			System.out.println("Please enter your current password: ");
+
+		}
+		System.out.println("Enter your new password: ");
+		newPW = sc.next();
+		this.updateStudent(newPW);
+		System.out.println("Password changed successfully!");
+		return;
 		
 	}
 
-	@Override
 	public String getPW() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.password;
 	}
 
 	@Override
-	public String getID() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getID() 
+	{
+		return this.studentID;
 	}
 	
 
@@ -141,7 +152,7 @@ public class Student extends User{
 				
 				if (parts[2].equals("Available"))
 				{
-					System.out.println(count + " : " + parts[1]);
+					System.out.println(count + " : " + parts[1] + " -- Supervisor: " + parts[0]);
 					
 				}
 				count++;
@@ -158,7 +169,7 @@ public class Student extends User{
 		
 	}
 
-	public void reqProj(boolean req) {
+	public void reqProj(boolean req) throws FileNotFoundException, IOException {
 
 		if (req==true)                 //for req project allocation
 		{
@@ -355,7 +366,7 @@ public class Student extends User{
 		int count=1; 
 		int recent=-1;
 		Filepath f = new Filepath();
-		System.out.println("Recent request status");
+		System.out.println("Recent request status: ");
 		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
 		{
 			String line = r.readLine();
@@ -367,7 +378,12 @@ public class Student extends User{
 				if ( (!parts[1].equals("ChangeSup")) && parts[2].equals(this.studentID)) //Check for student id and the relevant request type
 				{
 					if (parts[0].equals("Pending")) {
-						System.out.println("Request type :" + parts[1] + " is " + parts[0]); //we print all all the pending (new)
+						System.out.println("**NEW** \t");
+						System.out.println("Request type : " + parts[1]);
+						System.out.println("Status: " + parts[0]);
+						System.out.println("Name of Project: " + parts[3]);
+						System.out.println( "Supervisor Name: " + parts[4]);//we print all all the pending (new)
+						System.out.println();
 					}
 					recent=count; //will set the index last request into recent
 						
@@ -396,7 +412,7 @@ public class Student extends User{
 		{
 			String line = r.readLine();
 			line=r.readLine();
-			System.out.println("Request history");
+			System.out.println("Request history: ");
 			while (line != null)
 			{
 				String[] parts = line.split(",");
@@ -468,7 +484,62 @@ public class Student extends User{
 		
 	}
 
-	
+	private void updateStudent(String password)
+	{	        
+        // Read the file into memory
+        Filepath f = new Filepath();
+        List<String> lines = new ArrayList<>();
+        try(BufferedReader br = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+       	{
+            String line;
+            String newData = "";
+            int found = 0;
+            int lineNumber = 0;
+	        while ((line = br.readLine()) != null) 
+            {
+	        	if (line.trim().isEmpty()) 
+		       	{
+		            break;
+		        }
+		        lines.add(line);
+		        if (found == 0)
+		        {
+		             lineNumber++;
+			         String[] parts = line.split(",");
+			         System.out.println("Current ID: " + this.getID());
+				     if (parts[3].equals(this.getID()))
+				     {
+				          newData = String.format("%s,%s,%s,%s,%s,%s", parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], password);
+				          found = 1;
+				          System.out.println("Project title changed successfully!");
+				     }
+		        }
+		    }
+		    if (found == 0)
+		    {
+		         System.out.println("Project not found! Project title not changed!");
+		         return;
+		    }
+		    br.close();
+		        
+		    lines.set(lineNumber-1, newData);			// the line number to overwrite (starting from 0)
+		    FileWriter fw = new FileWriter(f.getSTUDFILENAME());    
+		    PrintWriter out = new PrintWriter(fw); 
+		    for (String line2 : lines) 
+		    {
+		    	out.println(line2);					// Write the modified data back to the file
+		    }
+		    out.close();
+		}
+        catch (IOException e) 
+        {
+        	e.printStackTrace();
+        }
+	}
+	private void updateStudent(Status newStatus)
+	{
+		
+	}
 	
 	
 }

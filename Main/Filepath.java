@@ -2,11 +2,11 @@ package Main;
 
 public class Filepath {
 	// Edit your filepath here manually
-	final String PROJFILENAME = "C:\\Users\\ryank\\OneDrive\\Desktop\\2002project\\rollover_project.csv";
-	final String STUDFILENAME = "C:\\Users\\ryank\\OneDrive\\Desktop\\2002project\\student list.csv";
-	final String FACFILENAME = "C:\\Users\\ryank\\OneDrive\\Desktop\\2002project\\faculty_list.csv";
-	final String SUPFILENAME = "C:\\Users\\ryank\\OneDrive\\Desktop\\2002project\\faculty_list.csv";
-	final String REQFILENAME = "C:\\Users\\ryank\\OneDrive\\Desktop\\2002project\\request.csv";
+	final String PROJFILENAME = "C:\\Users\\Mel\\NTU\\Y1S2\\eclipse\\eclipse-workspace\\SC2002\\src\\Files\\rollover_project.csv";
+	final String STUDFILENAME = "C:\\Users\\Mel\\NTU\\Y1S2\\eclipse\\eclipse-workspace\\SC2002\\src\\Files\\student list.csv";
+	final String COORDFILENAME = "C:\\Users\\Mel\\NTU\\Y1S2\\eclipse\\eclipse-workspace\\SC2002\\src\\Files\\FYP coordinator.csv";
+	final String SUPFILENAME = "C:\\Users\\Mel\\NTU\\Y1S2\\eclipse\\eclipse-workspace\\SC2002\\src\\Files\\faculty_list.csv";
+	final String REQFILENAME = "C:\\Users\\Mel\\NTU\\Y1S2\\eclipse\\eclipse-workspace\\SC2002\\src\\Files\\request.csv";
 
 	public String getPROJFILENAME() {
 		return PROJFILENAME;
@@ -16,8 +16,8 @@ public class Filepath {
 		return STUDFILENAME;
 	}
 
-	public String getFACFILENAME() {
-		return FACFILENAME;
+	public String getCOORDFILENAME() {
+		return COORDFILENAME;
 	}
 
 	public String getSUPFILENAME() {

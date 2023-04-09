@@ -25,131 +25,72 @@ public class Coordinator extends Supervisor {
 		super(facultyID);
 	}
 	
-	public void approveReq(Boolean approve) {
-		
-		if (approve==true) {    			//for approval
-			
-			//1. ask for what type of request (alloc,delloc,changesup)
-			//2. iterate and print through each request with an index
-			//3. ask them for an index 
-			//4. iterate through again and do the necessary changes in the csv file
-			//5. do the necessary changes to the relevant objects
-			
-			System.out.println("Enter which type of request");
-			System.out.println("1. Allocation request");
-			System.out.println("2. Transfer student request");
-			System.out.println("3. De-allocation request");
-			System.out.println("4. Quit");
-			
-			int choice=sc.nextInt();
-			
-			while (choice!=4) {
-				
-				switch (choice) {
-				
-				case 1: 
+	public void approveReq(Boolean approve) throws FileNotFoundException, IOException 
+	{
+		Request.ApprovalStatus result = approve ? Request.ApprovalStatus.Approved : Request.ApprovalStatus.Rejected;
+		{
+			System.out.println("Enter the request number to approve (Enter -1 to exit): ");
+			int choice;
+			Scanner sc = new Scanner(System.in);
+			choice = sc.nextInt();
+			Filepath f = new Filepath();
+			while (choice > 0)
+			{
+				try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+				{
 					int count=1;
-					int index;
-					Filepath f = new Filepath();
-					try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+					String line = r.readLine();
+					line = r.readLine();
+					System.out.println("");
+					while (line != null) 
 					{
-						String line = r.readLine();
-						line=r.readLine();
-						System.out.println("View all pending Allocation Requests:");
-						while (line != null)
+						String[] parts = line.split(",");
+						if (choice == count)
 						{
-							String[] parts = line.split(",");
-							if (parts[0].equals("Pending") && parts[1].equals("ReqAlloc"))
+							System.out.println("facultyID: " + this.getFacultyID());
+							System.out.println(parts[0].equals("Pending"));
+							System.out.println(parts[1].equals("ReqChangeTitle"));
+							if (parts[4].equals(this.getFacultyID()) && parts[0].equals("Pending") && parts[1].equals("ReqChangeTitle"))
 							{
-								System.out.println(count + " : " + parts[0]);
-								count++;
+								//If request chosen is ownself's changeTitle
+								System.out.println("Title Changed successfully");
+								Project p = new Project(parts[3]);
+								p.editProject(parts[3],parts[5]);
+								
+								ReqChangeTitle request = new ReqChangeTitle(result, "", "", "", "");
+								request.updateRequest(parts[3], result);
+							}
+							else if (parts[0].equals("Pending") && (parts[1].equals("ReqAlloc")))
+							{
+								//If request chosen is ReqAlloc
+								//Edit Project file status, studentID and sup name to reflect changes
+								//Edit Student file status to reflect changes
+								//Edit Request file status to reflect changes
+
+							}
+							else if (parts[0].equals("Pending") && parts[1].equals("ReqChangeSup"))
+							{
+								//If request chosen is ReqChangeSup
+								//Edit Project file sup name to reflect changes
+								//Edit Student file supID to reflect changes 
+								//Edit Request file status to reflect changes
 							}
 							line = r.readLine();
 						}
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					System.out.println();
-					
-					System.out.println("Enter which request to approve");
-					index=sc.nextInt();
-					
-					
-					try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
-					{	
-						int count2=1;
-						String line = r.readLine();
-						line=r.readLine();
-						System.out.println("View all pending Allocation Requests:");
-						while (line != null)
+						else if (parts[0].equals("Pending") && !(!parts[5].equals(this.getFacultyID()) && parts[1].equals("ReqChangeTitle")))
 						{
-							String[] parts = line.split(",");
-							if (parts[0].equals("Pending") && parts[1].equals("ReqAlloc"))
-							{
-								System.out.println(count + " : " + parts[0]);
-								count2++;
-							}
-							line = r.readLine();
-							
-							if (count2==index) {
-								//how the fk do i edit the csv from pending to approved
-								//change the attributes of the objects involved
-							}
-
-						       
-							
+							//Overall check to verify if its a viable request for Coordinator
+							count++;
 						}
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						line = r.readLine();
 					}
-					System.out.println();
-					
-					
-					
-					
-					
-				}
-
-						break;
-						
-				case 2: 
-						break;
-					
-				
-				case 3: 
-						break;
-					
-				default : System.out.println("Invalid input");
 				}
 				
-				
-				
-				
+				System.out.println("Enter the request number to approve/reject (Enter -1 to exit): ");
+				choice = sc.nextInt();
 			}
-			
-		
-		
-		if (approve==false) {				//for reject
-			
-			//1. ask for what type of request (alloc,delloc,changesup)
-			//2. iterate and print through each request with an index
-			//3. ask them for an index 
-			//4. iterate through again and do the necessary changes in the csv file
-			//5. do the necessary changes to the relevant objects
-			
-			System.out.println("Request rejected");
 		}
-
 	}
-	
 	public void viewAllProjs() {
 		int count=1;
 		Filepath f = new Filepath();
@@ -187,19 +128,26 @@ public class Coordinator extends Supervisor {
 	}
 	
 	public void viewPendingReq() {
-		int count=1;
 		Filepath f = new Filepath();
+		int count = 1;
 		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
 		{
 			String line = r.readLine();
 			line=r.readLine();
 			System.out.println("View all Pending Requests:");
+			System.out.println("==================");
 			while (line != null)
 			{
 				String[] parts = line.split(",");
-				if (parts[0].equals("Pending"))
+				if (parts[0].equals("Pending") && !(!parts[5].equals(this.getFacultyID()) && parts[1].equals("ReqChangeTitle")))
 				{
-					System.out.println(count + " : " + parts[0]);
+					System.out.println(count + ") **NEW** \t");
+					System.out.println("Request type : " + parts[1]);
+					System.out.println("Status: " + parts[0]);
+					System.out.println("Name of Project: " + parts[3]);
+					System.out.println("Supervisor Name: " + parts[4]);
+					System.out.println("Student name: " + parts[2]);//we print all all the pending (new)
+					System.out.println("==================");
 					count++;
 				}
 				line = r.readLine();
@@ -241,11 +189,6 @@ public class Coordinator extends Supervisor {
 			e.printStackTrace();
 		}
 		System.out.println();
-	}
-
-	public void createNewProj() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	
