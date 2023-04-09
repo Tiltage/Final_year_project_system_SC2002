@@ -1,4 +1,4 @@
-﻿Name,Email,Password,StudID,Project Title,Supervisor,Status
+﻿Name,Email,Password,StudID,Project Title,SupervisorID,Status
 CHERN ,YCHERN@e.ntu.edu.sg;,password,YCHERN,test,Melvin,Assigned
 KOH ,KOH1@e.ntu.edu.sg;,password,KOH1,null,null,Unassigned
 BRANDON ,BR015@e.ntu.edu.sg;,abcde,BR015,null,null,Unassigned

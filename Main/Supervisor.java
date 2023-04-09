@@ -327,7 +327,7 @@ public class Supervisor extends User {
 			
 			while (line != null) {
 				String[] parts = line.split(",");
-				if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
+				if (parts[4].equals(this.facultyID) && parts[0].equals("Pending") && parts[1].equals("ReqChangeTitle"))
 				{
 					if(choice==count) {
 						Project p = new Project(parts[3]);

@@ -102,7 +102,7 @@ public class Request {
 	
 	
 	
-	public static void main(String[] args) 
+	public static void main(String[] args) throws FileNotFoundException, IOException 
 	{
 		ReqAlloc r = new ReqAlloc(Request.ApprovalStatus.Pending, "Ben", "Calculator app");
 		r.addRequest();

@@ -111,13 +111,16 @@ public class Student extends User{
 		System.out.println("Password: " + checkPW);
 		System.out.println("Current PW: " + this.getPW());
 		System.out.println(this.getPW().equals(checkPW) == false);
-		while (this.getPW().equals(checkPW) == false);
+		if (this.getPW().equals(checkPW) == false)
 		{
-			System.out.println("Incorrect password, please try again.");
-			checkPW = sc.next();
-			System.out.println("Please enter your current password: ");
-
+			while (this.getPW().equals(checkPW) == false);
+			{
+				System.out.println("Incorrect password, please try again.");
+				checkPW = sc.nextLine();
+				System.out.println("Please enter your current password: ");
+			}
 		}
+
 		System.out.println("Enter your new password: ");
 		newPW = sc.next();
 		this.updateStudent(newPW);
@@ -507,17 +510,20 @@ public class Student extends User{
 		             lineNumber++;
 			         String[] parts = line.split(",");
 			         System.out.println("Current ID: " + this.getID());
+			         System.out.println("Updating password...");
+			         System.out.println("Status: " + parts[6]);
 				     if (parts[3].equals(this.getID()))
 				     {
-				          newData = String.format("%s,%s,%s,%s,%s,%s", parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], password);
+				          newData = String.format("%s,%s,%s,%s,%s,%s", parts[0], parts[1], password, parts[3], parts[4], parts[5], parts[6]);
 				          found = 1;
-				          System.out.println("Project title changed successfully!");
+				          System.out.println("Status: " + parts[6]);
+				          System.out.println("Student password changed successfully!");
 				     }
 		        }
 		    }
 		    if (found == 0)
 		    {
-		         System.out.println("Project not found! Project title not changed!");
+		         System.out.println("Student not found! Password not changed!");
 		         return;
 		    }
 		    br.close();
@@ -536,10 +542,57 @@ public class Student extends User{
         	e.printStackTrace();
         }
 	}
-	private void updateStudent(Status newStatus)
-	{
-		
+	public void updateStudent(String projectTitle, String supName, Status newStatus)
+	{	        
+        // Read the file into memory
+        Filepath f = new Filepath();
+        List<String> lines = new ArrayList<>();
+        try(BufferedReader br = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+       	{
+            String line;
+            String newData = "";
+            int found = 0;
+            int lineNumber = 0;
+	        while ((line = br.readLine()) != null) 
+            {
+	        	if (line.trim().isEmpty()) 
+		       	{
+		            break;
+		        }
+		        lines.add(line);
+		        if (found == 0)
+		        {
+		             lineNumber++;
+			         String[] parts = line.split(",");
+			         System.out.println("Current ID: " + this.getID());
+				     if (parts[3].equals(this.getID()))
+				     {
+				          newData = String.format("%s,%s,%s,%s,%s,%s", parts[0], parts[1], parts[2], parts[3], projectTitle, supName, newStatus.toString());
+				          found = 1;
+				          System.out.println("Project title changed successfully!");
+				     }
+		        }
+		    }
+		    if (found == 0)
+		    {
+		         System.out.println("Student not found! Assigned project title not changed!");
+		         return;
+		    }
+		    br.close();
+		        
+		    lines.set(lineNumber-1, newData);			// the line number to overwrite (starting from 0)
+		    FileWriter fw = new FileWriter(f.getSTUDFILENAME());    
+		    PrintWriter out = new PrintWriter(fw); 
+		    for (String line2 : lines) 
+		    {
+		    	out.println(line2);					// Write the modified data back to the file
+		    }
+		    out.close();
+		}
+        catch (IOException e) 
+        {
+        	e.printStackTrace();
+        }
 	}
-	
 	
 }
