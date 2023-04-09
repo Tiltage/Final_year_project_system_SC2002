@@ -1,5 +1,5 @@
 ﻿Name,Email,Password,StudID,Project Title,SupervisorID,Status
-CHERN ,YCHERN@e.ntu.edu.sg;,password,YCHERN,test,Melvin,Assigned
+CHERN ,YCHERN@e.ntu.edu.sg;,orange,YCHERN,Machine Learning-based Interference Mitigation in a Multi-tier Networks,A S Madhukumar
 KOH ,KOH1@e.ntu.edu.sg;,password,KOH1,null,null,Unassigned
 BRANDON ,BR015@e.ntu.edu.sg;,abcde,BR015,null,null,Unassigned
 CALVIN ,CT113@e.ntu.edu.sg;,password,CT113,null,null,Unassigned

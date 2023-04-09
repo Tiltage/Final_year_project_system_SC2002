@@ -1,6 +1,6 @@
-﻿approval status,request type,student id,project title,sup id,new title/sup
-Pending,ReqChangeSup,na,i<3SC2002,YI_LI,Li Fang
-Pending,ReqAlloc,YCHERN,Machine Learning-based Interference Mitigation in a Multi-tier Networks,na,na
+﻿approval status,request type,student id,project title,Supervisor Name,new title/sup
+Pending,ReqChangeSup,na,i<3SC2002,Li Yi,Li Fang
+Approved,ReqAlloc,YCHERN,Machine Learning-based Interference Mitigation in a Multi-tier Networks,A S Madhukumar,na
 Pending,ReqAlloc,YCHERN,Sonification of geometry 1,Alexei Sourin,NA
 Pending,ReqAlloc,YCHERN,test,Melvin,NA
 Pending,ReqAlloc,BR015,Deep Learning-Driven Edge Caching for 5G-and-Beyond Industrial IoT Networks,A S Madhukumar,NA

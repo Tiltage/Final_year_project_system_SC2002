@@ -509,12 +509,12 @@ public class Student extends User{
 		        {
 		             lineNumber++;
 			         String[] parts = line.split(",");
-			         System.out.println("Current ID: " + this.getID());
-			         System.out.println("Updating password...");
 			         System.out.println("Status: " + parts[6]);
 				     if (parts[3].equals(this.getID()))
 				     {
-				          newData = String.format("%s,%s,%s,%s,%s,%s", parts[0], parts[1], password, parts[3], parts[4], parts[5], parts[6]);
+				          System.out.println("Current ID: " + this.getID());
+				          System.out.println("Updating password...");
+				          newData = String.format("%s,%s,%s,%s,%s,%s,%s", parts[0], parts[1], password, parts[3], parts[4], parts[5], parts[6]);
 				          found = 1;
 				          System.out.println("Status: " + parts[6]);
 				          System.out.println("Student password changed successfully!");

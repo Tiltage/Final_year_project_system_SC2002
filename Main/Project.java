@@ -135,7 +135,7 @@ public class Project {
 			         String[] parts = line.split(",");
 				     if (parts[1].equals(projTitle))
 				     {
-				          newData = String.format("%s,%s,%s", parts[0], parts[1], status);
+				          newData = String.format("%s,%s,%s,%s", parts[0], parts[1], status, parts[3]);
 				          found = 1;
 				          this.status = status;
 				          System.out.println("Project status changed successfully!");
@@ -188,7 +188,7 @@ public class Project {
 			         String[] parts = line.split(",");
 				     if (parts[1].equals(projTitle))
 				     {
-				          newData = String.format("%s,%s,%s", parts[0], newProjTitle, parts[2]);
+				          newData = String.format("%s,%s,%s,%s", parts[0], newProjTitle, parts[2],parts[3]);
 				          found = 1;
 				          System.out.println("Project title changed successfully!");
 				     }
@@ -240,7 +240,8 @@ public class Project {
 			         String[] parts = line.split(",");
 				     if (parts[1].equals(projTitle))
 				     {
-				          newData = String.format("%s,%s,%s", newSup, parts[1], parts[2]);
+				    	 System.out.println("Supervisor name: " + newSup);
+				          newData = String.format("%s,%s,%s,%s", newSup, parts[1], parts[2], parts[3]);
 				          found = 1;
 				          System.out.println("Project supervisor changed successfully!");
 				     }
