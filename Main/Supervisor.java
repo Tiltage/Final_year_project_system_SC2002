@@ -610,39 +610,42 @@ public class Supervisor extends User {
 	    System.out.println("Please enter the project number of the project to change supervisor: ");
 	    int projectNum=sc.nextInt();
 	    sc.nextLine();
-	    System.out.println("Please enter name of new supervisor: ");
-	    newSupName=sc.nextLine();
 	    
-	    if (newSupName.equalsIgnoreCase(this.supervisorName))
-	    {
-	      System.out.println("Why are you trying to change supervisor name to your own name???\n");
-	      return;
-	    }
 	    int Found = 0;
 	    BufferedReader Br = new BufferedReader(new FileReader(f.getSUPFILENAME()));
-	    String line2 = Br.readLine();
-	      while(line2!=null)
-	      {
-	        // Add a new row to the bottom of the file
-	              String[] parts2 = line2.split(",");
-	              if (parts2[0].equalsIgnoreCase(newSupName))
-	              {
-	                Found = 1;
-	                break;
-	              }
-	              line2 = Br.readLine();              
-	      }
-	      Br.close();
-	    if (Found == 0)
-	    {
-	      System.out.println("Supervisor you are trying to change to does not exist!! \n");
-	      return;
+	    
+	    while(Found==0) {
+	    	System.out.println("Please enter name of new supervisor (Enter -1 to exit): ");
+	 	    newSupName=sc.nextLine();
+	 	    
+	 	    if(newSupName.equals("-1"))break;
+	 	    
+	 	    if (newSupName.equalsIgnoreCase(this.supervisorName))
+	 	    {
+	 	    	System.out.println("Why are you trying to change supervisor name to your own name???\n");
+	 	    	continue;
+	 	    }
+	 	    String line2 = Br.readLine();
+	 	      while(line2!=null)
+	 	      {
+	 	        // Add a new row to the bottom of the file
+	 	              String[] parts2 = line2.split(",");
+	 	              if (parts2[0].equalsIgnoreCase(newSupName))
+	 	              {
+	 	            	  String studentName = getStudentName(projList[projectNum]);
+	 	            	  System.out.println("Change supervisor of project:" + projList[projectNum] + " to " + newSupName);
+	 	            	  ReqChangeSup re = new ReqChangeSup(Request.ApprovalStatus.Pending, studentName, projList[projectNum], this.supervisorName, newSupName);
+	 	            	  re.addRequest();
+	 	            	  return;
+	 	              }
+	 	              line2 = Br.readLine();              
+	 	      }
+	 	      System.out.println("Supervisor you are trying to change to does not exist!! \n"); 	      
 	    }
+	    Br.close();
+
 	    
-	    System.out.println("Change supervisor of project:" + projList[projectNum] + " to " + newSupName);
 	    
-	    ReqChangeSup re = new ReqChangeSup(Request.ApprovalStatus.Pending, "na", projList[projectNum], this.supervisorName, newSupName);
-	    re.addRequest();
 	    
 	      }
 	      
@@ -651,4 +654,24 @@ public class Supervisor extends User {
 	                e.printStackTrace();
 	        }
 	  }
+	
+	public String getStudentName(String projName) throws FileNotFoundException, IOException {
+		String studentName = null;
+		Filepath f = new Filepath();
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME()))){
+	    	String line3 = r.readLine();
+	        while(line3!=null)
+	        {
+	        	String[] parts = line3.split(",");
+	            if (parts[5].equals(this.supervisorName))
+	            {
+	               studentName = parts[3];
+	            }
+	            line3 = r.readLine();              
+	        }
+	        r.close();	    	
+	    }
+		return studentName;
+	}
+	
 }
