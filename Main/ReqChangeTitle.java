@@ -6,21 +6,21 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class ReqChangeTitle extends Request{
-	private String supID;
+	private String supName;
 	private String newProjTitle;
 	
-	public ReqChangeTitle(ApprovalStatus approvalStatus, String studentID, String projTitle, String supID, String newProjTitle){
+	public ReqChangeTitle(ApprovalStatus approvalStatus, String studentID, String projTitle, String supName, String newProjTitle){
 		super(approvalStatus, studentID, projTitle);
 		this.setType(RequestType.ReqChangeTitle);
-		this.supID = supID;
+		this.supName = supName;
 		this.newProjTitle = newProjTitle;
 	}
 	
-	public String getSupID() {
-		return supID;
+	public String getSupName() {
+		return supName;
 	}
-	public void setSupID(String supID) {
-		this.supID = supID;
+	public void setSupName(String supName) {
+		this.supName = supName;
 	}
 	public String getNewProjTitle() {
 		return newProjTitle;
@@ -37,7 +37,7 @@ public class ReqChangeTitle extends Request{
 	             PrintWriter out = new PrintWriter(bw)) 
 		{
 	            // Add a new row to the bottom of the file
-	            out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supID,this.newProjTitle).println();
+	            out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supName,this.newProjTitle).println();
 	            System.out.println("Data appended to file successfully!");
 
         } catch (IOException e) 
