@@ -84,10 +84,9 @@ public class Project {
 	// End state is to call p.addProject to add all its attributes into the csv file 
 	{	
 		Filepath f = new Filepath();
-		try(FileWriter fw = new FileWriter(f.getPROJFILENAME(), true);
-			BufferedReader br = new BufferedReader(new FileReader(f.getPROJFILENAME()));
-	        PrintWriter out = new PrintWriter(fw)) 
-		
+		try	(FileWriter fw = new FileWriter(f.getPROJFILENAME(), true);
+				BufferedReader br = new BufferedReader(new FileReader(f.getPROJFILENAME()));
+		        PrintWriter out = new PrintWriter(fw))
 		{
 			String line;
             int lineNumber = 0;
@@ -98,9 +97,8 @@ public class Project {
                 lineNumber++;
             }
             br.close();
-     
-            
-            out.printf("%s,%s,%s", this.supervisorName,this.projTitle, this.status).println();		//added .println() at the back cos when adding 2 projs consecutively, 2nd proj would append at the same line as 1st
+   
+            out.printf("%s,%s,%s,%s", this.supervisorName,this.projTitle, this.status, this.projID).println();		//added .println() at the back cos when adding 2 projs consecutively, 2nd proj would append at the same line as 1st
             out.close();
             System.out.println("New project added successfully!");
 		}
@@ -109,6 +107,7 @@ public class Project {
 			{
 	            e.printStackTrace();
 	        }
+		
 	}
 	
 	public void editProject(String projTitle, Status status)
@@ -315,7 +314,7 @@ public class Project {
 
 	public static void main(String[] args) 
 	{
-		Project p1 = new Project("69","abe@def", "Li Fang", "lif", "helloWorld");
+		Project p1 = new Project("69", "abc@e","LiF","abcdef", "HELLOWORLD");
 		p1.addProject();
 		System.out.println(p1.getProjID());
 	}
