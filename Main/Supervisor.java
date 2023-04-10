@@ -282,12 +282,18 @@ public class Supervisor extends User {
 			{
 				String line = r.readLine();
 				String[] header = line.split(",");
-				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "New Title");
+				int count=1;
 				while (line != null) {
 					String[] parts = line.split(",");
 					if (parts[4].equals(this.supervisorName) && !parts[0].equals("Pending") && parts[1].equals("ReqChangeTitle"))
 					{
-						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[5]);
+						System.out.println("Request "+count);
+						System.out.println("Approval Status: "+parts[0]);
+						System.out.println("Student: " +parts[2]);
+						System.out.println("Project Title: " +parts[3]);
+						System.out.println("New Title: " +parts[5]);
+						System.out.println("");
+						count++;
 					}
 					line = r.readLine();
 				}
@@ -300,12 +306,18 @@ public class Supervisor extends User {
 			{
 				String line = r.readLine();
 				String[] header = line.split(",");
-				System.out.println(header[2] + "  ||  " + header[3] + "  ||  " + "Old Supervisor" + "  ||  " + "New Supervisor");
+				int count=1;
 				while (line != null) {
 					String[] parts = line.split(",");
 					if (parts[4].equals(this.supervisorName)&&!parts[0].equals("Pending")&&parts[1].equals("ReqChangeSup"))
 					{
-						System.out.println(parts[2] + "  ||  " + parts[3] + "  ||  " + parts[4] + "  ||  " + parts[5]);
+						System.out.println("Request "+count);
+						System.out.println("Approval Status: "+parts[0]);
+						System.out.println("Student: " +parts[2]);
+						System.out.println("Project Title: " +parts[3]);
+						System.out.println("New Supervisor: " +parts[5]);
+						System.out.println("");
+						count++;;
 					}
 					line = r.readLine();
 				}
