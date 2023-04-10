@@ -22,7 +22,7 @@ public class Main {
 		
 		Scanner sc = new Scanner(System.in);
 		userType = sc.nextInt();
-		sc.nextLine();
+		sc.nextLine();  				//input buffer
 		
 		
 		while (userType == 1 || userType==2 || userType ==3) {
@@ -34,10 +34,10 @@ public class Main {
 				while (access == false) 
 				{
 					System.out.println("Please input Student UserID : ");
-					UserID=sc.next();
+					UserID=sc.nextLine();
 					
 					System.out.println("Please input password : ");
-					password=sc.next();
+					password=sc.nextLine();
 					if (check(UserID, password, 1) == true)
 					{
 						access = true;
@@ -64,11 +64,7 @@ public class Main {
 				access=false;
 				while (access==false) {
 					System.out.println("Please input Supervisor UserID : ");
-					UserID=sc.nextLine(); //nextline vs next 
-				/* if (UserID not in excel){
-					System.out.println("Invalid UserID");
-					continue;
-					}*/
+					UserID=sc.nextLine();
 					
 					System.out.println("Please input password : ");
 					password=sc.nextLine();
@@ -76,7 +72,6 @@ public class Main {
 			        {
 						access = true;
 			        }
-					access=true;
 				}
 				Supervisor sp = new Supervisor(UserID);
 				menuChoice=SupervisorMenu.display();
@@ -98,10 +93,10 @@ public class Main {
 				while (access==false) 
 				{
 					System.out.println("Please input Coordinator UserID : ");
-					UserID=sc.next();
+					UserID=sc.nextLine();
 					
 					System.out.println("Please input password : ");
-					password=sc.next();
+					password=sc.nextLine();
 					access=true;
 				
 				
@@ -130,6 +125,7 @@ public class Main {
 		System.out.println("2. Supervisor");
 		System.out.println("3. FYP Coordinator");
 		userType = sc.nextInt();
+		String s = sc.nextLine();   //input buffer
 		}
 	}
 	
