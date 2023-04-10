@@ -9,7 +9,7 @@ public class Supervisor extends User {
 	private String supervisorEmail;
 	private String password;
 	private Project[] projArr;
-	private int numProj;
+	private int numProj=0;
 	
 	
 	
@@ -316,15 +316,47 @@ public class Supervisor extends User {
 		System.out.println("File found");
 		Filepath f = new Filepath();
 		Scanner sc = new Scanner(System.in);
+		
 		do {
-			System.out.println("Enter request number to accept: ");
+			int count=1;
+			//View request
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+			{
+				String line = r.readLine();
+				String[] header = line.split(",");
+				System.out.println("");
+				
+				while (line != null) {
+					String[] parts = line.split(",");
+					if (parts[4].equals(this.supervisorName)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
+					{
+						System.out.println("Pending request "+count);
+						System.out.println("Student: " +parts[2]);
+						System.out.println("Project Title: " +parts[3]);
+						System.out.println("New Title: " +parts[5]);
+						System.out.println("");
+						count++;
+					}
+					line = r.readLine();
+				}
+			}
+			
+			//if no more requests
+			if(count==1) {
+				System.out.println("There are no more requests to approve");
+				System.out.println();
+				break;
+			}
+			
+			//Accepting request			
+			System.out.println("Enter request number to accept (Enter -1 to exit): ");
 			choice=sc.nextInt();
 			
 			if(choice<1)return;
 			
 			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
 			{
-				int count=1;
+				count=1;
 				String line = r.readLine();
 				String[] header = line.split(",");
 				System.out.println("");
@@ -339,6 +371,7 @@ public class Supervisor extends User {
 							
 							ReqChangeTitle request = new ReqChangeTitle(Request.ApprovalStatus.Approved, "", "", "", "");
 							request.updateRequest(parts[3], Request.ApprovalStatus.Approved);
+							break;
 						}
 						
 						count++;
@@ -346,42 +379,80 @@ public class Supervisor extends User {
 					line = r.readLine();
 				}
 			}
-			return;
 		}while(choice>0);
+		
+		return;
 	}
 		
 		
 	
 	public void rejectReq() throws FileNotFoundException, IOException {
-		int choice;
+		int choice=0;
 		System.out.println("File found");
 		Filepath f = new Filepath();
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.println("Enter request number to accept: ");
-		choice=sc.nextInt();
-		
-		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
-		{
+		do {
 			int count=1;
-			String line = r.readLine();
-			String[] header = line.split(",");
-			System.out.println("");
-			
-			while (line != null) {
-				String[] parts = line.split(",");
-				if (parts[4].equals(this.facultyID)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
-				{
-					if(choice==count) {
-						ReqChangeTitle request = new ReqChangeTitle(Request.ApprovalStatus.Rejected, "", "", "", "");
-						request.updateRequest(parts[3], Request.ApprovalStatus.Rejected);
+			//View request
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+			{
+				String line = r.readLine();
+				String[] header = line.split(",");
+				System.out.println("");
+				
+				while (line != null) {
+					String[] parts = line.split(",");
+					if (parts[4].equals(this.supervisorName)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
+					{
+						System.out.println("Pending request "+count);
+						System.out.println("Student: " +parts[2]);
+						System.out.println("Project Title: " +parts[3]);
+						System.out.println("New Title: " +parts[5]);
+						System.out.println("");
+						count++;
 					}
-					
-					count++;
+					line = r.readLine();
 				}
-				line = r.readLine();
 			}
-		}
+			
+			//if no more requests
+			if(count==1) {
+				System.out.println("There are no more requests to reject");
+				System.out.println();
+				break;
+			}
+			
+			//Accepting request			
+			System.out.println("Enter request number to reject (Enter -1 to exit): ");
+			choice=sc.nextInt();
+			
+			if(choice<1)return;
+			
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+			{
+				count=1;
+				String line = r.readLine();
+				String[] header = line.split(",");
+				System.out.println("");
+				
+				while (line != null) {
+					String[] parts = line.split(",");
+					if (parts[4].equals(this.supervisorName) && parts[0].equals("Pending") && parts[1].equals("ReqChangeTitle"))
+					{
+						if(choice==count) {
+							ReqChangeTitle request = new ReqChangeTitle(Request.ApprovalStatus.Rejected, "", "", "", "");
+							request.updateRequest(parts[3], Request.ApprovalStatus.Rejected);
+							break;
+						}
+						
+						count++;
+					}
+					line = r.readLine();
+				}
+			}
+		}while(choice>0);
+		
 		return;
 	}
 	
@@ -481,22 +552,83 @@ public class Supervisor extends User {
 	public String getSupervisorName() {
 		return supervisorName;
 	}
-
-	public void requestTransfer() { //change 
-		String projectName;
-		String newSupName;
-		Scanner sc = new Scanner(System.in);
-		
-		System.out.println("Please enter name of project: ");
-		projectName=sc.nextLine();
-		sc.nextLine();
-		System.out.println("Please enter name of new supervisor: ");
-		newSupName=sc.nextLine();
-		System.out.println("Input: " + projectName + "," + newSupName);
-		
-		ReqChangeSup r = new ReqChangeSup(Request.ApprovalStatus.Pending, "na", projectName, this.facultyID, newSupName);
-		r.addRequest();
-		
-	}
-
+	
+	public void requestTransfer() 
+	  {
+	      Filepath f = new Filepath();
+	      try(BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+	      {
+	        int NumOfProjFound = 0;
+	        int lineNumber = 0;
+	        String line = r.readLine();
+	        String projList[] = new String[100];
+	        while(line!=null)
+	        {
+	          // Add a new row to the bottom of the file
+	          lineNumber++;
+	                String[] parts = line.split(",");
+	                if (parts[0].equals(this.supervisorName))
+	                {
+	                  NumOfProjFound++;
+	                  System.out.printf("Project %d: %s", NumOfProjFound, parts[1]).println();
+	                  projList[NumOfProjFound] = parts[1];
+	                }
+	                line = r.readLine();              
+	        }
+	        r.close();
+	        if (NumOfProjFound == 0)
+	        {
+	          System.out.println("You do not have any projects!");
+	        }
+	          
+	          
+	    
+	    String projectName = "";
+	    String newSupName;
+	    Scanner sc = new Scanner(System.in);
+	    
+	    System.out.println("Please enter the project number of the project to change supervisor: ");
+	    int projectNum=sc.nextInt();
+	    sc.nextLine();
+	    System.out.println("Please enter name of new supervisor: ");
+	    newSupName=sc.nextLine();
+	    
+	    if (newSupName.equalsIgnoreCase(this.supervisorName))
+	    {
+	      System.out.println("Why are you trying to change supervisor name to your own name???\n");
+	      return;
+	    }
+	    int Found = 0;
+	    BufferedReader Br = new BufferedReader(new FileReader(f.getSUPFILENAME()));
+	    String line2 = Br.readLine();
+	      while(line2!=null)
+	      {
+	        // Add a new row to the bottom of the file
+	              String[] parts2 = line2.split(",");
+	              if (parts2[0].equalsIgnoreCase(newSupName))
+	              {
+	                Found = 1;
+	                break;
+	              }
+	              line2 = Br.readLine();              
+	      }
+	      Br.close();
+	    if (Found == 0)
+	    {
+	      System.out.println("Supervisor you are trying to change to does not exist!! \n");
+	      return;
+	    }
+	    
+	    System.out.println("Change supervisor of project:" + projList[projectNum] + " to " + newSupName);
+	    
+	    ReqChangeSup re = new ReqChangeSup(Request.ApprovalStatus.Pending, "na", projList[projectNum], this.supervisorName, newSupName);
+	    re.addRequest();
+	    
+	      }
+	      
+	      catch (IOException e) 
+	        {
+	                e.printStackTrace();
+	        }
+	  }
 }
