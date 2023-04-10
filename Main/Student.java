@@ -218,10 +218,11 @@ public class Student extends User{
 	      System.out.println("None");   
 	    }
 	    else {
-	    for (int i=0;i<DeRegisProj.size();i++) {
-	        System.out.println(DeRegisProj.get(i));                //prints out all the previously registered projects
-	        }
-	      }
+	    	for (int i=0;i<DeRegisProj.size();i++)
+	    		{
+	        	System.out.println(DeRegisProj.get(i));                //prints out all the previously registered projects
+	    		}
+	         }	
 	    System.out.println();
 	    
 	    int total=1;
@@ -313,7 +314,7 @@ public class Student extends User{
 	        }
 	        
 	        
-	        else {          //for request de-allocation
+	        else {          //for request de-allocation, reject if got pending req
 	          
 	          if (this.status==Status.Pending) {
 	            System.out.println("You have a pending request for a project"); //sanity check
@@ -328,7 +329,41 @@ public class Student extends User{
 	          String title="NA";
 	          int count=1;
 	          Filepath f = new Filepath();
-	          try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+	          
+	          
+	          
+	  		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+			{	
+				String line = r.readLine();
+				line=r.readLine();
+				while (line != null)
+				{
+					String[] parts = line.split(",");
+					
+					if (parts[2].equals(this.studentID) && parts[0].equals("Pending") && parts[1].equals("ReqChangeTitle")) //to check if have any pending change title req
+					{
+						System.out.println("You already have a pending request to change title");
+						return;
+					}
+					
+					if (parts[2].equals(this.studentID) && parts[0].equals("Pending") && parts[1].equals("ReqDeregister"))
+					{
+						System.out.println("You already have a pending request to deregister a project");
+						return;	
+					}
+					line = r.readLine();
+				}
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	          
+	          
+	         try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
 	          {  
 	            String line = r.readLine();
 	            line=r.readLine();
@@ -485,7 +520,7 @@ public class Student extends User{
 
 	}
 
-	public void reqChangeTitle() {
+	public void reqChangeTitle() {        //if got pending deallocation req, we dont allow
 		
 		if (this.status!=Status.Assigned) {
 			System.out.println("You have not been assigned a project");
@@ -503,8 +538,14 @@ public class Student extends User{
 				
 				if (parts[2].equals(this.studentID) && parts[0].equals("Pending") && parts[1].equals("ReqChangeTitle")) //to check if have any pending change title req
 				{
-					System.out.println("You already have a request to change title");
+					System.out.println("You already have a pending request to change title");
 					return;
+				}
+				
+				if (parts[2].equals(this.studentID) && parts[0].equals("Pending") && parts[1].equals("ReqDeregister"))
+				{
+					System.out.println("You already have a pending request to deregister a project");
+					return;	
 				}
 				line = r.readLine();
 			}
