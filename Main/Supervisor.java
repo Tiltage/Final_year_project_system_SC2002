@@ -29,6 +29,7 @@ public class Supervisor extends User {
 	{
 		this.facultyID = facultyID;
 		this.projArr = generateProjArr();
+		this.numProj = projArr.length;
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
 		{
@@ -371,6 +372,9 @@ public class Supervisor extends User {
 							
 							ReqChangeTitle request = new ReqChangeTitle(Request.ApprovalStatus.Approved, "", "", "", "");
 							request.updateRequest(parts[3], Request.ApprovalStatus.Approved);
+							
+							Student student = new Student(parts[2]);
+							student.updateStudent(parts[3], this.supervisorName, parts[5]);
 							break;
 						}
 						
