@@ -51,11 +51,12 @@ public class Main {
 				{
 					StudentMenu.execution(menuChoice,s);
 					if (menuChoice == 1) {
+						access=false;
 						break;
 					}
 					menuChoice=StudentMenu.display();
 				}
-		
+				access=false;
 				break;
 			}
 		case 2:
@@ -71,11 +72,11 @@ public class Main {
 					
 					System.out.println("Please input password : ");
 					password=sc.nextLine();
-					
 					if (check(UserID, password, 2) == true)
-					{
+			        {
 						access = true;
-					}
+			        }
+					access=true;
 				}
 				Supervisor sp = new Supervisor(UserID);
 				menuChoice=SupervisorMenu.display();
@@ -83,10 +84,12 @@ public class Main {
 				while (menuChoice != 5) {
 					SupervisorMenu.execution(menuChoice,sp);
 					if (menuChoice == 1) {
+						access=false;
 						break;
 					}
 					menuChoice=SupervisorMenu.display();
 				}
+				access=false;
 				break;
 			}
 		case 3:
@@ -95,18 +98,10 @@ public class Main {
 				while (access==false) 
 				{
 					System.out.println("Please input Coordinator UserID : ");
-					UserID=sc.next(); //nextline vs next 
-				/* if (UserID not in excel){
-					System.out.println("Invalid UserID");
-					continue;
-					}*/
+					UserID=sc.next();
 					
 					System.out.println("Please input password : ");
 					password=sc.next();
-				/* if (UserID in excel and the password is incorrect ){
-				  	System.out.println("Invalid Password");
-					continue;
-					}		 */
 					access=true;
 				
 				
@@ -118,11 +113,13 @@ public class Main {
 				{
 					CoordinatorMenu.execution(menuChoice,co);
 					if (menuChoice == 1) {
+						access=false;
 						break;
 					}
 					menuChoice=CoordinatorMenu.display();
 				}
 				}
+				access=false;
 				break;
 			}
 		default:
