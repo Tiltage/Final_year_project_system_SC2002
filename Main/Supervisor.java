@@ -28,8 +28,6 @@ public class Supervisor extends User {
 	public Supervisor(String facultyID) throws FileNotFoundException, IOException
 	{
 		this.facultyID = facultyID;
-		this.projArr = generateProjArr();
-		this.numProj = projArr.length;
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
 		{
@@ -52,6 +50,9 @@ public class Supervisor extends User {
 		            	this.supervisorName = parts[0][0];
 		            	this.supervisorEmail = email[1];
 		            	this.password = parts[2][0];
+		        		System.out.println("Constructing");
+		        		this.projArr = generateProjArr();
+		        		this.numProj = projArr.length;
 		            	found = 1;
 		            }
 		            line = r.readLine();
@@ -82,6 +83,7 @@ public class Supervisor extends User {
 				if (parts[0].equals(this.supervisorName))
 				{
 					Project p = new Project(parts[1]);
+					System.out.println(parts[1]);
 					list.add(p);
 				}
 				line = r.readLine();
@@ -611,6 +613,26 @@ public class Supervisor extends User {
 	    int projectNum=sc.nextInt();
 	    sc.nextLine();
 	    
+	    //Checking for previous requests
+		try(BufferedReader reader = new BufferedReader(new FileReader(f.getREQFILENAME()))){
+	    	String line3 = reader.readLine();
+	        while(line3!=null)
+	        {
+	        	String[] parts = line3.split(",");
+	            if (parts[1].equals("ReqChangeSup")&&parts[3].equals(projList[projectNum])&&parts[4].equals(this.supervisorName))
+	            {
+	               System.out.println("You already have a pending request for that project");
+	               System.out.println("");
+	               return;
+	            }
+	            line3 = reader.readLine();              
+	        }
+	        reader.close();	    	
+	    }
+		
+	    
+	    //Sanity checks
+	    
 	    int Found = 0;
 	    BufferedReader Br = new BufferedReader(new FileReader(f.getSUPFILENAME()));
 	    
@@ -659,15 +681,15 @@ public class Supervisor extends User {
 		String studentName = null;
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME()))){
-	    	String line3 = r.readLine();
-	        while(line3!=null)
+	    	String line = r.readLine();
+	        while(line!=null)
 	        {
-	        	String[] parts = line3.split(",");
+	        	String[] parts = line.split(",");
 	            if (parts[5].equals(this.supervisorName))
 	            {
 	               studentName = parts[3];
 	            }
-	            line3 = r.readLine();              
+	            line = r.readLine();              
 	        }
 	        r.close();	    	
 	    }
