@@ -43,7 +43,7 @@ public class CoordinatorMenu {
 			break;
 		case 5 : 
 			System.out.println("15 : View all projects ");
-			System.out.println("16 : ?????"); 
+			System.out.println("16 : Generate report"); 
 			choice=sc.nextInt();
 			break;
 		
@@ -56,7 +56,10 @@ public class CoordinatorMenu {
 			break;
 			
 		default :
-			System.out.println("Invalid option!");
+			if (choice < 1 || choice > 20)
+			{
+				System.out.println("Invalid option!");
+			}
 		}
 		return choice;
 	}
@@ -71,6 +74,7 @@ public class CoordinatorMenu {
 			
 		case 4: 
 			co.changePW();
+			break;
 		
 		case 8 : 
 			co.createProj();
@@ -85,7 +89,7 @@ public class CoordinatorMenu {
 			break;
 			
 		case 11 : 
-			co.viewPendingReq();
+			co.viewRequest();
 			break;
 			
 		case 12 :
@@ -93,11 +97,11 @@ public class CoordinatorMenu {
 			break;
 			
 		case 13 : 
-			co.approveReq(true);
+			co.approveReq();
 			break;
 		
 		case 14 : 
-			co.approveReq(false);
+			co.approveReq();
 			break;
 			
 		case 15 : 
@@ -109,16 +113,18 @@ public class CoordinatorMenu {
 			
 		case 17:
 			co.viewPendingReqCoord();
+			break;
 			
 		case 18:
 			co.viewReqHistCoord();
+			break;
 			
 		case 19:
 			co.approveReqCoord(true);
+			break;
 			
 		case 20:
-			co.approveReqCoord(false)
-	
+			co.approveReqCoord(false);
 			break;
 			
 			
