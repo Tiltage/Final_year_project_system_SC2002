@@ -18,9 +18,9 @@ public class Student extends User{
 	private String studentName;
 	private String studentEmail;
 	private String password;
-	private Status status; //need initialise to unassigned?
-	private Project proj; //unimplemented
-	//private String[] deRegisProjs ; //i think i shall use a local var instead
+	private Status status; 
+	private Project proj; 
+	
 	
 	Scanner sc = new Scanner (System.in);
 	
@@ -48,13 +48,8 @@ public class Student extends User{
 		            {
 		            	this.studentName = parts[0][0];
 		            	this.studentEmail = email[1];
+		            	this.password=email[2];
 		            	this.proj = getProj(studentID);
-		            	//System.out.println(this.studentName);
-		            	//System.out.println(this.studentEmail);
-		            	//System.out.println(this.studentID);
-		            	//System.out.println(this.password);
-		            	//System.out.println(this.status);
-		            	//System.out.println(this.proj.getProjTitle());
 		            	found = 1;
 		            }
 		            line = r.readLine();
@@ -81,7 +76,6 @@ public class Student extends User{
 				if (parts[4] != null && parts[3].equals(studentID))
 				{
 					Project p = new Project(parts[4]);
-					//System.out.println("Proj: " + p.getProjTitle());
 					stat = parts[6];
 					password = parts[2];
 					this.setStatus(stat);
@@ -110,19 +104,24 @@ public class Student extends User{
 		checkPW = sc.next();
 		System.out.println("Password: " + checkPW);
 		System.out.println("Current PW: " + this.getPW());
-		System.out.println(this.getPW().equals(checkPW) == false);
+		System.out.println(this.getPW().equals(checkPW) != false);
 		if (this.getPW().equals(checkPW) == false)
 		{
-			while (this.getPW().equals(checkPW) == false);
+			while (this.getPW().equals(checkPW) == false)
 			{
 				System.out.println("Incorrect password, please try again.");
-				checkPW = sc.nextLine();
 				System.out.println("Please enter your current password: ");
+				checkPW = sc.nextLine();
 			}
 		}
 
 		System.out.println("Enter your new password: ");
 		newPW = sc.next();
+		if (newPW.equals(this.getPW())) {
+			System.out.println("New password cannot be the same as the current one");
+			return;
+		}
+		
 		this.updateStudent(newPW);
 		System.out.println("Password changed successfully!");
 		return;
@@ -142,188 +141,228 @@ public class Student extends User{
 
 
 	public void viewAvailableProjects() {
-		int count=1;
-		Filepath f = new Filepath();
-		try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
-		{
-			String line = r.readLine();
-			line=r.readLine();
-			System.out.println("The title of the available projects are : ");
-			while (line != null)
-			{
-				String[] parts = line.split(",");
-				
-				if (parts[2].equals("Available"))
-				{
-					System.out.println(count + " : " + parts[1] + " -- Supervisor: " + parts[0]);
-					
-				}
-				count++;
-				line = r.readLine();
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println();
-		
-	}
+	    int count=1;
+	    Filepath f = new Filepath();
+	    try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+	    {
+	      String line = r.readLine();
+	      line=r.readLine();
+	      System.out.println("The title of the available projects are ");
+	      System.out.println("ID : Title ");
+	      while (line != null)
+	      {
+	        String[] parts = line.split(",");
+	        
+	        if (parts[2].equals("Available"))
+	        {
+	          System.out.println(count + " : " + parts[1] + " -- Supervisor: " + parts[0]);
+	          
+	        }
+	        count++;  //should i put this inside?
+	        line = r.readLine();
+	      }
+	    } catch (FileNotFoundException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	    } catch (IOException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	    }
+	    System.out.println();
+	    
+	  }
 
-	public void reqProj(boolean req) throws FileNotFoundException, IOException {
+	  public void reqProj(boolean req) throws FileNotFoundException, IOException {
 
-		if (req==true)                 //for req project allocation
-		{
-		int index;
-		String projectTitle = "NA";
-		int valid=0;
-		
-		if (this.status==Status.Pending) {
-			System.out.println("You have a pending request for a project"); //sanity check
-			return;
-		}
-		
-		if (this.status==Status.Assigned) {
-			System.out.println("You have been assigned a project"); //sanity check
-			return;
-		}
+	    if (req==true)                 //for req project allocation
+	    {
+	    int index;
+	    String projectTitle = "NA";
+	    String supName = "NA";
+	    
+	    int valid=0;
+	    
+	    if (this.status==Status.Pending) {
+	      System.out.println("You have a pending request for a project"); //sanity check
+	      return;
+	    }
+	    
+	    if (this.status==Status.Assigned) {
+	      System.out.println("You have been assigned a project"); //sanity check
+	      return;
+	    }
 
-		List<String> DeRegisProj = new ArrayList<>();          //declare an araylis of deregistered projects
-		
-		int count=1;
-		Filepath f = new Filepath();
-		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
-		{
-			String line = r.readLine();
-			line=r.readLine();
-			while (line != null)
-			{
-				String[] parts = line.split(",");
-				if (parts[0].equals("Approved") && parts[1].equals("ReqDealloc") && parts[2].equals(this.studentID))
-				{
-					DeRegisProj.add(parts[3]); 						//adding all the deregistered project into array
-				}
-				line = r.readLine();
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		System.out.println("List of De-registered Projects : ");
-		if (DeRegisProj.size()==0) {
-			System.out.println("None");   
-		}
-		else {
-		for (int i=0;i<DeRegisProj.size();i++) {
-				System.out.println(DeRegisProj.get(i));                //prints out all the previously registered projects
-				}
-			}
-		System.out.println();
-		
-		
-		
-		
-		while (valid==0) {
-			System.out.println("Enter the Number ID of the project you want to be allocated : ");
-			System.out.println();
-			index=sc.nextInt();
-			
-			try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
-			{
-				String line = r.readLine();
-				
-				
-				for (int i=0;i<index;i++) {
-					line=r.readLine();			          //iterate the csv until the index of requested project
-				}
-				
-				String[] parts = line.split(",");
-				
-				if (parts[2].equals("Available"))
-				{	
-					
-					for (int j=0;j<DeRegisProj.size();j++) {
-						
-						if (parts[1].equals(DeRegisProj.get(j))){
-							
-							System.out.println("You have registered for this project before !");   //check if they registered for the project before
-							continue;							
-						}
-						
-					}
+	    List<String> DeRegisProj = new ArrayList<>();          //declare an araylis of deregistered projects
+	    
+	    int count=1;
+	    Filepath f = new Filepath();
+	    try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+	    {
+	      String line = r.readLine();
+	      line=r.readLine();
+	      while (line != null)
+	      {
+	        String[] parts = line.split(",");
+	        if (parts[0].equals("Approved") && parts[1].equals("ReqDealloc") && parts[2].equals(this.studentID))
+	        {
+	          DeRegisProj.add(parts[3]);             //adding all the deregistered project into array
+	        }
+	        line = r.readLine();
+	      }
+	    } catch (FileNotFoundException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	    } catch (IOException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	    }
+	    
+	    System.out.println("List of De-registered Projects : ");
+	    if (DeRegisProj.size()==0) {
+	      System.out.println("None");   
+	    }
+	    else {
+	    for (int i=0;i<DeRegisProj.size();i++) {
+	        System.out.println(DeRegisProj.get(i));                //prints out all the previously registered projects
+	        }
+	      }
+	    System.out.println();
+	    
+	    int total=1;
+	    try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+	    {  
+	      String line = r.readLine();
+	      line=r.readLine();
+	      while (line != null)
+	      {
+	        total++; 
+	        line = r.readLine();
+	      }
+	    } catch (FileNotFoundException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	    } catch (IOException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	    }
+	    
+	    
+	    
+	    
+	    while (valid==0) {
+	      System.out.println("Enter the Number ID of the project you want to be allocated : ");
+	      System.out.println();
+	      index=sc.nextInt();
+	      
+	      if (index>=total || index<1) {
+	        System.out.println("Invalid selection");
+	        continue;
+	      }
+	      
+	      try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+	      {
+	        String line = r.readLine();
+	        
+	        
+	        for (int i=0;i<index;i++) {
+	          line=r.readLine();                //iterate the csv until the index of requested project
+	        }
+	        
+	        String[] parts = line.split(",");
+	        
+	        if (!parts[2].equals("Available")) {
+	          System.out.println("This project is unavailable");
+	          continue;
+	        }
+	        
+	        if (parts[2].equals("Available"))
+	        {  
+	          for (int j=0;j<DeRegisProj.size();j++) {
+	        	  if (parts[1].equals(DeRegisProj.get(j))){
+	                  
+	                  System.out.println("You have registered for this project before !");   //check if they registered for the project before
+	                  continue;              
+	                }
+	                
+	              }
 
-					projectTitle = parts[1];
-					System.out.println(projectTitle);    //if available, we print out again and break out
-					System.out.println();
-					valid=1;                             //this for breaking
-					
-				}
+	              projectTitle = parts[1];
+	              supName=parts[0];
+	              Project p= new Project(projectTitle);
+	              
+	              System.out.println(projectTitle);    //if available, we print out again and break out
+	              System.out.println();
+	              this.status=Status.Pending;
+	              
+	              updateStudent(projectTitle,supName,Status.Pending);      //updating student csv          
+	              p.editProject(projectTitle,Project.Status.Reserved);          //updating project csv
+	              
+	              valid=1;                             //this for breaking
+	              
+	              //student csv status not updated
+	              //project csv status not updated
+	            }
 
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		ReqAlloc r = new ReqAlloc(Request.ApprovalStatus.Pending, this.studentID, projectTitle);
-		r.addRequest();
-		}
-		
-		
-		else {          //for request de-allocation
-			
-			if (this.status==Status.Pending) {
-				System.out.println("You have a pending request for a project"); //sanity check
-				return;
-			}
-			
-			if (this.status==Status.Unassigned) {
-				System.out.println("You have not been assigned a project"); //sanity check
-				return;
-			}
-			
-			String title="NA";
-			int count=1;
-			Filepath f = new Filepath();
-			try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
-			{	
-				String line = r.readLine();
-				line=r.readLine();
-				while (line != null)
-				{
-					String[] parts = line.split(",");
-					
-					if (parts[2].equals(this.studentID))
-					{
-						title=parts[3];                //iterate to find the current title new (need it to pass in as parameter)
-						break;
-						
-					}
-					count++;
-					line = r.readLine();
-				}
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			System.out.println();
-			
-			ReqDeregister r = new ReqDeregister(Request.ApprovalStatus.Pending, this.studentID, title);
-			r.addRequest();
-			}	
-		}
+	          } catch (FileNotFoundException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	          } catch (IOException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	          }
+	        }
+	        
+	        ReqAlloc r = new ReqAlloc(Request.ApprovalStatus.Pending, this.studentID, projectTitle);
+	        r.addRequest();
+	        }
+	        
+	        
+	        else {          //for request de-allocation
+	          
+	          if (this.status==Status.Pending) {
+	            System.out.println("You have a pending request for a project"); //sanity check
+	            return;
+	          }
+	          
+	          if (this.status==Status.Unassigned) {
+	            System.out.println("You have not been assigned a project"); //sanity check
+	            return;
+	          }
+	          
+	          String title="NA";
+	          int count=1;
+	          Filepath f = new Filepath();
+	          try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+	          {  
+	            String line = r.readLine();
+	            line=r.readLine();
+	            while (line != null)
+	            {
+	              String[] parts = line.split(",");
+	              
+	              if (parts[2].equals(this.studentID))
+	              {
+	                title=parts[3];                //iterate to find the current title new (need it to pass in as parameter)
+	                break;
+	                
+	              }
+	              count++;
+	              line = r.readLine();
+	            }
+	          } catch (FileNotFoundException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	          } catch (IOException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	          }
+	          System.out.println();
+	          
+	          ReqDeregister r = new ReqDeregister(Request.ApprovalStatus.Pending, this.studentID, title);
+	          r.addRequest();
+	          }  
+	        }
+	          
 	
 	public void viewProject() {
 		
@@ -567,15 +606,15 @@ public class Student extends User{
 			         System.out.println("Current ID: " + this.getID());
 				     if (parts[3].equals(this.getID()))
 				     {
-				          newData = String.format("%s,%s,%s,%s,%s,%s", parts[0], parts[1], parts[2], parts[3], projectTitle, supName, newStatus.toString());
+				          newData = String.format("%s,%s,%s,%s,%s,%s,%s", parts[0], parts[1], parts[2], parts[3], projectTitle, supName, newStatus.toString());
 				          found = 1;
-				          System.out.println("Project title changed successfully!");
+				          System.out.println("Status updated to " + newStatus.toString());
 				     }
 		        }
 		    }
 		    if (found == 0)
 		    {
-		         System.out.println("Student not found! Assigned project title not changed!");
+		         System.out.println("Title not found! Assigned project title not changed!");
 		         return;
 		    }
 		    br.close();
@@ -594,5 +633,60 @@ public class Student extends User{
         	e.printStackTrace();
         }
 	}
+	
+	public void updateStudent(String projectTitle, String supName, String newProjectTitle)
+	{	        
+        // Read the file into memory
+        Filepath f = new Filepath();
+        List<String> lines = new ArrayList<>();
+        try(BufferedReader br = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+       	{
+            String line;
+            String newData = "";
+            int found = 0;
+            int lineNumber = 0;
+	        while ((line = br.readLine()) != null) 
+            {
+	        	if (line.trim().isEmpty()) 
+		       	{
+		            break;
+		        }
+		        lines.add(line);
+		        if (found == 0)
+		        {
+		             lineNumber++;
+			         String[] parts = line.split(",");
+			         System.out.println("Current ID: " + this.getID());
+				     if (parts[4].equals(projectTitle))
+				     {
+				          newData = String.format("%s,%s,%s,%s,%s,%s,%s", parts[0], parts[1], parts[2], parts[3], newProjectTitle, supName, parts[6]);
+				          found = 1;
+				          System.out.println("Project title changed successfully!");
+				     }
+		        }
+		    }
+		    if (found == 0)
+		    {
+		         System.out.println("Project Title not found! Assigned project title not changed!");
+		         return;
+		    }
+		    br.close();
+		        
+		    lines.set(lineNumber-1, newData);			// the line number to overwrite (starting from 0)
+		    FileWriter fw = new FileWriter(f.getSTUDFILENAME());    
+		    PrintWriter out = new PrintWriter(fw); 
+		    for (String line2 : lines) 
+		    {
+		    	out.println(line2);					// Write the modified data back to the file
+		    }
+		    out.close();
+		}
+        catch (IOException e) 
+        {
+        	e.printStackTrace();
+        }
+	}
+	
+	
 	
 }
