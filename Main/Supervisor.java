@@ -106,6 +106,10 @@ public class Supervisor extends User {
 	{
 		this.facultyID = facultyID;
 	}
+	public int getNumProj()
+	{
+	  return numProj;
+	}
 	public void createProj() {
 		String projTitle;
 		Scanner sc = new Scanner(System.in);
