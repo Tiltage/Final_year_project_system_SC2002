@@ -24,7 +24,7 @@ public class Student extends User{
 	
 	Scanner sc = new Scanner (System.in);
 	
-	public Student(String studentID) throws FileNotFoundException, IOException //copy kendrea constructor
+	public Student(String studentID) throws FileNotFoundException, IOException 
 	{
 		this.studentID = studentID;
 		Filepath f = new Filepath();
@@ -72,7 +72,6 @@ public class Student extends User{
 			while(line!=null)
 			{
 				String[] parts = line.split(",");
-				System.out.println(parts[4]);
 				if (parts[4] != null && parts[3].equals(studentID))
 				{
 					Project p = new Project(parts[4]);
@@ -455,6 +454,7 @@ public class Student extends User{
 			String line = r.readLine();
 			line=r.readLine();
 			System.out.println("Request history: ");
+			
 			while (line != null)
 			{
 				String[] parts = line.split(",");
@@ -462,12 +462,21 @@ public class Student extends User{
 				if ((!parts[1].equals("ChangeSup")) && parts[2].equals(this.studentID))
 				{	
 					if (!parts[0].equals("Pending")) {
-						System.out.println("Request type :" + parts[1] + " is " + parts[0]); //print out all the approved/rejected
+						System.out.println("**OLD** \t");
+						System.out.println("Request type : " + parts[1]);
+						System.out.println("Status: " + parts[0]);
+						System.out.println("Name of Project: " + parts[3]);
+						System.out.println( "Supervisor Name: " + parts[4]);//we print all all the pending (new)
+						System.out.println();
 					}
 				}
 				count++;
 				line = r.readLine();
 			}
+			if (line==null) {
+				System.out.println("No other request history");
+			}
+			System.out.println();
 				
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -486,6 +495,32 @@ public class Student extends User{
 			return;
 		}
 		
+		Filepath f = new Filepath();
+		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+		{	
+			String line = r.readLine();
+			line=r.readLine();
+			while (line != null)
+			{
+				String[] parts = line.split(",");
+				
+				if (parts[2].equals(this.studentID) && parts[0].equals("Pending") && parts[1].equals("ReqChangeTitle")) //to check if have any pending change title req
+				{
+					System.out.println("You already have a request to change title");
+					return;
+				}
+				line = r.readLine();
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		String oldTitle="NA";
 		String newTitle="NA";
 		String SupervisorID="NA";
@@ -493,23 +528,20 @@ public class Student extends User{
 		System.out.println("Please enter the new title name :");
 		newTitle=sc.next();
 		
-		Filepath f = new Filepath();
 		try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
 		{	
-			int count=1;
 			String line = r.readLine();
 			line=r.readLine();
 			while (line != null)
 			{
 				String[] parts = line.split(",");
 				
-				if (parts[0].equals(this.studentID)) //Check for student id and the correct request type
+				if (parts[3].equals(this.studentID)) //Check for student id and the correct request type
 				{
-					oldTitle=parts[3];               //store relevant data so can pass in as parameters later
-					SupervisorID=parts[4];
+					oldTitle=parts[4];               //store relevant data so can pass in as parameters later
+					SupervisorID=parts[5];
 					break;
 				}
-				count++;
 				line = r.readLine();
 			}
 			
@@ -522,6 +554,8 @@ public class Student extends User{
 		}
 
 		ReqChangeTitle r3 = new ReqChangeTitle(Request.ApprovalStatus.Pending, this.studentID , oldTitle, SupervisorID, newTitle);
+		System.out.println(SupervisorID);
+		System.out.println(oldTitle);
 		r3.addRequest();
 		
 	}
@@ -551,7 +585,7 @@ public class Student extends User{
 			         System.out.println("Status: " + parts[6]);
 				     if (parts[3].equals(this.getID()))
 				     {
-				          System.out.println("Current ID: " + this.getID());
+				          //System.out.println("Current ID: " + this.getID());
 				          System.out.println("Updating password...");
 				          newData = String.format("%s,%s,%s,%s,%s,%s,%s", parts[0], parts[1], password, parts[3], parts[4], parts[5], parts[6]);
 				          found = 1;
@@ -603,7 +637,7 @@ public class Student extends User{
 		        {
 		             lineNumber++;
 			         String[] parts = line.split(",");
-			         System.out.println("Current ID: " + this.getID());
+			         //System.out.println("Current ID: " + this.getID());
 				     if (parts[3].equals(this.getID()))
 				     {
 				          newData = String.format("%s,%s,%s,%s,%s,%s,%s", parts[0], parts[1], parts[2], parts[3], projectTitle, supName, newStatus.toString());
