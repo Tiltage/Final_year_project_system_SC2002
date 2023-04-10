@@ -639,9 +639,11 @@ public class Supervisor extends User {
 	      return;
 	    }
 	    
-	    System.out.println("Change supervisor of project:" + projList[projectNum] + " to " + newSupName);
+	    String studentName = getStudentName(projList[projectNum]);
 	    
-	    ReqChangeSup re = new ReqChangeSup(Request.ApprovalStatus.Pending, "na", projList[projectNum], this.supervisorName, newSupName);
+	    
+	    System.out.println("Change supervisor of project:" + projList[projectNum] + " to " + newSupName);
+	    ReqChangeSup re = new ReqChangeSup(Request.ApprovalStatus.Pending, studentName, projList[projectNum], this.supervisorName, newSupName);
 	    re.addRequest();
 	    
 	      }
@@ -651,4 +653,23 @@ public class Supervisor extends User {
 	                e.printStackTrace();
 	        }
 	  }
+	
+	public String getStudentName(String projName) throws FileNotFoundException, IOException {
+		String studentName = null;
+		Filepath f = new Filepath();
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME()))){
+	    	String line3 = r.readLine();
+	        while(line3!=null)
+	        {
+	        	String[] parts = line3.split(",");
+	            if (parts[5].equals(this.supervisorName))
+	            {
+	               studentName = parts[3];
+	            }
+	            line3 = r.readLine();              
+	        }
+	        r.close();	    	
+	    }
+		return studentName;
+	}
 }
