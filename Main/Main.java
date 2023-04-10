@@ -71,11 +71,11 @@ public class Main {
 					
 					System.out.println("Please input password : ");
 					password=sc.nextLine();
-				/* if (UserID in excel and the password is incorrect ){
-				  	System.out.println("Invalid Password");
-					continue;
-					}		 */
-					access=true;
+					
+					if (check(UserID, password, 2) == true)
+					{
+						access = true;
+					}
 				}
 				Supervisor sp = new Supervisor(UserID);
 				menuChoice=SupervisorMenu.display();

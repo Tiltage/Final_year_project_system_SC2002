@@ -6,27 +6,27 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class ReqChangeSup extends Request{
-	private String supID;
-	private String newSupID;
+	private String supName;
+	private String newSupName;
 	
-	public ReqChangeSup(ApprovalStatus approvalStatus, String studentID, String projTitle, String supID, String newSupID){
+	public ReqChangeSup(ApprovalStatus approvalStatus, String studentID, String projTitle, String supName, String newSupName){
 		super(approvalStatus, studentID, projTitle);
 		this.setType(RequestType.ReqChangeSup);
-		this.supID = supID;
-		this.newSupID = newSupID;
+		this.supName = supName;
+		this.newSupName = newSupName;
 	}
 	
-	public String getSupID() {
-		return supID;
+	public String getSupName() {
+		return supName;
 	}
-	public void setSupID(String supID) {
-		this.supID = supID;
+	public void setSupName(String supName) {
+		this.supName = supName;
 	}
-	public String getNewSupID() {
-		return newSupID;
+	public String getNewSupName() {
+		return newSupName;
 	}
-	public void setNewSupID(String newSupID) {
-		this.newSupID = newSupID;
+	public void setNewSupName(String newSupName) {
+		this.newSupName = newSupName;
 	}
 	
 	public void addRequest()
@@ -37,7 +37,7 @@ public class ReqChangeSup extends Request{
 	             PrintWriter out = new PrintWriter(bw)) 
 		{
 	            // Add a new row to the bottom of the file
-	            out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supID,this.newSupID).println();
+	            out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supName,this.newSupName).println();
 	            System.out.println("Data appended to file successfully!");
 
         } catch (IOException e) 
