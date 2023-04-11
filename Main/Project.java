@@ -7,17 +7,16 @@ public class Project {
 	
 	enum Status {Available, Unavailable, Allocated, Reserved}
 	private String studentID ;
-	private String studentEmail;
+	private String studentName;
 	private int projID;
 	private String supervisorName;
 	private String supervisorEmail;
 	private String projTitle;
 	private Status status;
 	
-	public Project(String studentID, String studentEmail, String supervisorName, String supervisorEmail, String projTitle) 
+	public Project(String studentID, String supervisorName, String supervisorEmail, String projTitle) 
 	{
 		this.studentID = studentID;
-		this.studentEmail = studentEmail;
 		this.supervisorName = supervisorName;
 		this.supervisorEmail = supervisorEmail;
 		this.projTitle = projTitle;
@@ -62,7 +61,8 @@ public class Project {
 	            	this.supervisorName = parts[0];
 	            	this.projTitle = parts[1];
 	            	this.status = Status.valueOf(parts[2]);
-	            	this.projID = lineNumber-1;		//1st project is in row 2 cos there is a header row in row 1
+	            	this.projID = lineNumber-1;
+	            	this.studentName = getstudentName();//1st project is in row 2 cos there is a header row in row 1
 	            	found = 1;
 	            }
 	            line = r.readLine();	            
@@ -108,6 +108,34 @@ public class Project {
 	            e.printStackTrace();
 	        }
 		
+	}
+	
+	private String getstudentName() throws FileNotFoundException, IOException
+	{
+		String name = null;
+		Filepath f = new Filepath();
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+		{
+			int found = 0;
+			String line = r.readLine();
+			while(line!=null && found == 0)
+			{
+	            String[] parts = line.split(",");
+	            if (parts[4].equals(this.projTitle))
+	            {
+	            	name = parts[0];
+	            	return name;
+	            }
+	            line = r.readLine();	            
+			}
+			r.close();
+		}
+		return name;
+	}
+	
+	public String getStudentName()
+	{
+		return this.studentName;
 	}
 	
 	public void editProject(String projTitle, Status status)
