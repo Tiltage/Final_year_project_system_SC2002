@@ -6,19 +6,15 @@ import java.util.*;
 public class Project {
 	
 	enum Status {Available, Unavailable, Allocated, Reserved}
-	private String studentID ;
 	private String studentName;
 	private int projID;
 	private String supervisorName;
-	private String supervisorEmail;
 	private String projTitle;
 	private Status status;
 	
-	public Project(String studentID, String supervisorName, String supervisorEmail, String projTitle) 
+	public Project(String supervisorName, String projTitle) 
 	{
-		this.studentID = studentID;
 		this.supervisorName = supervisorName;
-		this.supervisorEmail = supervisorEmail;
 		this.projTitle = projTitle;
 		this.status = Status.Available; // Default status set to available
 		Filepath f = new Filepath();
@@ -298,18 +294,6 @@ public class Project {
 	}
 	
 
-	public String getStudentID() {
-		return studentID;
-	}
-	public void setStudentID(String studentID) {
-		this.studentID = studentID;
-	}
-	public String getStudentEmail() {
-		return studentEmail;
-	}
-	public void setStudentEmail(String studentEmail) {
-		this.studentEmail = studentEmail;
-	}
 	public int getProjID() {
 		return projID;
 	}
@@ -322,12 +306,6 @@ public class Project {
 	public void setSupervisorName(String supervisorName) {
 		this.supervisorName = supervisorName;
 	}
-	public String getSupervisorEmail() {
-		return supervisorEmail;
-	}
-	public void setSupervisorEmail(String supervisorEmail) {
-		this.supervisorEmail = supervisorEmail;
-	}
 	public String getProjTitle() {
 		return projTitle;
 	}
@@ -339,13 +317,6 @@ public class Project {
 	}
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	public static void main(String[] args) 
-	{
-		Project p1 = new Project("69", "abc@e","LiF","abcdef", "HELLOWORLD");
-		p1.addProject();
-		System.out.println(p1.getProjID());
 	}
 	
 }

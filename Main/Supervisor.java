@@ -28,6 +28,8 @@ public class Supervisor extends User {
 	public Supervisor(String facultyID) throws FileNotFoundException, IOException
 	{
 		this.facultyID = facultyID;
+		this.projArr = generateProjArr();
+		this.numProj = projArr.length;
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
 		{
@@ -50,9 +52,6 @@ public class Supervisor extends User {
 		            	this.supervisorName = parts[0][0];
 		            	this.supervisorEmail = email[1];
 		            	this.password = parts[2][0];
-		        		System.out.println("Constructing");
-		        		this.projArr = generateProjArr();
-		        		this.numProj = projArr.length;
 		            	found = 1;
 		            }
 		            line = r.readLine();
@@ -83,7 +82,6 @@ public class Supervisor extends User {
 				if (parts[0].equals(this.supervisorName))
 				{
 					Project p = new Project(parts[1]);
-					System.out.println(parts[1]);
 					list.add(p);
 				}
 				line = r.readLine();
@@ -95,7 +93,7 @@ public class Supervisor extends User {
         for(int i=0; i<n; i++) 
         {
             projs[i] = list.get(i);
-            System.out.println(projs[i].getStudentID());
+            System.out.println(projs[i].getStudentName());
         }
 		return projs;
 	}
@@ -119,7 +117,7 @@ public class Supervisor extends User {
 		System.out.println("Please enter project title:");
 		projTitle = sc.nextLine();
 		
-		Project p1 = new Project("na","na", this.supervisorName, this.facultyID, projTitle);
+		Project p1 = new Project(this.supervisorName, projTitle);
 		p1.addProject();
 	}
 	
@@ -224,6 +222,7 @@ public class Supervisor extends User {
 					String[] parts = line.split(",");
 					if (parts[4].equals(this.supervisorName)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
 					{
+						System.out.println("**NEW**");
 						System.out.println("Pending request "+count);
 						System.out.println("Student: " +parts[2]);
 						System.out.println("Project Title: " +parts[3]);
@@ -613,26 +612,6 @@ public class Supervisor extends User {
 	    int projectNum=sc.nextInt();
 	    sc.nextLine();
 	    
-	    //Checking for previous requests
-		try(BufferedReader reader = new BufferedReader(new FileReader(f.getREQFILENAME()))){
-	    	String line3 = reader.readLine();
-	        while(line3!=null)
-	        {
-	        	String[] parts = line3.split(",");
-	            if (parts[1].equals("ReqChangeSup")&&parts[3].equals(projList[projectNum])&&parts[4].equals(this.supervisorName))
-	            {
-	               System.out.println("You already have a pending request for that project");
-	               System.out.println("");
-	               return;
-	            }
-	            line3 = reader.readLine();              
-	        }
-	        reader.close();	    	
-	    }
-		
-	    
-	    //Sanity checks
-	    
 	    int Found = 0;
 	    BufferedReader Br = new BufferedReader(new FileReader(f.getSUPFILENAME()));
 	    
@@ -654,7 +633,8 @@ public class Supervisor extends User {
 	 	              String[] parts2 = line2.split(",");
 	 	              if (parts2[0].equalsIgnoreCase(newSupName))
 	 	              {
-	 	            	  String studentName = getStudentName(projList[projectNum]);
+	 	            	  Project temp = new Project(projList[projectNum]);
+	 	            	  String studentName = temp.getStudentName();
 	 	            	  System.out.println("Change supervisor of project:" + projList[projectNum] + " to " + newSupName);
 	 	            	  ReqChangeSup re = new ReqChangeSup(Request.ApprovalStatus.Pending, studentName, projList[projectNum], this.supervisorName, newSupName);
 	 	            	  re.addRequest();
@@ -676,24 +656,5 @@ public class Supervisor extends User {
 	                e.printStackTrace();
 	        }
 	  }
-	
-	public String getStudentName(String projName) throws FileNotFoundException, IOException {
-		String studentName = null;
-		Filepath f = new Filepath();
-		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME()))){
-	    	String line = r.readLine();
-	        while(line!=null)
-	        {
-	        	String[] parts = line.split(",");
-	            if (parts[5].equals(this.supervisorName))
-	            {
-	               studentName = parts[3];
-	            }
-	            line = r.readLine();              
-	        }
-	        r.close();	    	
-	    }
-		return studentName;
-	}
 	
 }
