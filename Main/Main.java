@@ -33,28 +33,30 @@ public class Main {
 			{
 				while (access == false) 
 				{
-					System.out.println("Please input Student UserID : ");
+					System.out.println("Please input Student UserID (-1 to quit) : ");
 					UserID=sc.nextLine();
+					if (UserID.equals("-1")) {
+						break;
+					}
 					
 					System.out.println("Please input password : ");
 					password=sc.nextLine();
 					if (check(UserID, password, 1) == true)
 					{
 						access = true;
+						Student s = new Student(UserID);
+						menuChoice=StudentMenu.display();
+						
+						while (menuChoice != 8) 
+						{
+							StudentMenu.execution(menuChoice,s);
+							if (menuChoice == 1) {
+								access=false;
+								break;
+							}
+							menuChoice=StudentMenu.display();
+						}
 					}
-		
-				}
-				Student s = new Student(UserID);
-				menuChoice=StudentMenu.display();
-				
-				while (menuChoice != 8) 
-				{
-					StudentMenu.execution(menuChoice,s);
-					if (menuChoice == 1) {
-						access=false;
-						break;
-					}
-					menuChoice=StudentMenu.display();
 				}
 				access=false;
 				break;
@@ -63,26 +65,29 @@ public class Main {
 			{
 				access=false;
 				while (access==false) {
-					System.out.println("Please input Supervisor UserID : ");
+					System.out.println("Please input Supervisor UserID (-1 to quit): ");
 					UserID=sc.nextLine();
+					if (UserID.equals("-1")) {
+						break;
+					}
 					
 					System.out.println("Please input password : ");
 					password=sc.nextLine();
 					if (check(UserID, password, 2) == true)
 			        {
 						access = true;
+						Supervisor sp = new Supervisor(UserID);
+						menuChoice=SupervisorMenu.display();
+						
+						while (menuChoice != 5) {
+							SupervisorMenu.execution(menuChoice,sp);
+							if (menuChoice == 1) {
+								access=false;
+								break;
+							}
+							menuChoice=SupervisorMenu.display();
+						}
 			        }
-				}
-				Supervisor sp = new Supervisor(UserID);
-				menuChoice=SupervisorMenu.display();
-				
-				while (menuChoice != 5) {
-					SupervisorMenu.execution(menuChoice,sp);
-					if (menuChoice == 1) {
-						access=false;
-						break;
-					}
-					menuChoice=SupervisorMenu.display();
 				}
 				access=false;
 				break;
@@ -92,31 +97,35 @@ public class Main {
 				access=false;
 				while (access==false) 
 				{
-					System.out.println("Please input Coordinator UserID : ");
+					System.out.println("Please input Coordinator UserID (-1 to quit): ");
 					UserID=sc.nextLine();
+					if (UserID.equals("-1")) {
+						break;
+					}
 					
 					System.out.println("Please input password : ");
 					password=sc.nextLine();
-					access=true;
-				
-				
-				Coordinator co = new Coordinator(UserID);
-				System.out.println("ID:" + co.getFacultyID());
-				menuChoice=CoordinatorMenu.display();
-				
-				while (menuChoice != 7) 
-				{
-					CoordinatorMenu.execution(menuChoice,co);
-					if (menuChoice == 1) {
-						access=false;
-						break;
+					if (check(UserID, password, 3) == true) {
+						access=true;
+						Coordinator co = new Coordinator(UserID);
+						System.out.println("ID:" + co.getFacultyID());
+						menuChoice=CoordinatorMenu.display();
+						
+						while (menuChoice != 7) 
+						{
+							CoordinatorMenu.execution(menuChoice,co);
+							if (menuChoice == 1) {
+								access=false;
+								break;
+							}
+							menuChoice=CoordinatorMenu.display();
+						}
 					}
-					menuChoice=CoordinatorMenu.display();
-				}
 				}
 				access=false;
 				break;
 			}
+		
 		default:
 			System.out.println("Invalid Choice");
 		}
@@ -125,7 +134,7 @@ public class Main {
 		System.out.println("2. Supervisor");
 		System.out.println("3. FYP Coordinator");
 		userType = sc.nextInt();
-		String s = sc.nextLine();   //input buffer
+		sc.nextLine();   //input buffer
 		}
 	}
 	
