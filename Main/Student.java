@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Student extends User{
 	
-	enum Status {Unassigned,Pending,Assigned}
+	enum Status {Unassigned,Pending,Assigned,Ended}
 	
 	private String studentID;
 	private String studentName;
@@ -50,6 +50,7 @@ public class Student extends User{
 		            	this.studentEmail = email[1];
 		            	this.password=email[2];
 		            	this.proj = getProj(studentID);
+		            	this.status=setStatus(email[6]);
 		            	found = 1;
 		            }
 		            line = r.readLine();
@@ -139,6 +140,16 @@ public class Student extends User{
 	public void viewAvailableProjects() {
 	    int count=1;
 	    Filepath f = new Filepath();
+	    
+	    if (this.status==Status.Ended) {
+	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+	    }
+	    
+	    if (this.status==Status.Assigned) {
+	    	System.out.println("You have already been assigned a project");
+	    }
+	    
+	    
 	    try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 	    {
 	      String line = r.readLine();
@@ -154,7 +165,7 @@ public class Student extends User{
 	          System.out.println(count + " : " + parts[1] + " -- Supervisor: " + parts[0]);
 	          
 	        }
-	        count++;  //should i put this inside?
+	        count++;  
 	        line = r.readLine();
 	      }
 	    } catch (FileNotFoundException e) {
@@ -188,44 +199,13 @@ public class Student extends User{
 	      return;
 	    }
 
-	    List<String> DeRegisProj = new ArrayList<>();          //declare an araylis of deregistered projects
+	    if (this.status==Status.Ended) {
+	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+	    }
 	    
 	    int count=1;
-	    Filepath f = new Filepath();
-	    try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
-	    {
-	      String line = r.readLine();
-	      line=r.readLine();
-	      while (line != null)
-	      {
-	        String[] parts = line.split(",");
-	        if (parts[0].equals("Approved") && parts[1].equals("ReqDealloc") && parts[2].equals(this.studentID))
-	        {
-	          DeRegisProj.add(parts[3]);             //adding all the deregistered project into array
-	        }
-	        line = r.readLine();
-	      }
-	    } catch (FileNotFoundException e) {
-	      // TODO Auto-generated catch block
-	      e.printStackTrace();
-	    } catch (IOException e) {
-	      // TODO Auto-generated catch block
-	      e.printStackTrace();
-	    }
-	    
-	    System.out.println("List of De-registered Projects : ");
-	    if (DeRegisProj.size()==0) {
-	      System.out.println("None");   
-	    }
-	    else {
-	    	for (int i=0;i<DeRegisProj.size();i++)
-	    		{
-	        	System.out.println(DeRegisProj.get(i));                //prints out all the previously registered projects
-	    		}
-	         }	
-	    System.out.println();
-	    
 	    int total=1;
+	    Filepath f = new Filepath();
 	    try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 	    {  
 	      String line = r.readLine();
@@ -242,9 +222,6 @@ public class Student extends User{
 	      // TODO Auto-generated catch block
 	      e.printStackTrace();
 	    }
-	    
-	    
-	    
 	    
 	    while (valid==0) {
 	      System.out.println("Enter the Number ID of the project you want to be allocated : ");
@@ -274,15 +251,6 @@ public class Student extends User{
 	        
 	        if (parts[2].equals("Available"))
 	        {  
-	          for (int j=0;j<DeRegisProj.size();j++) {
-	        	  if (parts[1].equals(DeRegisProj.get(j))){
-	                  
-	                  System.out.println("You have registered for this project before !");   //check if they registered for the project before
-	                  continue;              
-	                }
-	                
-	              }
-
 	              projectTitle = parts[1];
 	              supName=parts[0];
 	              Project p= new Project(projectTitle);
@@ -295,9 +263,6 @@ public class Student extends User{
 	              p.editProject(projectTitle,Project.Status.Reserved);          //updating project csv
 	              
 	              valid=1;                             //this for breaking
-	              
-	              //student csv status not updated
-	              //project csv status not updated
 	            }
 
 	          } catch (FileNotFoundException e) {
@@ -325,6 +290,10 @@ public class Student extends User{
 	            System.out.println("You have not been assigned a project"); //sanity check
 	            return;
 	          }
+	          
+	  	    if (this.status==Status.Ended) {
+		    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+		    }
 	          
 	          String title="NA";
 	          int count=1;
@@ -397,11 +366,15 @@ public class Student extends User{
 	
 	public void viewProject() {
 		
+	    if (this.status==Status.Ended) {
+	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+	    }
 		
 		if (this.status != Status.Assigned) {
 			System.out.println("You have not been assigned a project");    //sanity check
 			return;
 		}
+		
 		int count=1;
 		Filepath f = new Filepath();
 		try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
@@ -438,6 +411,11 @@ public class Student extends User{
 			
 		int count=1; 
 		int recent=-1;
+		
+	    if (this.status==Status.Ended) {
+	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+	    }
+		
 		Filepath f = new Filepath();
 		System.out.println("Recent request status: ");
 		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
@@ -521,6 +499,10 @@ public class Student extends User{
 	}
 
 	public void reqChangeTitle() {        //if got pending deallocation req, we dont allow
+		
+	    if (this.status==Status.Ended) {
+	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+	    }
 		
 		if (this.status!=Status.Assigned) {
 			System.out.println("You have not been assigned a project");
@@ -756,7 +738,5 @@ public class Student extends User{
         	e.printStackTrace();
         }
 	}
-	
-	
-	
+
 }
