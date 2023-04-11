@@ -239,7 +239,8 @@ public class Project {
 			         String[] parts = line.split(",");
 				     if (parts[1].equals(projTitle))
 				     {
-				    	 System.out.println("Supervisor name: " + newSup);
+				    	 System.out.println("New Supervisor name: " + newSup);
+				    	 this.supervisorName = newSup;
 				          newData = String.format("%s,%s,%s,%s", newSup, parts[1], parts[2], parts[3]);
 				          found = 1;
 				          System.out.println("Project supervisor changed successfully!");
