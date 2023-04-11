@@ -25,9 +25,9 @@ public class Supervisor extends User {
 	{
 		
 	}
-	public Supervisor(String facultyID) throws FileNotFoundException, IOException
+	public Supervisor(String supName) throws FileNotFoundException, IOException
 	{
-		this.facultyID = facultyID;
+		this.supervisorName = supName;
 		this.projArr = generateProjArr();
 		this.numProj = projArr.length;
 		Filepath f = new Filepath();
@@ -40,18 +40,17 @@ public class Supervisor extends User {
 				{
 					// Add a new row to the bottom of the file
 		            String[] email = line.split(csvSplitBy);
-		            String supervisorEmail = email[0];
-		            String parts[][] = new String[email.length][];
-		            for (int x = 0; x < email.length; x++)
+		            String supervisorEmail = email[1];
+		            String parts[] = email[1].split("@");
+		            if (email[0].equals(supervisorName))
 		            {
-		            	parts[x] = email[x].split("@");
-			
-		            }
-		            if (parts[1][0].equals(facultyID))
-		            {
-		            	this.supervisorName = parts[0][0];
+		            	this.facultyID = parts[0];
+		            	//System.out.println("parts00: " + parts[0]);
 		            	this.supervisorEmail = email[1];
-		            	this.password = parts[2][0];
+		            	//System.out.println("supemail: " + email[1]);
+		            	this.password = email[2];
+		            	//System.out.println("parts20: " + this.password);
+		            	//System.out.println("SupID: " + this.getFacultyID());
 		            	found = 1;
 		            }
 		            line = r.readLine();
@@ -63,6 +62,41 @@ public class Supervisor extends User {
 	            e.printStackTrace();
 	        }
 	}
+	public Supervisor(String facultyID, String password) throws FileNotFoundException, IOException
+	{
+		this.facultyID = facultyID;
+		this.password = password;
+		this.projArr = generateProjArr();
+		this.numProj = projArr.length;
+		Filepath f = new Filepath();
+		try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
+		{
+			int found = 0;
+				String line = r.readLine();
+				while(line!=null && found == 0)
+				{
+					// Add a new row to the bottom of the file
+		            String[] email = line.split(",");
+		            String supervisorEmail = email[1];
+		            String parts[] = email[1].split("@");
+		            if (parts[0].equals(facultyID))
+		            {
+		            	this.supervisorName = email[0];
+		            	//System.out.println("parts00: " + parts[0]);
+		            	this.supervisorEmail = email[1];
+		            	//System.out.println("supemail: " + email[1]);
+		            	found = 1;
+		            }
+		            line = r.readLine();
+				}
+	            
+		 }
+        catch (IOException e) 
+			{
+	            e.printStackTrace();
+	        }
+	}
+		
 	
 	/**
 	 * @return
@@ -93,7 +127,7 @@ public class Supervisor extends User {
         for(int i=0; i<n; i++) 
         {
             projs[i] = list.get(i);
-            System.out.println(projs[i].getStudentName());
+            //System.out.println(projs[i].getStudentName());
         }
 		return projs;
 	}
@@ -121,7 +155,8 @@ public class Supervisor extends User {
 		p1.addProject();
 	}
 	
-	public void viewProj() {
+	public void viewProj() 
+	{
 		int count=1;
 		Filepath f = new Filepath();
 		try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
@@ -222,7 +257,7 @@ public class Supervisor extends User {
 					String[] parts = line.split(",");
 					if (parts[4].equals(this.supervisorName)&&parts[0].equals("Pending")&&parts[1].equals("ReqChangeTitle"))
 					{
-						System.out.println("**NEW**");
+						System.out.println("**NEW");
 						System.out.println("Pending request "+count);
 						System.out.println("Student: " +parts[2]);
 						System.out.println("Project Title: " +parts[3]);
@@ -656,5 +691,9 @@ public class Supervisor extends User {
 	                e.printStackTrace();
 	        }
 	  }
+	public static void main(String[] args) throws FileNotFoundException, IOException
+	{
+		Supervisor s = new Supervisor("Bo An");
+	}
 	
 }

@@ -76,7 +76,7 @@ public class Main {
 					if (check(UserID, password, 2) == true)
 			        {
 						access = true;
-						Supervisor sp = new Supervisor(UserID);
+						Supervisor sp = new Supervisor(UserID, password);
 						menuChoice=SupervisorMenu.display();
 						
 						while (menuChoice != 5) {
