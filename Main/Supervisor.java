@@ -9,6 +9,7 @@ public class Supervisor extends User {
 	private String supervisorEmail;
 	private String password;
 	private Project[] projArr;
+	private int numAllocProjs;
 	private int numProj=0;
 	
 	
@@ -30,6 +31,7 @@ public class Supervisor extends User {
 		this.supervisorName = supName;
 		this.projArr = generateProjArr();
 		this.numProj = projArr.length;
+		this.numAllocProjs = generateAllocProjs(projArr);
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
 		{
@@ -68,6 +70,7 @@ public class Supervisor extends User {
 		this.password = password;
 		this.projArr = generateProjArr();
 		this.numProj = projArr.length;
+		this.numAllocProjs = generateAllocProjs(projArr);
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
 		{
@@ -130,6 +133,19 @@ public class Supervisor extends User {
             //System.out.println(projs[i].getStudentName());
         }
 		return projs;
+	}
+	
+	private int generateAllocProjs(Project[] projArr)
+	{
+		int count = 0;
+		for (int i=0; i<projArr.length; i++)
+		{
+			if (projArr[i].getStatus().toString().equals("Allocated"))
+			{
+				count++;
+			}
+		}
+		return count;
 	}
 	
 	public String getFacultyID()
