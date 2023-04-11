@@ -44,9 +44,9 @@ public class Request {
 		        {
 		             lineNumber++;
 			         String[] parts = line.split(",");
-				     if (parts[3].equals(projTitle)&&parts[1].equals(this.getType().toString()))
+			        if (parts[3].equals(projTitle)&&parts[1].equals(this.getType().toString()))
 				     {
-				          newData = String.format("%s,%s,%s,%s,%s,%s", status, parts[1], parts[2], parts[3], parts[4], parts[5]);
+				    	  newData = String.format("%s,%s,%s,%s,%s,%s", status, parts[1], parts[2], parts[3], parts[4], parts[5]);
 				          found = 1;
 				          this.approvalStatus = status;
 				          System.out.println("Request status changed successfully!");
@@ -98,21 +98,6 @@ public class Request {
 	}
 	public void setProjTitle(String projTitle) {
 		this.projTitle = projTitle;
-	}
-	
-	
-	
-	public static void main(String[] args) throws FileNotFoundException, IOException 
-	{
-		ReqAlloc r = new ReqAlloc(Request.ApprovalStatus.Pending, "Ben", "Calculator app");
-		r.addRequest();
-		ReqDeregister r2 = new ReqDeregister(Request.ApprovalStatus.Pending, "Ben", "Calculator app");
-		r2.addRequest();
-		ReqChangeTitle r3 = new ReqChangeTitle(Request.ApprovalStatus.Pending, "Ben", "Calculator app", "li fang", "Calc app");
-		r3.addRequest();
-		ReqChangeSup r4 = new ReqChangeSup(Request.ApprovalStatus.Pending, "Ben", "Calculator app", "li fang", "TA tan");
-		r4.addRequest();
-
 	}
 	
 	

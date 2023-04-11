@@ -73,52 +73,42 @@ public class Coordinator extends Supervisor {
 	public void approveReqCoord(Boolean approve) throws FileNotFoundException, IOException 
 	{
 		this.viewPendingReqCoord();
-		if (approve)
+		System.out.println("Enter the request number to approve / reject (Enter -1 to exit): ");
+		int choice;
+		Scanner sc = new Scanner(System.in);
+		choice = sc.nextInt();
+		Request.ApprovalStatus result = approve ? Request.ApprovalStatus.Approved : Request.ApprovalStatus.Rejected;
+		
+		Filepath f = new Filepath();
+		while (choice > 0)
 		{
-			Request.ApprovalStatus result = Request.ApprovalStatus.Approved;
-			System.out.println("Enter the request number to approve (Enter -1 to exit): ");
-			int choice;
-			Scanner sc = new Scanner(System.in);
-			choice = sc.nextInt();
-			Filepath f = new Filepath();
-			while (choice > 0)
+			try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
 			{
-				try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
+				int count=1;
+				String line = r.readLine();
+				line = r.readLine();
+				while (line != null) 
 				{
-					int count=1;
-					String line = r.readLine();
-					line = r.readLine();
-					while (line != null) 
+					String[] parts = line.split(",");
+					
+					if (choice == count)
 					{
-						String[] parts = line.split(",");
-						System.out.println("Supervisor name: " + parts[4]);
-						if (choice == count)
+						
+						if (parts[0].equals("Pending") && (parts[1].equals("ReqAlloc")))
 						{
+							//If request chosen is ReqAlloc
 							
-							if (parts[0].equals("Pending") && (parts[1].equals("ReqAlloc")))
+							//Edit Request file status to reflect changes
+							ReqAlloc request = new ReqAlloc(result, parts[2], parts[3]);
+							request.updateRequest(parts[3], result);
+							
+							if (approve)
 							{
-								//If request chosen is ReqAlloc
-								//Edit Project file status and sup name to reflect changes
-								System.out.println("Project Allocated successfully");
-								Project p = new Project(parts[3]);
-								p.editProject(parts[3],Project.Status.Allocated);
-								p.editProjectSup(parts[3], parts[4]);
-								
-								//Edit Student file status to reflect changes
-								Student s = new Student(parts[2]);
-								s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Assigned);
-								
-								//Edit Request file status to reflect changes
-								ReqChangeSup request = new ReqChangeSup(result, parts[2], parts[3], parts[4], parts[5]);
-								request.updateRequest(parts[3], result);
-								return;
-							}
-							else if (parts[0].equals("Pending") && parts[1].equals("ReqChangeSup"))
-							{
+								System.out.println("Entered-----------------------------------");
 								boolean choice2 = true;
 								//If request chosen is ReqChangeSup
 								//If approving this request will not result in supervisor having >2 projects
-								Supervisor temp = new Supervisor(parts[0]);
+								Supervisor temp = new Supervisor(parts[4]);
 								if (temp.getNumProj() >= 2)
 								{
 									choice2 = false;
@@ -127,72 +117,111 @@ public class Coordinator extends Supervisor {
 									Scanner sc1 = new Scanner(System.in);
 									choice2 = sc1.nextInt() == 1 ? true : false;
 								}
+								
+								if (choice2)
+								{
+									//Edit Project file status and sup name to reflect changes
+									System.out.println("Project Allocated successfully");
+									Project p = new Project(parts[3]);
+									p.editProject(parts[3],Project.Status.Allocated);
+																		
+									//Edit Student file status to reflect changes
+									Student s = new Student(parts[2]);
+									s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Assigned);
+									
+									if (temp.getNumProj() == 2)
+									{
+										changeAllOthersToAvailOrUnavail(parts[4], 0);
+										
+									}
+								
+								}
+															
+							} 
+								
+						return;	
+						}
+						else if (parts[0].equals("Pending") && parts[1].equals("ReqChangeSup"))
+						{
+							ReqChangeSup request = new ReqChangeSup(result, parts[2], parts[3], parts[4], parts[5]);
+							request.updateRequest(parts[3], result);
+							
+							if (approve)
+							{
+								boolean choice2 = true;
+								//If request chosen is ReqChangeSup
+								//If approving this request will not result in supervisor having >2 projects
+								System.out.println("parts[5]:" + parts[5]);
+								Supervisor temp = new Supervisor(parts[5]);
+								if (temp.getNumProj() >= 2)
+								{
+									choice2 = false;
+									System.out.println("Supervisor has reached the maximum number of projects. Currently overseeing " + temp.getNumProj() + " projects.");
+									System.out.println("Press 1 to proceed with approval (Enter -1 to go back):");
+									Scanner sc1 = new Scanner(System.in);
+									choice2 = sc1.nextInt() == 1 ? true : false;
+								}
+								
 								if (choice2)
 								{
 									Project p = new Project(parts[3]);
-									p.editProjectSup(parts[3], parts[4]);
+									p.editProjectSup(parts[3], parts[5]);
 									
 									//Edit Student file supID to reflect changes 
 									Student s1 = new Student(parts[2]);
 									s1.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Assigned);
-									
 									//Edit Request file status to reflect changes
-									ReqAlloc request = new ReqAlloc(result, parts[2], parts[3]);
-									request.updateRequest(parts[3], result);
 									
+									Supervisor oldSup = new Supervisor(parts[4]);
+									if (oldSup.getNumProj()==1)
+									{
+										changeAllOthersToAvailOrUnavail(parts[4], 0);
+									}
 									System.out.println("Supervisor Changed successfully");
-									return;
 								}
+								
 							}
-						}
-						else if (parts[0].equals("Pending") && !(parts[1].equals("ReqChangeTitle")))
-						{
-							//Overall check to verify if its a viable request for Coordinator
-							count++;
-						}
-						line = r.readLine();
-					}
-					System.out.println("Enter another request number to approve/reject (Enter -1 to exit): ");
-					choice = sc.nextInt();
-				}
-			}
-		}
-		else
-		{
-			Request.ApprovalStatus result = Request.ApprovalStatus.Rejected;
-			System.out.println("Enter the request number to reject (Enter -1 to exit): ");
-			int choice;
-			Scanner sc = new Scanner(System.in);
-			choice = sc.nextInt();
-			Filepath f = new Filepath();
-			while (choice >0)
-			{
-				try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
-				{
-					int count=1;
-					String line = r.readLine();
-					line = r.readLine();
-					while (line != null) 
-					{
-						String[] parts = line.split(",");
-						if (choice == count)
-						{
-							ReqChangeTitle request = new ReqChangeTitle(result, "", "", "", "");
-							request.updateRequest(parts[3], result);
-							System.out.println("Request rejected");
 							return;
-							
 						}
-						if (parts[0].equals("Pending") && !(!parts[5].equals(this.getFacultyID()) && parts[1].equals("ReqChangeTitle")))
+						
+						else if (parts[0].equals("Pending") && (parts[1].equals("ReqDeregister")))
 						{
-							count++;
+							//If request chosen is ReqDeregister
+							
+							//Edit Request file status to reflect changes
+							ReqDeregister request = new ReqDeregister(result, parts[2], parts[3]);
+							request.updateRequest(parts[3], result);
+							
+							if (approve)
+							{
+								//Edit Project file status and sup name to reflect changes
+								System.out.println("Project Deregistered successfully");
+								Project p = new Project(parts[3]);
+								p.editProject(parts[3],Project.Status.Available);
+								
+								//Edit Student file status to reflect changes
+								Student s = new Student(parts[2]);
+								s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Ended);
+							
+							} 
+							return; 
 						}
-						line = r.readLine();
 					}
+					else if (parts[0].equals("Pending") && !(parts[1].equals("ReqChangeTitle")))
+					{
+						System.out.println("Supervisor name: " + parts[4]);
+						//Overall check to verify if its a viable request for Coordinator
+						count++;
+					}
+					line = r.readLine();
 				}
+				
+				System.out.println("Enter another request number to approve/reject (Enter -1 to exit): ");
+				choice = sc.nextInt();
 			}
 		}
 	}
+
 	public void viewAllProjs() {
 		Filepath f = new Filepath();
 		int count = 1;
@@ -393,7 +422,53 @@ public class Coordinator extends Supervisor {
 	public String getCoordinatorName() {
 		return coordinatorName;
 	}
+	
+	private void changeAllOthersToAvailOrUnavail(String supName, int mode)
+	 {
+	  //If mode is 1, change all Available to Unavailable, else change Unavailable to available
+	  String cur = mode == 1 ? "Available" : "Unavailable";
+	  String changeTo = mode == 1 ? "Unavailable" : "Available";
+	  Filepath f = new Filepath();
+	        List<String> lines = new ArrayList<>();
+	        try(BufferedReader br = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+	        {
+	            String line;
+	            String newData = "";
+	            int found = 0;
+	            int lineNumber = 0;
+	         while ((line = br.readLine()) != null) 
+	            {
+	          if (line.trim().isEmpty()) 
+	          {
+	              break;
+	          }
+	          String[] parts = line.split(",");
+	       if (parts[0].equals(supName) && parts[2].equals(cur))
+	       {
+	      newData = String.format("%s,%s,%s,%s", parts[0], parts[1], changeTo, parts[3]);            
+	       }
+	       else
+	       {
+	        newData = String.format("%s,%s,%s,%s", parts[0], parts[1], parts[2], parts[3]);
+	       }
+	       lines.add(newData);
+	       lineNumber++;
+	      }
+	      br.close();
+	          
+	      FileWriter fw = new FileWriter(f.getPROJFILENAME());    
+	      PrintWriter out = new PrintWriter(fw); 
+	      for (String line2 : lines) 
+	      {
+	       out.println(line2);     // Write the modified data back to the file
+	      }
+	      out.close();
+	  }
+	        catch (IOException e) 
+	        {
+	         e.printStackTrace();
+	        }
+	 }
 
-	
-	
 }
+
