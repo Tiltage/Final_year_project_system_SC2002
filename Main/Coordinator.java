@@ -124,11 +124,9 @@ public class Coordinator extends Supervisor {
 									//Edit Student file status to reflect changes
 									Student s = new Student(parts[2]);
 									s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Assigned);
-									
-									if (temp.getNumProj() == 2)
+									if (temp.getNumAllocProjs() >= 1)  //Reyan changed this to >= 1 cos this.getNumAllocProj doesnt increment after approving reqAlloc
 									{
-										changeAllOthersToAvailOrUnavail(parts[4], 0);
-										
+										changeAllOthersToAvailOrUnavail(parts[4], 1); 
 									}
 								
 								}
@@ -634,9 +632,11 @@ public class Coordinator extends Supervisor {
 	         e.printStackTrace();
 	        }
 	 }
-//	public static void main(String[] args) throws FileNotFoundException, IOException
-//	{
-//		Coordinator co = new Coordinator("Li fang", "password");
-//	}
+/*	public static void main(String[] args) throws FileNotFoundException, IOException
+	{
+		Coordinator co = new Coordinator("Li fang", "password");
+		co.changeAllOthersToAvailOrUnavail("Bo An", 1);
+	}
+	*/
 }
 

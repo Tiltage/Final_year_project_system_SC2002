@@ -670,6 +670,7 @@ public class Supervisor extends User {
 	        if (NumOfProjFound == 0)
 	        {
 	          System.out.println("You do not have any projects!");
+	          return;
 	        }
 	          
 	          
