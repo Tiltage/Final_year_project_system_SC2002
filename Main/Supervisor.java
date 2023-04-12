@@ -79,11 +79,9 @@ public class Supervisor extends User {
 		            String[] email = line.split(",");
 		            String supervisorEmail = email[1];
 		            String parts[] = email[1].split("@");
-		            System.out.println(parts[0]);
 		            if (parts[0].equals(facultyID))
 		            {
 		            	this.supervisorName = email[0];
-		            	System.out.println(email[0]);
 		            	//System.out.println("parts00: " + parts[0]);
 		            	this.supervisorEmail = email[1];
 		            	//System.out.println("supemail: " + email[1]);
@@ -199,6 +197,7 @@ public class Supervisor extends User {
 		{
 			String line = r.readLine();
 			line=r.readLine();
+			System.out.println("Your name is " + this.supervisorName);
 			System.out.println("The projects under you are: ");
 			while (line != null)
 			{

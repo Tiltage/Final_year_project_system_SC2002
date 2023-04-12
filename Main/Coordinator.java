@@ -14,12 +14,12 @@ import Main.Request.ApprovalStatus;
 
 public class Coordinator extends Supervisor {
 	
-	private String facultyID ;
 	private String coordinatorName;
 	private String coordinatorEmail;
 	private String password;
 	private Project[] projArr;
 	private int numProj;
+	private int numAllocProjs;
 	
 	Scanner sc=new Scanner(System.in);
 	
@@ -30,43 +30,38 @@ public class Coordinator extends Supervisor {
 		//super(facultyID, supervisorName, supervisorEmail, numProj); not sure whats numproj is for
 	}
 	
-	public Coordinator (String facultyID) throws FileNotFoundException, IOException
+	public Coordinator (String facultyID, String password) throws FileNotFoundException, IOException
 	{
-		this.facultyID = facultyID;
-		this.projArr = generateProjArr();
-		this.numProj = projArr.length;
+		super(facultyID,password);
+		this.password = password;
+	}
+	
+	private static String getCoordName(String facultyID)
+	{
+		String coordinatorName = null;
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getCOORDFILENAME())))
 		{
 			String csvSplitBy = ",";
 			int found = 0;
-				String line = r.readLine();
-				while(line!=null && found == 0)
-				{
-					// Add a new row to the bottom of the file
-		            String[] email = line.split(csvSplitBy);
-		            String coordinatorEmail = email[0];
-		            String parts[][] = new String[email.length][];
-		            for (int x = 0; x < email.length; x++)
-		            {
-		            	parts[x] = email[x].split("@");
-			
-		            }
-		            if (parts[1][0].equals(facultyID))
-		            {
-		            	this.coordinatorName = parts[0][0];
-		            	this.coordinatorEmail = email[1];
-		            	this.password = parts[2][0];
-		            	found = 1;
-		            }
-		            line = r.readLine();
-				}
-	            
-
+			String line = r.readLine();
+			while(line!=null && found == 0)
+			{
+				// Add a new row to the bottom of the file
+	            String[] email = line.split(csvSplitBy);
+	            String coordinatorEmail = email[1];
+	            String parts[] = email[1].split("@");
+	            if (parts[0].equals(facultyID))
+	            {
+	            	coordinatorName = email[0];
+	            }
+	            line = r.readLine();
+			}        
         } catch (IOException e) 
 			{
 	            e.printStackTrace();
 	        }
+    	return coordinatorName;
 	}
 	
 	
@@ -533,10 +528,6 @@ public class Coordinator extends Supervisor {
 		return this.password;
 	}
 	
-	public String getFacultyID()
-	{
-		return this.facultyID;
-	}
 
 	
 	private void updateCoordinator(String password)
@@ -643,6 +634,9 @@ public class Coordinator extends Supervisor {
 	         e.printStackTrace();
 	        }
 	 }
-
+//	public static void main(String[] args) throws FileNotFoundException, IOException
+//	{
+//		Coordinator co = new Coordinator("Li fang", "password");
+//	}
 }
 
