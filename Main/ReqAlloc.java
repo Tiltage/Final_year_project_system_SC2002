@@ -8,7 +8,8 @@ import java.io.PrintWriter;
 
 public class ReqAlloc extends Request{
 	private String supID;
-	private String newSupID;
+	private String newSupName;
+	private String supervisorName;
 
 	public ReqAlloc(ApprovalStatus approvalStatus, String studentID, String projTitle) throws FileNotFoundException, IOException{
 		super(approvalStatus, studentID, projTitle);
@@ -16,7 +17,8 @@ public class ReqAlloc extends Request{
 		Project temp = new Project(projTitle);
 		Supervisor tempsup = new Supervisor(temp.getSupervisorName());
 		this.supID = tempsup.getFacultyID();
-		this.newSupID = "NA";
+		this.newSupName = "NA";
+		this.supervisorName = tempsup.getSupervisorName();
 	}
 	
 	public void addRequest()
@@ -27,7 +29,7 @@ public class ReqAlloc extends Request{
 	             PrintWriter out = new PrintWriter(bw)) 
 		{
 	            // Add a new row to the bottom of the file
-			out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supID,this.newSupID).println();
+			out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supervisorName,this.newSupName).println();
             System.out.println("Data appended to file successfully!");
 
         } catch (IOException e) 

@@ -109,10 +109,11 @@ public class Coordinator extends Supervisor {
 								//If request chosen is ReqChangeSup
 								//If approving this request will not result in supervisor having >2 projects
 								Supervisor temp = new Supervisor(parts[4]);
-								if (temp.getNumProj() >= 2)
+								System.out.println("Num of allocated projects: " + temp.getNumAllocProjs());
+								if (temp.getNumAllocProjs() >= 2)
 								{
 									choice2 = false;
-									System.out.println("Supervisor has reached the maximum number of projects. Currently overseeing " + temp.getNumProj() + " projects.");
+									System.out.println("Supervisor has reached the maximum number of projects. Currently overseeing " + temp.getNumAllocProjs() + " projects.");
 									System.out.println("Press 1 to proceed with approval (Enter -1 to go back):");
 									Scanner sc1 = new Scanner(System.in);
 									choice2 = sc1.nextInt() == 1 ? true : false;
@@ -153,10 +154,10 @@ public class Coordinator extends Supervisor {
 								//If approving this request will not result in supervisor having >2 projects
 								System.out.println("parts[5]:" + parts[5]);
 								Supervisor temp = new Supervisor(parts[5]);
-								if (temp.getNumProj() >= 2)
+								if (temp.getNumAllocProjs() >= 2)
 								{
 									choice2 = false;
-									System.out.println("Supervisor has reached the maximum number of projects. Currently overseeing " + temp.getNumProj() + " projects.");
+									System.out.println("Supervisor has reached the maximum number of projects. Currently overseeing " + temp.getNumAllocProjs() + " projects.");
 									System.out.println("Press 1 to proceed with approval (Enter -1 to go back):");
 									Scanner sc1 = new Scanner(System.in);
 									choice2 = sc1.nextInt() == 1 ? true : false;
@@ -173,9 +174,14 @@ public class Coordinator extends Supervisor {
 									//Edit Request file status to reflect changes
 									
 									Supervisor oldSup = new Supervisor(parts[4]);
-									if (oldSup.getNumProj()==1)
+									if (oldSup.getNumAllocProjs() < 2)
 									{
 										changeAllOthersToAvailOrUnavail(parts[4], 0);
+									}
+									Supervisor newSup = new Supervisor(parts[5]);
+									if (newSup.getNumAllocProjs() >= 2)
+									{
+										changeAllOthersToAvailOrUnavail(parts[5], 1);
 									}
 									System.out.println("Supervisor Changed successfully");
 								}
@@ -202,6 +208,11 @@ public class Coordinator extends Supervisor {
 								//Edit Student file status to reflect changes
 								Student s = new Student(parts[2]);
 								s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Ended);
+								Supervisor temp = new Supervisor(parts[5]);
+								if (temp.getNumAllocProjs() < 2)
+								{
+									changeAllOthersToAvailOrUnavail(parts[4], 0);
+								}
 							
 							} 
 							return; 
@@ -253,15 +264,178 @@ public class Coordinator extends Supervisor {
 	}
 	
 	public void createReport() throws FileNotFoundException, IOException {
-		int count=1;
-		Filepath f = new Filepath();
-		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
-		{
-			String line = r.readLine();
-			line=r.readLine();
-			System.out.println("All projects:");
-		}
-	}
+	    int choice;
+	    int count;
+	    Filepath f = new Filepath();
+	    String search;
+	    System.out.println("Search filter");
+	    System.out.println("1 : Supervisor name");
+	    System.out.println("2 : Student name");
+	    System.out.println("3 : Project status");
+	    System.out.println("-1 : Exit");
+	    choice=sc.nextInt();
+	    sc.nextLine();
+	    
+	    while (choice!=-1) {
+	      
+	      switch (choice) {
+	      
+	      case 1: 
+	        System.out.println("Enter Supervisor name :");
+	        search=sc.nextLine();
+	        while (search.length()<2) {
+	          System.out.println("Please enter a more specific input!");
+	          System.out.println("Enter Supervisor name :");
+	          search=sc.nextLine();
+	        }
+	    
+	        count = 1;
+	        try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+	        {
+	          String line = r.readLine();
+	          line=r.readLine();
+	          System.out.println("View all Projects Reports with " + "'" + search + "' :" );
+	          System.out.println("==================");
+	          while (line != null)
+	          {
+	            String[] parts = line.split(",");
+	            
+	            if (parts[0].toLowerCase().contains(search.toLowerCase())) {
+	              
+	              Project p=new Project(parts[1]);              
+	              System.out.println(count + ")");
+	              System.out.println("Supervisor Name: " + parts[0]);
+	              System.out.println("Name of Project: " + parts[1]);
+	              System.out.println("Status: " + parts[2]);
+	              System.out.println("Name of student: " + p.getStudentName());
+	              System.out.println("==================");
+	              count++;
+	            }
+	            line = r.readLine();
+	          }
+	        } catch (FileNotFoundException e) {
+	          // TODO Auto-generated catch block
+	          e.printStackTrace();
+	        } catch (IOException e) {
+	          // TODO Auto-generated catch block
+	          e.printStackTrace();
+	        }
+	        if (count==1) {
+	          System.out.println("Not found");
+	        }
+	        
+	        System.out.println();
+	        break;
+	        
+	      case 2: 
+	        System.out.println("Enter Student name :");
+	        search=sc.nextLine();
+	        while (search.length()<3) {
+	          System.out.println("Please enter a more specific input!");
+	          System.out.println("Enter Student name :");
+	          search=sc.nextLine();
+	        }
+	        
+	        count = 1;
+	        try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+	        {
+	          String line = r.readLine();
+	          line=r.readLine();
+	          System.out.println("View all Projects Reports with " + "'" + search + "' :" );
+	          System.out.println("==================");
+	          while (line != null)
+	          {
+	            String[] parts = line.split(",");
+	            
+	            if (parts[0].toLowerCase().contains(search.toLowerCase())) {
+	              
+	              System.out.println(count + ")");
+	              System.out.println("Name of student: " + parts[0]);
+	              System.out.println("Supervisor Name: " + parts[5]);
+	              System.out.println("Name of Project: " + parts[4]);
+	              System.out.println("Status: " + parts[6]);
+	              System.out.println("==================");
+	              count++;
+	            }
+	            line = r.readLine();
+	          }
+	        } catch (FileNotFoundException e) {
+	          // TODO Auto-generated catch block
+	          e.printStackTrace();
+	        } catch (IOException e) {
+	          // TODO Auto-generated catch block
+	          e.printStackTrace();
+	        }
+	        if (count==1) {
+	          System.out.println("Not found");
+	        }
+	        
+	        System.out.println();
+	        
+	        break;
+	        
+	      case 3: 
+	        
+	        System.out.println("Enter Status :");
+	        search=sc.nextLine();
+	        while (search.length()<3) 
+	        {
+	        	System.out.println("Please enter a more specific input!");
+	          	System.out.println("Enter Status :");
+	          	search=sc.nextLine();
+	        }
+	        
+	        count = 1;
+	        try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+	        {
+	          String line = r.readLine();
+	          line=r.readLine();
+	          System.out.println("View all Projects Reports with " + "'" + search + "' :" );
+	          System.out.println("==================");
+	          while (line != null)
+	          {
+	            String[] parts = line.split(",");
+	            
+	            if (parts[2].toLowerCase().contains(search.toLowerCase())) {
+	              
+	              Project p=new Project(parts[1]);              
+	              System.out.println(count + ")");
+	              System.out.println("Status: " + parts[2]);
+	              System.out.println("Supervisor Name: " + parts[0]);
+	              System.out.println("Name of Project: " + parts[1]);
+	              System.out.println("Name of student: " + p.getStudentName());
+	              System.out.println("==================");
+	              count++;
+	            }
+	            line = r.readLine();
+	          }
+	        } catch (FileNotFoundException e) {
+	          // TODO Auto-generated catch block
+	          e.printStackTrace();
+	        } catch (IOException e) {
+	          // TODO Auto-generated catch block
+	          e.printStackTrace();
+	        }
+	        if (count==1) {
+	          System.out.println("Not found");
+	        }
+	        
+	        System.out.println();
+	        break;
+	        
+	      default: System.out.println("Invalid input");
+	      }      
+	      System.out.println("Search filter");
+	      System.out.println("1 : Supervisor name");
+	      System.out.println("2 : Student name");
+	      System.out.println("3 : Project status");
+	      System.out.println("-1 : Exit");
+	      choice=sc.nextInt();
+	      sc.nextLine();
+	      
+	    }
+	  }
+
 	
 	public void viewPendingReqCoord() {
 		Filepath f = new Filepath();

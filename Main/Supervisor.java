@@ -148,6 +148,11 @@ public class Supervisor extends User {
 		return count;
 	}
 	
+	public int getNumAllocProjs()
+	{
+		return this.numAllocProjs;
+	}
+	
 	public String getFacultyID()
 	{
 		return facultyID;
