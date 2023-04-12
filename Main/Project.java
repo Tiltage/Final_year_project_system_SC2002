@@ -12,7 +12,7 @@ public class Project {
 	private String projTitle;
 	private Status status;
 	
-	public Project(String supervisorName, String projTitle) 
+	public Project(String supervisorName, String projTitle, Status status) 
 	{
 		this.supervisorName = supervisorName;
 		this.projTitle = projTitle;

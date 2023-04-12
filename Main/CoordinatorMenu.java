@@ -109,6 +109,7 @@ public class CoordinatorMenu {
 			break;
 			
 		case 16:
+			co.createReport();
 			break;
 			
 		case 17:

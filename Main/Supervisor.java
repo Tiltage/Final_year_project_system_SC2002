@@ -171,9 +171,18 @@ public class Supervisor extends User {
 		
 		System.out.println("Please enter project title:");
 		projTitle = sc.nextLine();
-		
-		Project p1 = new Project(this.supervisorName, projTitle);
-		p1.addProject();
+		if (this.numAllocProjs < 2)
+		{
+			Project p1 = new Project(this.supervisorName, projTitle, Project.Status.Available);
+			p1.addProject();
+		}
+		else
+		{
+			System.out.println("Reached maximum number of allocated projects! Created project will be listed as \"Unavailable\"! ");
+			Project p2 = new Project(this.supervisorName, projTitle, Project.Status.Unavailable);
+			p2.addProject();
+		}
+
 	}
 	
 	public void viewProj() 
