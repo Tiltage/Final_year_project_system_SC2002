@@ -658,7 +658,7 @@ public class Supervisor extends User {
 	          // Add a new row to the bottom of the file
 	          lineNumber++;
 	                String[] parts = line.split(",");
-	                if (parts[0].equals(this.supervisorName))
+	                if (parts[0].equals(this.supervisorName) && parts[2].equals("Allocated"))
 	                {
 	                  NumOfProjFound++;
 	                  System.out.printf("Project %d: %s", NumOfProjFound, parts[1]).println();
