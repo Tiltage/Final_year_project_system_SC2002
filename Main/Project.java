@@ -16,7 +16,7 @@ public class Project {
 	{
 		this.supervisorName = supervisorName;
 		this.projTitle = projTitle;
-		this.status = Status.Available; // Default status set to available
+		this.status = status; // Default status set to available
 		Filepath f = new Filepath();
 		try(BufferedReader br = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 		{

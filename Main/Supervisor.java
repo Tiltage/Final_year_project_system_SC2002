@@ -29,9 +29,6 @@ public class Supervisor extends User {
 	public Supervisor(String supName) throws FileNotFoundException, IOException
 	{
 		this.supervisorName = supName;
-		this.projArr = generateProjArr();
-		this.numProj = projArr.length;
-		this.numAllocProjs = generateAllocProjs(projArr);
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
 		{
@@ -63,14 +60,14 @@ public class Supervisor extends User {
 			{
 	            e.printStackTrace();
 	        }
+		this.projArr = generateProjArr();
+		this.numProj = projArr.length;
+		this.numAllocProjs = generateAllocProjs(projArr);
 	}
 	public Supervisor(String facultyID, String password) throws FileNotFoundException, IOException
 	{
 		this.facultyID = facultyID;
 		this.password = password;
-		this.projArr = generateProjArr();
-		this.numProj = projArr.length;
-		this.numAllocProjs = generateAllocProjs(projArr);
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
 		{
@@ -82,9 +79,11 @@ public class Supervisor extends User {
 		            String[] email = line.split(",");
 		            String supervisorEmail = email[1];
 		            String parts[] = email[1].split("@");
+		            System.out.println(parts[0]);
 		            if (parts[0].equals(facultyID))
 		            {
 		            	this.supervisorName = email[0];
+		            	System.out.println(email[0]);
 		            	//System.out.println("parts00: " + parts[0]);
 		            	this.supervisorEmail = email[1];
 		            	//System.out.println("supemail: " + email[1]);
@@ -98,6 +97,9 @@ public class Supervisor extends User {
 			{
 	            e.printStackTrace();
 	        }
+		this.projArr = generateProjArr();
+		this.numProj = projArr.length;
+		this.numAllocProjs = generateAllocProjs(projArr);
 	}
 		
 	
@@ -110,6 +112,7 @@ public class Supervisor extends User {
 	{
 		List<Project> list = new ArrayList<>();
 		Filepath f = new Filepath();
+		System.out.println(this.supervisorName);
 		try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 		{
 			String line = r.readLine();
@@ -138,8 +141,10 @@ public class Supervisor extends User {
 	private int generateAllocProjs(Project[] projArr)
 	{
 		int count = 0;
+		System.out.println(this.numProj);
 		for (int i=0; i<projArr.length; i++)
 		{
+			System.out.println(projArr[i].getProjTitle());
 			if (projArr[i].getStatus().toString().equals("Allocated"))
 			{
 				count++;
@@ -171,6 +176,7 @@ public class Supervisor extends User {
 		
 		System.out.println("Please enter project title:");
 		projTitle = sc.nextLine();
+		System.out.println("Number of allocated projects " + this.numAllocProjs);
 		if (this.numAllocProjs < 2)
 		{
 			Project p1 = new Project(this.supervisorName, projTitle, Project.Status.Available);
@@ -723,7 +729,7 @@ public class Supervisor extends User {
 	  }
 	public static void main(String[] args) throws FileNotFoundException, IOException
 	{
-		Supervisor s = new Supervisor("Bo An");
+		Supervisor s = new Supervisor("BOAN", "password");
 	}
 	
 }
