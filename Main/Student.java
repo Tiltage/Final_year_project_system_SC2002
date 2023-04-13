@@ -24,44 +24,72 @@ public class Student extends User{
 	
 	Scanner sc = new Scanner (System.in);
 	
-	public Student(String studentID) throws FileNotFoundException, IOException 
-	{
-		this.studentID = studentID;
-		Filepath f = new Filepath();
-		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
-		{
-			String csvSplitBy = ",";
-			int found = 0;
-				String line = r.readLine();
-				while(line!=null && found == 0)
-				{
-					// Add a new row to the bottom of the file
-		            String[] email = line.split(csvSplitBy);
-		            String studentEmail = email[0];             //not sure what to add here
-		            String parts[][] = new String[email.length][];
-		            for (int x = 0; x < email.length; x++)
-		            {
-		            	parts[x] = email[x].split("@");
-			
-		            }
-		            if (parts[1][0].equals(studentID))
-		            {
-		            	this.studentName = parts[0][0];
-		            	this.studentEmail = email[1];
-		            	this.password=email[2];
-		            	this.proj = getProj(studentID);
-		            	this.status=setStatus(email[6]);
-		            	found = 1;
-		            }
-		            line = r.readLine();
-				}
+	public Student(String studentID, String password) throws FileNotFoundException, IOException 
+	 {
+	  this.studentID = studentID;
+	  this.password = password;
+	  Filepath f = new Filepath();
+	  try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+	  {
+	   int found = 0;
+	   String line = r.readLine();
+	   while(line!=null && found == 0)
+	   {
+	    // Add a new row to the bottom of the file
+	             String[] email = line.split(",");
+	             String studentEmail = email[1];     
+	             String parts[] = email[1].split("@");//not sure what to add here
+	             if (parts[0].equals(studentID))
+	             {
+	              this.studentName = email[0];
+	              this.studentEmail = studentEmail;
+	              this.proj = getProj(studentID);
+	              this.status = setStatus(email[6]);
+	              found = 1;
+	             }
+	             line = r.readLine();
+	   }
+	             
+	        } 
+	  catch (IOException e) 
+	  {
+	            e.printStackTrace();
+	        }
+	 }
+	 
+	 public Student(String studName) throws FileNotFoundException, IOException
+	 {
+	  this.studentName = studName;
+	  Filepath f = new Filepath();
+	  try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
+	  {
+	   int found = 0;
+	   String line = r.readLine();
+	   while(line!=null && found == 0)
+	   {
+	    // Add a new row to the bottom of the file
+	             String[] email = line.split(",");
+	             String studEmail = email[1];
+	             String parts[] = email[1].split("@");
+	             if (email[0].equals(studentName))
+	             {
+	              this.studentID = parts[0];    
+	              this.studentEmail = studEmail;
+	              this.password = email[2];
+	              this.proj = getProj(studentID);
+	              this.status = setStatus(email[6]);
+	              found = 1;
+	             }
+	             line = r.readLine();
+	   }
 	            
-        } 
-		catch (IOException e) 
-		{
-            e.printStackTrace();
-        }
-	}
+
+	        } catch (IOException e) 
+	   {
+	             e.printStackTrace();
+	         }
+	 }
+	
 
 	private Project getProj(String studentID) throws IOException {
 		Filepath f = new Filepath();

@@ -44,7 +44,7 @@ public class Main {
 					if (check(UserID, password, 1) == true)
 					{
 						access = true;
-						Student s = new Student(UserID);
+						Student s = new Student(UserID,password);
 						menuChoice=StudentMenu.display();
 						
 						while (menuChoice != 8) 
