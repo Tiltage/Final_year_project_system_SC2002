@@ -335,8 +335,8 @@ public class Student extends User{
 	          Filepath f = new Filepath();
 	         
 	        System.out.println("Confirm selection");
-	        System.out.println("Continue : 1");
-	        System.out.println("Quit : -1");
+	        System.out.println("1: Continue");
+	        System.out.println("-1: Quit");
 	        int confirm = sc.nextInt();
 	        
 	        if (confirm!=1) {
