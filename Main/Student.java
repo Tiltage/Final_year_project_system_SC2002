@@ -24,44 +24,72 @@ public class Student extends User{
 	
 	Scanner sc = new Scanner (System.in);
 	
-	public Student(String studentID) throws FileNotFoundException, IOException 
-	{
-		this.studentID = studentID;
-		Filepath f = new Filepath();
-		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
-		{
-			String csvSplitBy = ",";
-			int found = 0;
-				String line = r.readLine();
-				while(line!=null && found == 0)
-				{
-					// Add a new row to the bottom of the file
-		            String[] email = line.split(csvSplitBy);
-		            String studentEmail = email[0];             //not sure what to add here
-		            String parts[][] = new String[email.length][];
-		            for (int x = 0; x < email.length; x++)
-		            {
-		            	parts[x] = email[x].split("@");
-			
-		            }
-		            if (parts[1][0].equals(studentID))
-		            {
-		            	this.studentName = parts[0][0];
-		            	this.studentEmail = email[1];
-		            	this.password=email[2];
-		            	this.proj = getProj(studentID);
-		            	this.status=setStatus(email[6]);
-		            	found = 1;
-		            }
-		            line = r.readLine();
-				}
+	public Student(String studentID, String password) throws FileNotFoundException, IOException 
+	 {
+	  this.studentID = studentID;
+	  this.password = password;
+	  Filepath f = new Filepath();
+	  try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+	  {
+	   int found = 0;
+	   String line = r.readLine();
+	   while(line!=null && found == 0)
+	   {
+	    // Add a new row to the bottom of the file
+	             String[] email = line.split(",");
+	             String studentEmail = email[1];     
+	             String parts[] = email[1].split("@");//not sure what to add here
+	             if (parts[0].equals(studentID))
+	             {
+	              this.studentName = email[0];
+	              this.studentEmail = studentEmail;
+	              this.proj = getProj(studentID);
+	              this.status = setStatus(email[6]);
+	              found = 1;
+	             }
+	             line = r.readLine();
+	   }
+	             
+	        } 
+	  catch (IOException e) 
+	  {
+	            e.printStackTrace();
+	        }
+	 }
+	 
+	 public Student(String studName) throws FileNotFoundException, IOException
+	 {
+	  this.studentName = studName;
+	  Filepath f = new Filepath();
+	  try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
+	  {
+	   int found = 0;
+	   String line = r.readLine();
+	   while(line!=null && found == 0)
+	   {
+	    // Add a new row to the bottom of the file
+	             String[] email = line.split(",");
+	             String studEmail = email[1];
+	             String parts[] = email[1].split("@");
+	             if (email[0].equals(studentName))
+	             {
+	              this.studentID = parts[0];    
+	              this.studentEmail = studEmail;
+	              this.password = email[2];
+	              this.proj = getProj(studentID);
+	              this.status = setStatus(email[6]);
+	              found = 1;
+	             }
+	             line = r.readLine();
+	   }
 	            
-        } 
-		catch (IOException e) 
-		{
-            e.printStackTrace();
-        }
-	}
+
+	        } catch (IOException e) 
+	   {
+	             e.printStackTrace();
+	         }
+	 }
+	
 
 	private Project getProj(String studentID) throws IOException {
 		Filepath f = new Filepath();
@@ -143,10 +171,13 @@ public class Student extends User{
 	    
 	    if (this.status==Status.Ended) {
 	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+	    	return;
 	    }
 	    
 	    if (this.status==Status.Assigned) {
 	    	System.out.println("You have already been assigned a project");
+	    	return;
+	    	
 	    }
 	    
 	    
@@ -304,8 +335,8 @@ public class Student extends User{
 	          Filepath f = new Filepath();
 	         
 	        System.out.println("Confirm selection");
-	        System.out.println("continue : 1");
-	        System.out.println("quit : -1");
+	        System.out.println("1: Continue");
+	        System.out.println("-1: Quit");
 	        int confirm = sc.nextInt();
 	        
 	        if (confirm!=1) {
@@ -351,9 +382,9 @@ public class Student extends User{
 	            {
 	              String[] parts = line.split(",");
 	              
-	              if (parts[2].equals(this.studentID))
+	              if (parts[3].equals(this.studentID))
 	              {
-	                title=parts[3];                //iterate to find the current title new (need it to pass in as parameter)
+	                title=parts[4];                //iterate to find the current title new (need it to pass in as parameter)
 	                break;
 	                
 	              }
@@ -368,7 +399,7 @@ public class Student extends User{
 	            e.printStackTrace();
 	          }
 	          System.out.println();
-	          
+	          System.out.println(title);
 	          ReqDeregister r = new ReqDeregister(Request.ApprovalStatus.Pending, this.studentID, title);
 	          r.addRequest();
 	          }  
@@ -422,10 +453,6 @@ public class Student extends User{
 			
 		int count=1; 
 		int recent=-1;
-		
-	    if (this.status==Status.Ended) {
-	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
-	    }
 		
 		Filepath f = new Filepath();
 		System.out.println("Recent request status: ");
