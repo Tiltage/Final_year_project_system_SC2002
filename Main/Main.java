@@ -108,8 +108,6 @@ public class Main {
 					if (check(UserID, password, 3) == true) {
 						access=true;
 						Coordinator co = new Coordinator(UserID, password);
-						System.out.println("ID:" + co.getFacultyID());
-						System.out.println("Sup Name:" + co.getSupervisorName());
 						menuChoice=CoordinatorMenu.display();
 						
 						while (menuChoice != 7) 
