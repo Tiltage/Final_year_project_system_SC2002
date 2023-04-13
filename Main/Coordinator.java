@@ -117,7 +117,7 @@ public class Coordinator extends Supervisor {
 								if (choice2)
 								{
 									//Edit Project file status and sup name to reflect changes
-									System.out.println("Project Allocated successfully");
+									System.out.println("Project Allocated successfully!");
 									Project p = new Project(parts[3]);
 									p.editProject(parts[3],Project.Status.Allocated);
 																		
@@ -173,7 +173,7 @@ public class Coordinator extends Supervisor {
 									p.editProjectSup(parts[3], parts[5]);
 									
 									//Edit Student file supID to reflect changes 
-									System.out.println(p.getSupervisorName());
+									System.out.println("New Supervisor: " + p.getSupervisorName());
 									Student s1 = new Student(parts[2],0);
 									s1.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Assigned);
 									//Edit Request file status to reflect changes
@@ -188,7 +188,7 @@ public class Coordinator extends Supervisor {
 									{
 										changeAllOthersToAvailOrUnavail(parts[5], 1);
 									}
-									System.out.println("Supervisor Changed successfully");
+									System.out.println("Supervisor Changed successfully.");
 								}
 								
 							}
@@ -207,7 +207,7 @@ public class Coordinator extends Supervisor {
 							if (approve)
 							{
 								//Edit Project file status and sup name to reflect changes
-								System.out.println("Project Deregistered successfully");
+								System.out.println("Project Deregistered successfully.");
 								Project p = new Project(parts[3]);
 								p.editProject(parts[3],Project.Status.Available);
 								
@@ -228,7 +228,7 @@ public class Coordinator extends Supervisor {
 					}
 					else if (parts[0].equals("Pending") && !(parts[1].equals("ReqChangeTitle")))
 					{
-						System.out.println("Supervisor name: " + parts[4]);
+						//System.out.println("Supervisor name: " + parts[4]);
 						//Overall check to verify if its a viable request for Coordinator
 						count++;
 					}
@@ -330,7 +330,7 @@ public class Coordinator extends Supervisor {
 	          e.printStackTrace();
 	        }
 	        if (count==1) {
-	          System.out.println("Not found");
+	          System.out.println("Not found!");
 	        }
 	        
 	        System.out.println();
@@ -376,7 +376,7 @@ public class Coordinator extends Supervisor {
 	          e.printStackTrace();
 	        }
 	        if (count==1) {
-	          System.out.println("Not found");
+	          System.out.println("Not found!");
 	        }
 	        
 	        System.out.println();
@@ -426,7 +426,7 @@ public class Coordinator extends Supervisor {
 	          e.printStackTrace();
 	        }
 	        if (count==1) {
-	          System.out.println("Not found");
+	          System.out.println("Not found!");
 	        }
 	        
 	        System.out.println();
@@ -475,14 +475,14 @@ public class Coordinator extends Supervisor {
 		          e.printStackTrace();
 		        }
 		        if (count==1) {
-		          System.out.println("Not found");
+		          System.out.println("Not found!");
 		        }
 		        
 		        System.out.println();
 		        break;
 	        
 	        
-	      default: System.out.println("Invalid input");
+	      default: System.out.println("Invalid input.");
 	      }      
 	      System.out.println("Search filter");
 	      System.out.println("1 : Supervisor name");
@@ -593,7 +593,7 @@ public class Coordinator extends Supervisor {
 		System.out.println("Enter your new password: ");
 		newPW = sc.next();
 		if (newPW.equals(this.getPW())) {
-			System.out.println("New password cannot be the same as the current one");
+			System.out.println("New password cannot be the same as the current one.");
 			return;
 		}
 		this.updateCoordinator(newPW);

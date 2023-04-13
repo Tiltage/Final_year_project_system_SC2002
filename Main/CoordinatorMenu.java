@@ -31,22 +31,22 @@ public class CoordinatorMenu {
 			System.out.println("8 : Create new project ");
 			System.out.println("9 : View projects ");
 			System.out.println("10 : Update projects "); //to modify title himself
-			System.out.println("-1: Exit ");
+			System.out.println("-1 : Exit ");
 			choice=sc.nextInt();
 			break;
 		
 		case 2:	
-			System.out.println("11 : View Pending requests "); // //includes new and untouched requests
+			System.out.println("11 : View pending requests "); // //includes new and untouched requests
 			System.out.println("12 : View request history ");
 			System.out.println("13 : Approve requests "); //includes change title requests
 			System.out.println("14 : Reject requests ");
-			System.out.println("-1: Exit ");
+			System.out.println("-1 : Exit ");
 			choice=sc.nextInt();
 			break;
 		case 5 : 
 			System.out.println("15 : View all projects ");
 			System.out.println("16 : Generate report"); 
-			System.out.println("-1: Exit ");
+			System.out.println("-1 : Exit ");
 			choice=sc.nextInt();
 			break;
 		
@@ -55,7 +55,7 @@ public class CoordinatorMenu {
 			System.out.println("18 : View request history ");
 			System.out.println("19 : Approve requests "); 
 			System.out.println("20 : Reject requests ");
-			System.out.println("-1: Exit ");
+			System.out.println("-1 : Exit ");
 			choice=sc.nextInt();
 			break;
 			
@@ -137,7 +137,7 @@ public class CoordinatorMenu {
 			
 			
 		default:
-			System.out.println("Invalid choice");
+			System.out.println("Invalid choice!");
 		}
 	}	
 }

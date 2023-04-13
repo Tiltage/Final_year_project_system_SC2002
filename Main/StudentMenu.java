@@ -31,7 +31,7 @@ public class StudentMenu {
 		
 		case 1 : 
 			s.changePW();
-			System.out.println("Logging you out to retry password");
+			System.out.println("Logging you out to retry password.");
 			break;
 		
 		case 2 : 
@@ -60,7 +60,7 @@ public class StudentMenu {
 			break;
 			
 		default:
-			System.out.println("Invalid");
+			System.out.println("Invalid choice!");
 		}
 	}	
 }

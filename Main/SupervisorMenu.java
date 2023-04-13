@@ -54,7 +54,7 @@ public class SupervisorMenu {
 		case 1 : 
 			sp.changePW();
 			//if change password need quit and relogin to try again
-			System.out.println("Logging you out to retry password");
+			System.out.println("Logging you out to retry password.");
 			break;
 		
 		case 6 : 
@@ -91,7 +91,7 @@ public class SupervisorMenu {
 			break;
 			
 		default:
-			System.out.println("Invalid choice");
+			System.out.println("Invalid choice!");
 		}
 	}	
 	

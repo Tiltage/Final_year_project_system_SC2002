@@ -176,7 +176,7 @@ public class Student extends User{
 		System.out.println("Enter your new password: ");
 		newPW = sc.next();
 		if (newPW.equals(this.getPW())) {
-			System.out.println("New password cannot be the same as the current one");
+			System.out.println("New password cannot be the same as the current one.");
 			return;
 		}
 		
@@ -208,7 +208,7 @@ public class Student extends User{
 	    }
 	    
 	    if (this.status==Status.Assigned) {
-	    	System.out.println("You have already been assigned a project");
+	    	System.out.println("You have already been assigned a project.");
 	    	return;
 	    	
 	    }
@@ -254,17 +254,17 @@ public class Student extends User{
 	    int valid=0;
 	    
 	    if (this.status==Status.Pending) {
-	      System.out.println("You have a pending request for a project"); //sanity check
+	      System.out.println("You have a pending request for a project."); //sanity check
 	      return;
 	    }
 	    
 	    if (this.status==Status.Assigned) {
-	      System.out.println("You have been assigned a project"); //sanity check
+	      System.out.println("You have been assigned a project."); //sanity check
 	      return;
 	    }
 
 	    if (this.status==Status.Ended) {
-	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+	    	System.out.println("You are not allowed to make a selection again as you deregistered your FYP.");
 	    }
 	    
 	    int count=1;
@@ -297,7 +297,7 @@ public class Student extends User{
 	      }
 	      
 	      if (index>=total || index<1) {
-	        System.out.println("Invalid selection");
+	        System.out.println("Invalid selection!");
 	        continue;
 	      }
 	      
@@ -313,7 +313,7 @@ public class Student extends User{
 	        String[] parts = line.split(",");
 	        
 	        if (!parts[2].equals("Available")) {
-	          System.out.println("This project is unavailable");
+	          System.out.println("This project is unavailable.");
 	          continue;
 	        }
 	        
@@ -350,26 +350,26 @@ public class Student extends User{
 	        else {          //for request de-allocation, reject if got pending req
 	          
 	          if (this.status==Status.Pending) {
-	            System.out.println("You have a pending request for a project"); //sanity check
+	            System.out.println("You have a pending request for a project."); //sanity check
 	            return;
 	          }
 	          
 	          if (this.status==Status.Unassigned) {
-	            System.out.println("You have not been assigned a project"); //sanity check
+	            System.out.println("You have not been assigned a project."); //sanity check
 	            return;
 	          }
 	          
 	  	    if (this.status==Status.Ended) {
-		    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+		    	System.out.println("You are not allowed to make a selection again as you deregistered your FYP.");
 		    }
 	          
 	          String title="NA";
 	          int count=1;
 	          Filepath f = new Filepath();
 	         
-	        System.out.println("Confirm selection");
-	        System.out.println("1: Continue");
-	        System.out.println("-1: Quit");
+	        System.out.println("Confirm selection:");
+	        System.out.println("1 : Continue");
+	        System.out.println("-1 : Quit");
 	        int confirm = sc.nextInt();
 	        
 	        if (confirm!=1) {
@@ -386,13 +386,13 @@ public class Student extends User{
 					
 					if (parts[2].equals(this.studentID) && parts[0].equals("Pending") && parts[1].equals("ReqChangeTitle")) //to check if have any pending change title req
 					{
-						System.out.println("You already have a pending request to change title");
+						System.out.println("You already have a pending request to change title.");
 						return;
 					}
 					
 					if (parts[2].equals(this.studentID) && parts[0].equals("Pending") && parts[1].equals("ReqDeregister"))
 					{
-						System.out.println("You already have a pending request to deregister a project");
+						System.out.println("You already have a pending request to deregister a project.");
 						return;	
 					}
 					line = r.readLine();
@@ -447,7 +447,7 @@ public class Student extends User{
 	    }
 		
 	    if (this.status != Status.Assigned) {
-			System.out.println("You have not been assigned a project");    //sanity check
+			System.out.println("You have not been assigned a project.");    //sanity check
 			return;
 		}
 		
@@ -503,9 +503,9 @@ public class Student extends User{
 					if (parts[0].equals("Pending")) {
 						System.out.println("**NEW** \t");
 						System.out.println("Request type : " + parts[1]);
-						System.out.println("Status: " + parts[0]);
-						System.out.println("Name of Project: " + parts[3]);
-						System.out.println( "Supervisor Name: " + parts[4]);//we print all all the pending (new)
+						System.out.println("Status : " + parts[0]);
+						System.out.println("Name of Project : " + parts[3]);
+						System.out.println( "Supervisor Name : " + parts[4]);//we print all all the pending (new)
 						System.out.println();
 					}
 					recent=count; //will set the index last request into recent
@@ -516,7 +516,7 @@ public class Student extends User{
 			}
 				
 			if (recent==-1) {
-				System.out.println("You have not sent in a request"); //after iterating if never find matches, means never request
+				System.out.println("You have not sent in a request."); //after iterating if never find matches, means never request
 				return;
 			}
 				
@@ -535,20 +535,20 @@ public class Student extends User{
 		{
 			String line = r.readLine();
 			line=r.readLine();
-			System.out.println("Request history: ");
+			System.out.println("Request history : ");
 			
 			while (line != null)
 			{
 				String[] parts = line.split(",");
 					
-				if ((!parts[1].equals("ChangeSup")) && parts[2].equals(this.studentID))
+				if ((!parts[1].equals("ReqChangeSup")) && parts[2].equals(this.studentID))
 				{	
 					if (!parts[0].equals("Pending")) {
 						System.out.println("**OLD** \t");
 						System.out.println("Request type : " + parts[1]);
-						System.out.println("Status: " + parts[0]);
-						System.out.println("Name of Project: " + parts[3]);
-						System.out.println( "Supervisor Name: " + parts[4]);//we print all all the pending (new)
+						System.out.println("Status : " + parts[0]);
+						System.out.println("Name of Project : " + parts[3]);
+						System.out.println( "Supervisor Name : " + parts[4]);//we print all all the pending (new)
 						System.out.println();
 					}
 				}
@@ -556,7 +556,7 @@ public class Student extends User{
 				line = r.readLine();
 			}
 			if (line==null) {
-				System.out.println("No other request history");
+				System.out.println("No other request history.");
 			}
 			System.out.println();
 				
@@ -577,7 +577,7 @@ public class Student extends User{
 	    }
 		
 		if (this.status!=Status.Assigned) {
-			System.out.println("You have not been assigned a project");
+			System.out.println("You have not been assigned a project.");
 			return;
 		}
 		
@@ -592,13 +592,13 @@ public class Student extends User{
 				
 				if (parts[2].equals(this.studentID) && parts[0].equals("Pending") && parts[1].equals("ReqChangeTitle")) //to check if have any pending change title req
 				{
-					System.out.println("You already have a pending request to change title");
+					System.out.println("You already have a pending request to change title.");
 					return;
 				}
 				
 				if (parts[2].equals(this.studentID) && parts[0].equals("Pending") && parts[1].equals("ReqDeregister"))
 				{
-					System.out.println("You already have a pending request to deregister a project");
+					System.out.println("You already have a pending request to deregister a project.");
 					return;	
 				}
 				line = r.readLine();
@@ -649,7 +649,7 @@ public class Student extends User{
 		System.out.println("Supervisor Name: " + SupervisorID);
 		System.out.println("Previous Title: " + oldTitle);
 		r3.addRequest();
-		System.out.println("New Title:" + newTitle);
+		System.out.println("New Title: " + newTitle);
 		
 	}
 
@@ -737,11 +737,6 @@ public class Student extends User{
 				     }
 		        }
 		    }
-		    if (found == 0)
-		    {
-		         System.out.println("Title not found! Assigned project title not changed!");
-		         return;
-		    }
 		    br.close();
 		        
 		    lines.set(lineNumber-1, newData);			// the line number to overwrite (starting from 0)
@@ -788,11 +783,6 @@ public class Student extends User{
 				          System.out.println("Project title changed successfully!");
 				     }
 		        }
-		    }
-		    if (found == 0)
-		    {
-		         System.out.println("Project Title not found! Assigned project title not changed!");
-		         return;
 		    }
 		    br.close();
 		        
