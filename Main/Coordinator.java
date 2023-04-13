@@ -33,6 +33,7 @@ public class Coordinator extends Supervisor {
 	{
 		super(facultyID,password);
 		this.password = password;
+		this.coordinatorName = this.getSupervisorName();
 	}
 	
 	private static String getCoordName(String facultyID)
@@ -98,12 +99,12 @@ public class Coordinator extends Supervisor {
 							
 							if (approve)
 							{
-								System.out.println("Entered-----------------------------------");
+								//System.out.println("Entered-----------------------------------");
 								boolean choice2 = true;
 								//If request chosen is ReqChangeSup
 								//If approving this request will not result in supervisor having >2 projects
 								Supervisor temp = new Supervisor(parts[4]);
-								System.out.println("Num of allocated projects: " + temp.getNumAllocProjs());
+								//System.out.println("Num of allocated projects: " + temp.getNumAllocProjs());
 								if (temp.getNumAllocProjs() >= 2)
 								{
 									choice2 = false;
@@ -131,7 +132,19 @@ public class Coordinator extends Supervisor {
 								}
 															
 							} 
+							else
+							{
+								System.out.println("Allocation request rejected!");
+								//Update project status to available 
+								Project p = new Project(parts[3]);
+								p.editProject(parts[3],Project.Status.Available);
+
+								//Update student status from pending to unassigned
+								Student s = new Student(parts[2]);
+								s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Unassigned);
 								
+							}
+						System.out.println();	
 						return;	
 						}
 						else if (parts[0].equals("Pending") && parts[1].equals("ReqChangeSup"))
@@ -144,7 +157,6 @@ public class Coordinator extends Supervisor {
 								boolean choice2 = true;
 								//If request chosen is ReqChangeSup
 								//If approving this request will not result in supervisor having >2 projects
-								System.out.println("parts[5]:" + parts[5]);
 								Supervisor temp = new Supervisor(parts[5]);
 								if (temp.getNumAllocProjs() >= 2)
 								{
@@ -161,6 +173,7 @@ public class Coordinator extends Supervisor {
 									p.editProjectSup(parts[3], parts[5]);
 									
 									//Edit Student file supID to reflect changes 
+									System.out.println(p.getSupervisorName());
 									Student s1 = new Student(parts[2]);
 									s1.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Assigned);
 									//Edit Request file status to reflect changes
@@ -179,6 +192,7 @@ public class Coordinator extends Supervisor {
 								}
 								
 							}
+							System.out.println();	
 							return;
 						}
 						
@@ -198,15 +212,17 @@ public class Coordinator extends Supervisor {
 								p.editProject(parts[3],Project.Status.Available);
 								
 								//Edit Student file status to reflect changes
-								Student s = new Student(parts[2]);
-								s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Ended);
+								Student s = new Student(parts[2],0);
+								s.updateStudent("null", "null", Student.Status.Ended);
 								Supervisor temp = new Supervisor(parts[5]);
 								if (temp.getNumAllocProjs() < 2)
 								{
 									changeAllOthersToAvailOrUnavail(parts[4], 0);
 								}
+								
 							
 							} 
+							System.out.println();	
 							return; 
 						}
 					}
@@ -506,6 +522,10 @@ public class Coordinator extends Supervisor {
 				}
 				line = r.readLine();
 			}
+			if (count == 1)
+			{
+				System.out.println("No requests to approve!");
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -532,6 +552,7 @@ public class Coordinator extends Supervisor {
 				{
 					System.out.println(count + ")");
 					System.out.println("Status: " + parts[0]);
+					System.out.println("Request Type: " + parts[1]);
 					System.out.println("Name of Project: " + parts[3]);
 					System.out.println("Supervisor Name: " + parts[4]);
 					System.out.println("Student name: " + parts[2]);
@@ -607,7 +628,6 @@ public class Coordinator extends Supervisor {
 				          System.out.println("Updating password...");
 				          newData = String.format("%s,%s,%s", parts[0], parts[1], password);
 				          found = 1;
-				          System.out.println("Coordinator password changed successfully!");
 				     }
 		        }
 		    }
