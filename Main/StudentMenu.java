@@ -14,8 +14,8 @@ public class StudentMenu {
 		System.out.println("Student menu page :");
 		System.out.println("1 : Change password ");
 		System.out.println("2 : View available projects ");
-		System.out.println("3 : Select the project to send to the coordinator");
-		System.out.println("4 : View own project :");
+		System.out.println("3 : Choose a project to be allocated to");
+		System.out.println("4 : View own project ");
 		System.out.println("5 : View requests status and history");
 		System.out.println("6 : Request to change title");
 		System.out.println("7 : Request to deregister FYP ");
@@ -31,7 +31,6 @@ public class StudentMenu {
 		
 		case 1 : 
 			s.changePW();
-			//if change password need quit and relogin to try again
 			System.out.println("Logging you out to retry password");
 			break;
 		

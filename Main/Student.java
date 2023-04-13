@@ -186,7 +186,7 @@ public class Student extends User{
 	    int index;
 	    String projectTitle = "NA";
 	    String supName = "NA";
-	    
+	    viewAvailableProjects();
 	    int valid=0;
 	    
 	    if (this.status==Status.Pending) {
@@ -224,9 +224,13 @@ public class Student extends User{
 	    }
 	    
 	    while (valid==0) {
-	      System.out.println("Enter the Number ID of the project you want to be allocated : ");
+	      System.out.println("Enter the Number ID of the project you want to be allocated (-1 to quit) : ");
 	      System.out.println();
 	      index=sc.nextInt();
+	      
+	      if (index==-1) {
+	    	  return;
+	      }
 	      
 	      if (index>=total || index<1) {
 	        System.out.println("Invalid selection");
@@ -298,9 +302,16 @@ public class Student extends User{
 	          String title="NA";
 	          int count=1;
 	          Filepath f = new Filepath();
-	          
-	          
-	          
+	         
+	        System.out.println("Confirm selection");
+	        System.out.println("continue : 1");
+	        System.out.println("quit : -1");
+	        int confirm = sc.nextInt();
+	        
+	        if (confirm!=1) {
+	        	return;
+	        }
+	        
 	  		try (BufferedReader r = new BufferedReader(new FileReader(f.getREQFILENAME())))
 			{	
 				String line = r.readLine();

@@ -265,6 +265,7 @@ public class Coordinator extends Supervisor {
 	    System.out.println("1 : Supervisor name");
 	    System.out.println("2 : Student name");
 	    System.out.println("3 : Project status");
+	    System.out.println("4 : Project title");
 	    System.out.println("-1 : Exit");
 	    choice=sc.nextInt();
 	    sc.nextLine();
@@ -416,12 +417,63 @@ public class Coordinator extends Supervisor {
 	        System.out.println();
 	        break;
 	        
+	      case 4: 
+		        
+		        System.out.println("Enter Title :");
+		        search=sc.nextLine();
+		        while (search.length()<3) 
+		        {
+		        	System.out.println("Please enter a more specific input!");
+		          	System.out.println("Enter Title :");
+		          	search=sc.nextLine();
+		        }
+		        
+		        count = 1;
+		        try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
+		        {
+		          String line = r.readLine();
+		          line=r.readLine();
+		          System.out.println("View all Projects Reports with " + "'" + search + "' :" );
+		          System.out.println("==================");
+		          while (line != null)
+		          {
+		            String[] parts = line.split(",");
+		            
+		            if (parts[1].toLowerCase().contains(search.toLowerCase())) {
+		              
+		              Project p=new Project(parts[1]);              
+		              System.out.println(count + ")");
+		              System.out.println("Name of Project: " + parts[1]);
+		              System.out.println("Status: " + parts[2]);
+		              System.out.println("Supervisor Name: " + parts[0]);
+		              System.out.println("Name of student: " + p.getStudentName());
+		              System.out.println("==================");
+		              count++;
+		            }
+		            line = r.readLine();
+		          }
+		        } catch (FileNotFoundException e) {
+		          // TODO Auto-generated catch block
+		          e.printStackTrace();
+		        } catch (IOException e) {
+		          // TODO Auto-generated catch block
+		          e.printStackTrace();
+		        }
+		        if (count==1) {
+		          System.out.println("Not found");
+		        }
+		        
+		        System.out.println();
+		        break;
+	        
+	        
 	      default: System.out.println("Invalid input");
 	      }      
 	      System.out.println("Search filter");
 	      System.out.println("1 : Supervisor name");
 	      System.out.println("2 : Student name");
 	      System.out.println("3 : Project status");
+	      System.out.println("4 : Project title");
 	      System.out.println("-1 : Exit");
 	      choice=sc.nextInt();
 	      sc.nextLine();
