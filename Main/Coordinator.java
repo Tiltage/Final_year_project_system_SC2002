@@ -122,7 +122,7 @@ public class Coordinator extends Supervisor {
 									p.editProject(parts[3],Project.Status.Allocated);
 																		
 									//Edit Student file status to reflect changes
-									Student s = new Student(parts[2]);
+									Student s = new Student(parts[2], 0);
 									s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Assigned);
 									if (temp.getNumAllocProjs() >= 1)  //Reyan changed this to >= 1 cos this.getNumAllocProj doesnt increment after approving reqAlloc
 									{
@@ -140,7 +140,7 @@ public class Coordinator extends Supervisor {
 								p.editProject(parts[3],Project.Status.Available);
 
 								//Update student status from pending to unassigned
-								Student s = new Student(parts[2]);
+								Student s = new Student(parts[2], 0);
 								s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Unassigned);
 								
 							}
@@ -174,7 +174,7 @@ public class Coordinator extends Supervisor {
 									
 									//Edit Student file supID to reflect changes 
 									System.out.println(p.getSupervisorName());
-									Student s1 = new Student(parts[2]);
+									Student s1 = new Student(parts[2],0);
 									s1.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Assigned);
 									//Edit Request file status to reflect changes
 									
@@ -561,6 +561,10 @@ public class Coordinator extends Supervisor {
 				}
 				line = r.readLine();
 			}
+			if (count == 1)
+			{
+				System.out.println("No requests in history to approve!");
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -588,6 +592,10 @@ public class Coordinator extends Supervisor {
 
 		System.out.println("Enter your new password: ");
 		newPW = sc.next();
+		if (newPW.equals(this.getPW())) {
+			System.out.println("New password cannot be the same as the current one");
+			return;
+		}
 		this.updateCoordinator(newPW);
 		System.out.println("Password changed successfully!");
 		return;
