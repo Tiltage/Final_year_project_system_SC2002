@@ -64,10 +64,6 @@ public class Project {
 	            line = r.readLine();	            
 			}
 			r.close();
-		if (found == 0)
-		{
-			System.out.println("Project not found! Attributes not retrieved!");
-		}
 	            
         } 
 		catch (IOException e) 
@@ -76,8 +72,7 @@ public class Project {
 	        }
 	}
 	
-	public void addProject() //Parameter should be a Project class itself, not attributes of a project class
-	// End state is to call p.addProject to add all its attributes into the csv file 
+	public void addProject() 
 	{	
 		Filepath f = new Filepath();
 		try	(FileWriter fw = new FileWriter(f.getPROJFILENAME(), true);
