@@ -698,8 +698,9 @@ public void requestTransfer()
 	
 	//adding request
 	int Found = 0;
-	BufferedReader Br = new BufferedReader(new FileReader(f.getSUPFILENAME()));
+	
 	while(Found==0) {
+		BufferedReader Br = new BufferedReader(new FileReader(f.getSUPFILENAME()));
 		System.out.println("Please enter name of new supervisor (Enter -1 to exit): ");
 	    newSupName=sc.nextLine();
 	    
@@ -718,20 +719,22 @@ public void requestTransfer()
 	              if (parts2[0].equalsIgnoreCase(newSupName))
 	              {
 	            	  Project temp = new Project(projList[projectNum]);
-	            	  
-	            	
-	            	  
 	            	  String studentName = temp.getStudentName();
+	            	  Student s = new Student(studentName);
+	            	  
+	            	  
+	            	  String studentID = s.getID();
 	            	  System.out.println("Change supervisor of project:" + projList[projectNum] + " to " + newSupName);
-	            	  ReqChangeSup re = new ReqChangeSup(Request.ApprovalStatus.Pending, studentName, projList[projectNum], this.supervisorName, newSupName);
+	            	  ReqChangeSup re = new ReqChangeSup(Request.ApprovalStatus.Pending, studentID, projList[projectNum], this.supervisorName, newSupName);
 	            	  re.addRequest();
 	            	  return;
 	              }
 	              line2 = Br.readLine();              
 	      }
+	      Br.close();
 	      System.out.println("Supervisor you are trying to change to does not exist!! \n"); 	      
 		    }
-		    Br.close();
+
 		      }
 	      
 	      catch (IOException e){

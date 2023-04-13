@@ -109,7 +109,7 @@ public class Project {
 		{
 			int found = 0;
 			String line = r.readLine();
-			while(line!=null && found == 0)
+			while (line != null)
 			{
 	            String[] parts = line.split(",");
 	            if (parts[4].equals(this.projTitle))

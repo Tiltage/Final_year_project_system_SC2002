@@ -61,14 +61,14 @@ public class Student extends User{
 	 {
 	  this.studentName = studName;
 	  Filepath f = new Filepath();
-	  try(BufferedReader r = new BufferedReader(new FileReader(f.getSUPFILENAME())))
+	  try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
 	  {
 	   int found = 0;
 	   String line = r.readLine();
 	   while(line!=null && found == 0)
 	   {
 	    // Add a new row to the bottom of the file
-	             String[] email = line.split(",");
+	             String email[] = line.split(",");
 	             String studEmail = email[1];
 	             String parts[] = email[1].split("@");
 	             if (email[0].equals(studentName))
@@ -101,19 +101,19 @@ public class Student extends User{
 	   while(line!=null && found == 0)
 	   {
 	    // Add a new row to the bottom of the file
-	             String[] email = line.split(",");
-	             String studentEmail = email[1];     
-	             String parts[] = email[1].split("@");//not sure what to add here
-	             if (parts[0].equals(studentID))
-	             {
-	              this.studentName = email[0];
-	              this.studentEmail = studentEmail;
-	              this.proj = getProj(studentID);
-	           this.password = email[2];
-	              this.status = setStatus(email[6]);
-	              found = 1;
-	             }
-	             line = r.readLine();
+             String email[] = line.split(",");
+             String studentEmail = email[1];     
+             String parts[] = email[1].split("@");//not sure what to add here
+             if (parts[0].equals(studentID))
+             {
+              this.studentName = email[0];
+              this.studentEmail = studentEmail;
+              this.proj = getProj(studentID);
+              this.password = email[2];
+              this.status = setStatus(email[6]);
+              found = 1;
+             }
+             line = r.readLine();
 	   }
 	             
 	        } 
@@ -175,9 +175,10 @@ public class Student extends User{
 
 		System.out.println("Enter your new password: ");
 		newPW = sc.next();
-		if (newPW.equals(this.getPW())) {
+		while (newPW.equals(this.getPW())) {
 			System.out.println("New password cannot be the same as the current one.");
-			return;
+			System.out.println("Enter your new password: ");
+			newPW = sc.next();
 		}
 		
 		this.updateStudent(newPW);
@@ -616,9 +617,8 @@ public class Student extends User{
 		String oldTitle="NA";
 		String newTitle="NA";
 		String SupervisorID="NA";
-		
 		System.out.println("Please enter the new title name :");
-		newTitle=sc.next();
+		newTitle=sc.nextLine();
 		
 		try (BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
 		{	
