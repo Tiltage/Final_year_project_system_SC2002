@@ -645,9 +645,10 @@ public class Student extends User{
 		}
 
 		ReqChangeTitle r3 = new ReqChangeTitle(Request.ApprovalStatus.Pending, this.studentID , oldTitle, SupervisorID, newTitle);
-		System.out.println(SupervisorID);
-		System.out.println(oldTitle);
+		System.out.println("Supervisor Name: " + SupervisorID);
+		System.out.println("Previous Title: " + oldTitle);
 		r3.addRequest();
+		System.out.println("New Title:" + newTitle);
 		
 	}
 
