@@ -16,19 +16,6 @@ public class ReqChangeTitle extends Request{
 		this.newProjTitle = newProjTitle;
 	}
 	
-	public String getSupName() {
-		return supName;
-	}
-	public void setSupName(String supName) {
-		this.supName = supName;
-	}
-	public String getNewProjTitle() {
-		return newProjTitle;
-	}
-	public void setNewProjTitle(String newProjTitle) {
-		this.newProjTitle = newProjTitle;
-	}
-	
 	public void addRequest()
 	{
 		Filepath f = new Filepath();
@@ -38,7 +25,7 @@ public class ReqChangeTitle extends Request{
 		{
 	            // Add a new row to the bottom of the file
 	            out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supName,this.newProjTitle).println();
-	            System.out.println("Data appended to file successfully!");
+	            System.out.println("Request sent successfully");
 
         } catch (IOException e) 
 			{
