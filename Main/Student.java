@@ -89,6 +89,39 @@ public class Student extends User{
 	             e.printStackTrace();
 	         }
 	 }
+	 
+	 public Student(String studID, int dummy) throws FileNotFoundException, IOException
+	 {
+	  this.studentID = studID;
+	  Filepath f = new Filepath();
+	  try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
+	  {
+	   int found = 0;
+	   String line = r.readLine();
+	   while(line!=null && found == 0)
+	   {
+	    // Add a new row to the bottom of the file
+	             String[] email = line.split(",");
+	             String studentEmail = email[1];     
+	             String parts[] = email[1].split("@");//not sure what to add here
+	             if (parts[0].equals(studentID))
+	             {
+	              this.studentName = email[0];
+	              this.studentEmail = studentEmail;
+	              this.proj = getProj(studentID);
+	           this.password = email[2];
+	              this.status = setStatus(email[6]);
+	              found = 1;
+	             }
+	             line = r.readLine();
+	   }
+	             
+	        } 
+	  catch (IOException e) 
+	  {
+	            e.printStackTrace();
+	        }
+	 }
 	
 
 	private Project getProj(String studentID) throws IOException {
@@ -464,7 +497,7 @@ public class Student extends User{
 			{
 				String[] parts = line.split(",");
 				
-				if ( (!parts[1].equals("ChangeSup")) && parts[2].equals(this.studentID)) //Check for student id and the relevant request type
+				if ( (!parts[1].equals("ReqChangeSup")) && parts[2].equals(this.studentID)) //Check for student id and the relevant request type
 				{
 					if (parts[0].equals("Pending")) {
 						System.out.println("**NEW** \t");
