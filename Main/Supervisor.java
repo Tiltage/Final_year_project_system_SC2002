@@ -214,45 +214,48 @@ public void modifyProj() {
 	String line;
 	String projTitle, newProjTitle;
 	Scanner sc = new Scanner(System.in);
-	
+	this.viewProj();
 	System.out.println("Enter project number to modify");
-projNumber = sc.nextInt();
+	projNumber = sc.nextInt();
 
-Filepath f = new Filepath();
-try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
-{
-	line = r.readLine();
-	for(int i=0;i<projNumber;i++)
+	Filepath f = new Filepath();
+	try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 	{
 		line = r.readLine();
-	}
-	
-	String[] parts = line.split(",");
-	
-	if (parts[0].equals(this.supervisorName)) {
-		projTitle = parts[1];
-		System.out.println("Project: " + projTitle);
-	}
-	else {
-		System.out.println("Invalid project");
-		return;
-	}
-	
-	System.out.println("Please enter new project title:");
-	sc.nextLine();
-	newProjTitle = sc.nextLine();
-	Project p = new Project(projTitle);
-	p.editProject(projTitle, newProjTitle);
-	
-	
-} catch (FileNotFoundException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
-} catch (IOException e) {
-	// TODO Auto-generated catch block
+		for(int i=0;i<projNumber;i++)
+		{
+			line = r.readLine();
+		}
+		
+		String[] parts = line.split(",");
+		
+		if (parts[0].equals(this.supervisorName)) {
+			projTitle = parts[1];
+			System.out.println("Project: " + projTitle);
+		}
+		else {
+			System.out.println("Invalid project");
+			return;
+		}
+		
+		System.out.println("Please enter new project title:");
+		sc.nextLine();
+		newProjTitle = sc.nextLine();
+		Project p = new Project(projTitle);
+		p.editProject(projTitle, newProjTitle);
+		
+		Student student = new Student(parts[2]);
+		student.updateStudent(projTitle, this.supervisorName, newProjTitle);
+		
+		
+	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
 		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-}
 
 public void viewRequest() throws FileNotFoundException, IOException
 {
