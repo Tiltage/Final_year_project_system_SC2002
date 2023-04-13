@@ -1,8 +1,8 @@
 ﻿Name,Email,Password,StudID,Project Title,SupervisorID,Status
-CHERN ,YCHERN@e.ntu.edu.sg;,oranges,YCHERN,Sonification of geometry 1,Alexei Sourin,Assigned
+CHERN ,YCHERN@e.ntu.edu.sg;,password,YCHERN,null,null,Unassigned
 KOH ,KOH1@e.ntu.edu.sg;,password,KOH1,null,null,Unassigned
 BRANDON ,BR015@e.ntu.edu.sg;,password,BR015,null,null,Unassigned
-CALVIN ,CT113@e.ntu.edu.sg;,password,CT113,3D printing ,Li Fang,Assigned
+CALVIN ,CT113@e.ntu.edu.sg;,password,CT113,null,null,Unassigned
 CHAN,YCN019@e.ntu.edu.sg;,password,YCN019,null,null,Unassigned
 DENISE,DL007@e.ntu.edu.sg;,password,DL007,null,null,Unassigned
 DONG,DON84@e.ntu.edu.sg;,password,DON84,null,null,Unassigned
