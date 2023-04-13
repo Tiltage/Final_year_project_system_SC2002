@@ -30,7 +30,7 @@ public class ReqAlloc extends Request{
 		{
 	            // Add a new row to the bottom of the file
 			out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supervisorName,this.newSupName).println();
-            System.out.println("Data appended to file successfully!");
+			System.out.println("Request sent successfully");
 
         } catch (IOException e) 
 			{

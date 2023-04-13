@@ -13,19 +13,6 @@ public class ReqChangeSup extends Request{
 		this.newSupName = newSupName;
 	}
 	
-	public String getSupName() {
-		return supName;
-	}
-	public void setSupName(String supName) {
-		this.supName = supName;
-	}
-	public String getNewSupName() {
-		return newSupName;
-	}
-	public void setNewSupName(String newSupName) {
-		this.newSupName = newSupName;
-	}
-	
 	public void addRequest()
 	  {
 	    Filepath f = new Filepath();
@@ -37,7 +24,7 @@ public class ReqChangeSup extends Request{
 	            br.close();
 	              // Add a new row to the bottom of the file
 	              out.printf("%s,%s,%s,%s,%s,%s", this.isApprovalStatus(), this.getType(), this.getStudentID(), this.getProjTitle(),this.supName,this.newSupName).println();
-	              System.out.println("Data appended to file successfully!");
+	              System.out.println("Request sent successfully");
 
 	        } catch (IOException e) 
 	      {

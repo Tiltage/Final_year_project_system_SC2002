@@ -27,6 +27,7 @@ public class SupervisorMenu {
 			System.out.println("6 : Create new project ");
 			System.out.println("7 : View projects ");
 			System.out.println("8 : Update projects "); //to modify title himself
+			System.out.println("-1 : Exit ");
 			choice=sc.nextInt();
 			break;
 		
@@ -36,6 +37,7 @@ public class SupervisorMenu {
 			System.out.println("10 : View request history ");
 			System.out.println("11 : Approve requests "); //includes change title requests
 			System.out.println("12 : Reject requests ");
+			System.out.println("-1 : Exit ");
 			choice=sc.nextInt();
 			break;
 		

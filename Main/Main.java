@@ -15,7 +15,7 @@ public class Main {
 		boolean access = false;
 		String password;
 		String UserID=null;
-		System.out.println("Enter User type ");
+		System.out.println("Enter User type (-1 to quit) ");
 		System.out.println("1. Student");
 		System.out.println("2. Supervisor");
 		System.out.println("3. FYP Coordinator");
@@ -25,7 +25,7 @@ public class Main {
 		sc.nextLine();  				//input buffer
 		
 		
-		while (userType == 1 || userType==2 || userType ==3) {
+		while (userType>0) {
 			
 		switch(userType)
 		{
@@ -44,7 +44,7 @@ public class Main {
 					if (check(UserID, password, 1) == true)
 					{
 						access = true;
-						Student s = new Student(UserID);
+						Student s = new Student(UserID,password);
 						menuChoice=StudentMenu.display();
 						
 						while (menuChoice != 8) 
@@ -128,13 +128,14 @@ public class Main {
 		default:
 			System.out.println("Invalid Choice");
 		}
-		
+		System.out.println("Enter User type (-1 to quit) ");
 		System.out.println("1. Student");
 		System.out.println("2. Supervisor");
 		System.out.println("3. FYP Coordinator");
 		userType = sc.nextInt();
 		sc.nextLine();   //input buffer
 		}
+		System.out.println("Thank you for using the program!");
 	}
 	
 	private static boolean check(String UserID, String pw, int choice) throws IOException
