@@ -719,7 +719,6 @@ public class Student extends User{
 		        {
 		             lineNumber++;
 			         String[] parts = line.split(",");
-			         System.out.println("Current ID: " + this.getID());
 				     if (parts[4].equals(projectTitle))
 				     {
 				          newData = String.format("%s,%s,%s,%s,%s,%s,%s", parts[0], parts[1], parts[2], parts[3], newProjectTitle, supName, parts[6]);

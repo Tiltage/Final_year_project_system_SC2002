@@ -27,7 +27,6 @@ public class Coordinator extends Supervisor {
 	{
 		super(facultyID, supervisorName, supervisorEmail);
 		this.password = getPW();
-		//super(facultyID, supervisorName, supervisorEmail, numProj); not sure whats numproj is for
 	}
 	
 	public Coordinator (String facultyID, String password) throws FileNotFoundException, IOException

@@ -22,10 +22,7 @@ public class Supervisor extends User {
 		this.projArr = generateProjArr();
 		this.numProj = projArr.length;
 	}
-	public Supervisor()
-	{
-		
-	}
+
 	public Supervisor(String supName) throws FileNotFoundException, IOException
 	{
 		this.supervisorName = supName;
@@ -44,12 +41,8 @@ public class Supervisor extends User {
 		            if (email[0].equals(supervisorName))
 		            {
 		            	this.facultyID = parts[0];
-		            	//System.out.println("parts00: " + parts[0]);
 		            	this.supervisorEmail = email[1];
-		            	//System.out.println("supemail: " + email[1]);
 		            	this.password = email[2];
-		            	//System.out.println("parts20: " + this.password);
-		            	//System.out.println("SupID: " + this.getFacultyID());
 		            	found = 1;
 		            }
 		            line = r.readLine();
@@ -82,9 +75,7 @@ public class Supervisor extends User {
 		            if (parts[0].equals(facultyID))
 		            {
 		            	this.supervisorName = email[0];
-		            	//System.out.println("parts00: " + parts[0]);
 		            	this.supervisorEmail = email[1];
-		            	//System.out.println("supemail: " + email[1]);
 		            	found = 1;
 		            }
 		            line = r.readLine();
@@ -110,7 +101,7 @@ public class Supervisor extends User {
 	{
 		List<Project> list = new ArrayList<>();
 		Filepath f = new Filepath();
-		System.out.println(this.supervisorName);
+		//System.out.println(this.supervisorName);
 		try (BufferedReader r = new BufferedReader(new FileReader(f.getPROJFILENAME())))
 		{
 			String line = r.readLine();
@@ -131,7 +122,6 @@ public class Supervisor extends User {
         for(int i=0; i<n; i++) 
         {
             projs[i] = list.get(i);
-            //System.out.println(projs[i].getStudentName());
         }
 		return projs;
 	}
@@ -139,10 +129,8 @@ public class Supervisor extends User {
 	private int generateAllocProjs(Project[] projArr)
 	{
 		int count = 0;
-		System.out.println(this.numProj);
 		for (int i=0; i<projArr.length; i++)
 		{
-			System.out.println(projArr[i].getProjTitle());
 			if (projArr[i].getStatus().toString().equals("Allocated"))
 			{
 				count++;
