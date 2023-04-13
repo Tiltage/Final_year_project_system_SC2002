@@ -143,10 +143,13 @@ public class Student extends User{
 	    
 	    if (this.status==Status.Ended) {
 	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+	    	return;
 	    }
 	    
 	    if (this.status==Status.Assigned) {
 	    	System.out.println("You have already been assigned a project");
+	    	return;
+	    	
 	    }
 	    
 	    
@@ -304,8 +307,8 @@ public class Student extends User{
 	          Filepath f = new Filepath();
 	         
 	        System.out.println("Confirm selection");
-	        System.out.println("continue : 1");
-	        System.out.println("quit : -1");
+	        System.out.println("Continue : 1");
+	        System.out.println("Quit : -1");
 	        int confirm = sc.nextInt();
 	        
 	        if (confirm!=1) {
@@ -351,9 +354,9 @@ public class Student extends User{
 	            {
 	              String[] parts = line.split(",");
 	              
-	              if (parts[2].equals(this.studentID))
+	              if (parts[3].equals(this.studentID))
 	              {
-	                title=parts[3];                //iterate to find the current title new (need it to pass in as parameter)
+	                title=parts[4];                //iterate to find the current title new (need it to pass in as parameter)
 	                break;
 	                
 	              }
@@ -368,7 +371,7 @@ public class Student extends User{
 	            e.printStackTrace();
 	          }
 	          System.out.println();
-	          
+	          System.out.println(title);
 	          ReqDeregister r = new ReqDeregister(Request.ApprovalStatus.Pending, this.studentID, title);
 	          r.addRequest();
 	          }  
@@ -422,10 +425,6 @@ public class Student extends User{
 			
 		int count=1; 
 		int recent=-1;
-		
-	    if (this.status==Status.Ended) {
-	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
-	    }
 		
 		Filepath f = new Filepath();
 		System.out.println("Recent request status: ");
