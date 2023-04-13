@@ -203,7 +203,7 @@ public class Student extends User{
 	    Filepath f = new Filepath();
 	    
 	    if (this.status==Status.Ended) {
-	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+	    	System.out.println("You are not allowed to make a selection again as you deregistered your FYP.");
 	    	return;
 	    }
 	    
@@ -442,10 +442,11 @@ public class Student extends User{
 	public void viewProject() {
 		
 	    if (this.status==Status.Ended) {
-	    	System.out.println(" You are not allowed to make a selection again as you deregistered your FYP.");
+	    	System.out.println("You are not allowed to view as you deregistered your FYP.");
+	    	return;
 	    }
 		
-		if (this.status != Status.Assigned) {
+	    if (this.status != Status.Assigned) {
 			System.out.println("You have not been assigned a project");    //sanity check
 			return;
 		}
