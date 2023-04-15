@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 import Main.Request.ApprovalStatus;
 
-public class Coordinator extends Supervisor implements User{
+public class Coordinator extends Supervisor{
 	
 	private String coordinatorName;
 	private String coordinatorEmail;

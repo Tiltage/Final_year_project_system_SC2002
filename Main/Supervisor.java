@@ -214,7 +214,7 @@ public void modifyProj() {
 	String line;
 	String projTitle, newProjTitle;
 	Scanner sc = new Scanner(System.in);
-	this.viewProj();
+	this.viewProject();
 	System.out.println("Enter project number to modify");
 	projNumber = sc.nextInt();
 

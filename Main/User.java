@@ -13,6 +13,6 @@ public interface User {
 	
 	public abstract void viewRequest() throws FileNotFoundException, IOException;
 
-	public abstract void viewproject();
+	public abstract void viewProject();
 	
 }
