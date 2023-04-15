@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 import Main.Request.ApprovalStatus;
 
-public class Coordinator extends Supervisor {
+public class Coordinator extends Supervisor implements User{
 	
 	private String coordinatorName;
 	private String coordinatorEmail;
@@ -711,11 +711,5 @@ public class Coordinator extends Supervisor {
 	         e.printStackTrace();
 	        }
 	 }
-/*	public static void main(String[] args) throws FileNotFoundException, IOException
-	{
-		Coordinator co = new Coordinator("Li fang", "password");
-		co.changeAllOthersToAvailOrUnavail("Bo An", 1);
-	}
-	*/
 }
 

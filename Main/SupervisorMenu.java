@@ -53,7 +53,6 @@ public class SupervisorMenu {
 		
 		case 1 : 
 			sp.changePW();
-			//if change password need quit and relogin to try again
 			System.out.println("Logging you out to retry password.");
 			break;
 		
@@ -62,7 +61,7 @@ public class SupervisorMenu {
 			break;
 			
 		case 7 : 
-			sp.viewProj();
+			sp.viewProject();
 			break;
 			
 		case 8 : 

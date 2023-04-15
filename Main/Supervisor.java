@@ -2,7 +2,7 @@ package Main;
 import java.io.*;
 import java.util.*;
 
-public class Supervisor extends User {
+public class Supervisor implements User {
 	
 	private String facultyID ;
 	private String supervisorName;
@@ -177,7 +177,7 @@ else
 
 }
 
-public void viewProj() 
+public void viewProject() 
 {
 	int count=1;
 	Filepath f = new Filepath();

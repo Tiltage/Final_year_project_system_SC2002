@@ -4,7 +4,7 @@ import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class Request {
+public abstract class Request {
 	enum RequestType {ReqAlloc, ReqDeregister, ReqChangeTitle, ReqChangeSup};
 	enum ApprovalStatus {Pending,Rejected,Approved};
 	private RequestType type;
@@ -18,10 +18,8 @@ public class Request {
 		this.projTitle = projTitle;
 	}
 	
-	public void addRequest()
-	{
-		//To be overridden in inherited classes
-	}
+	public abstract void addRequest();
+	
 	
 	public void updateRequest(String projTitle, ApprovalStatus status)
 	{

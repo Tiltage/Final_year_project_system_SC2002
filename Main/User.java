@@ -3,13 +3,7 @@ package Main;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public abstract class User {
-	
-	private String UserID;
-	private String password = "password";
-	private Request[] reqHist;
-
-	public User() {}
+public interface User {
 	
 	public abstract void changePW();
 	
@@ -19,5 +13,6 @@ public abstract class User {
 	
 	public abstract void viewRequest() throws FileNotFoundException, IOException;
 
-
+	public abstract void viewproject();
+	
 }

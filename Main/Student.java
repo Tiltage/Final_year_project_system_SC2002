@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Student extends User{
+public class Student implements User{
 	
 	enum Status {Unassigned,Pending,Assigned,Ended}
 	
