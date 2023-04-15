@@ -88,7 +88,7 @@ public class CoordinatorMenu {
 			break;
 			
 		case 9 : 
-			co.viewProj();
+			co.viewProject();
 			break;
 			
 		case 10 : 
