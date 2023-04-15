@@ -183,6 +183,14 @@ public class Coordinator extends Supervisor{
 								else
 								{
 									request.updateRequest(parts[3], Request.ApprovalStatus.Rejected);
+									
+									System.out.println("Project reverted to available!");
+									Project p = new Project(parts[3]);
+									p.editProject(parts[3],Project.Status.Available);
+									
+									System.out.println("Student status reverted to Unassigned");
+									Student s = new Student(parts[2], 0);
+									s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Unassigned);
 								}
 															
 							} 
@@ -247,6 +255,14 @@ public class Coordinator extends Supervisor{
 								else
 								{
 									request.updateRequest(parts[3], Request.ApprovalStatus.Rejected);
+									
+									System.out.println("Project reverted to available!");
+									Project p = new Project(parts[3]);
+									p.editProject(parts[3],Project.Status.Available);
+									
+									System.out.println("Student status reverted to Unassigned");
+									Student s = new Student(parts[2], 0);
+									s.updateStudent(p.getProjTitle(), p.getSupervisorName(), Student.Status.Unassigned);
 								}
 								
 							}
