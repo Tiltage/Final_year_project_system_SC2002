@@ -159,7 +159,7 @@ public class Coordinator extends Supervisor{
 								{
 									choice2 = false;
 									System.out.println("Supervisor has reached the maximum number of projects. Currently overseeing " + temp.getNumAllocProjs() + " projects.");
-									System.out.println("Press 1 to proceed with approval (Enter -1 to go back):");
+									System.out.println("Press 1 to proceed with approval (Enter -1 to reject instead):");
 									Scanner sc1 = new Scanner(System.in);
 									choice2 = sc1.nextInt() == 1 ? true : false;
 								}
@@ -216,7 +216,7 @@ public class Coordinator extends Supervisor{
 								{
 									choice2 = false;
 									System.out.println("Supervisor has reached the maximum number of projects. Currently overseeing " + temp.getNumAllocProjs() + " projects.");
-									System.out.println("Press 1 to proceed with approval (Enter -1 to go back):");
+									System.out.println("Press 1 to proceed with approval (Enter -1 to reject instead):");
 									Scanner sc1 = new Scanner(System.in);
 									choice2 = sc1.nextInt() == 1 ? true : false;
 								}
