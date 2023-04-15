@@ -106,27 +106,55 @@ public abstract class Request {
         	e.printStackTrace();
         }
 	}
+	/**
+	 * @return Request's approval status
+	 */
 	public ApprovalStatus isApprovalStatus() {
 		return approvalStatus;
 	}
+	/**
+	 * Sets the request's approval status
+	 * @param approvalStatus
+	 */
 	public void setApprovalStatus(ApprovalStatus approvalStatus) {
 		this.approvalStatus = approvalStatus;
 	}
+	/**
+	 * @return Request's type
+	 */
 	public RequestType getType() {
 		return type;
 	}
+	/**
+	 * Sets request's type
+	 * @param type Request type
+	 */
 	public void setType(RequestType type) {
 		this.type = type;
 	}
+	/**
+	 * @return Request's involved StudentID
+	 */
 	public String getStudentID() {
 		return studentID;
 	}
+	/**
+	 * Set the request's involved studentID
+	 * @param studentID Request's StudentID
+	 */
 	public void setStudentID(String studentID) {
 		this.studentID = studentID;
 	}
+	/**
+	 * @return Request's Project's Title
+	 */
 	public String getProjTitle() {
 		return projTitle;
 	}
+	/**
+	 * Sets Request's project title
+	 * @param projTitle Request Project Title
+	 */
 	public void setProjTitle(String projTitle) {
 		this.projTitle = projTitle;
 	}
