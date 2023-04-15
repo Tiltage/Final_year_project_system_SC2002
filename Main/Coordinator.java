@@ -256,9 +256,9 @@ public class Coordinator extends Supervisor{
 								{
 									request.updateRequest(parts[3], Request.ApprovalStatus.Rejected);
 									
-									System.out.println("Project reverted to available!");
+									System.out.println("Project changed to Unavailable as Supervisor has reached max number of projects!");
 									Project p = new Project(parts[3]);
-									p.editProject(parts[3],Project.Status.Available);
+									p.editProject(parts[3],Project.Status.Unavailable);
 									
 									System.out.println("Student status reverted to Unassigned");
 									Student s = new Student(parts[2], 0);
