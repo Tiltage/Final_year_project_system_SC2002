@@ -145,7 +145,6 @@ public class Coordinator extends Supervisor{
 							
 							//Edit Request file status to reflect changes
 							ReqAlloc request = new ReqAlloc(result, parts[2], parts[3]);
-							request.updateRequest(parts[3], result);
 							
 							if (approve)
 							{
@@ -166,6 +165,7 @@ public class Coordinator extends Supervisor{
 								
 								if (choice2)
 								{
+									request.updateRequest(parts[3], result);
 									//Edit Project file status and sup name to reflect changes
 									System.out.println("Project Allocated successfully!");
 									Project p = new Project(parts[3]);
@@ -211,11 +211,9 @@ public class Coordinator extends Supervisor{
 						}
 						else if (parts[0].equals("Pending") && parts[1].equals("ReqChangeSup"))
 						{
-							ReqChangeSup request = new ReqChangeSup(result, parts[2], parts[3], parts[4], parts[5]);
-							request.updateRequest(parts[3], result);
-							
 							if (approve)
 							{
+								ReqChangeSup request = new ReqChangeSup(result, parts[2], parts[3], parts[4], parts[5]);
 								boolean choice2 = true;
 								//If request chosen is ReqChangeSup
 								//If approving this request will not result in supervisor having >2 projects
@@ -231,6 +229,8 @@ public class Coordinator extends Supervisor{
 								
 								if (choice2)
 								{
+									request.updateRequest(parts[3], result);
+									
 									Project p = new Project(parts[3]);
 									p.editProjectSup(parts[3], parts[5]);
 									
@@ -810,7 +810,7 @@ public class Coordinator extends Supervisor{
 	
 	/**
 	 * Returns password of this coordinator class
-	 * @return password This coordinator's password
+	 * @return This coordinator's password
 	 */
 	
 	public String getPW() {

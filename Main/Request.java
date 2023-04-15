@@ -76,7 +76,7 @@ public abstract class Request {
 		        {
 		             lineNumber++;
 			         String[] parts = line.split(",");
-			        if (parts[3].equals(projTitle)&&parts[1].equals(this.getType().toString()))
+			        if (parts[3].equals(projTitle)&&parts[1].equals(this.getType().toString())&&parts[0].equals("Pending"))
 				     {
 				    	  newData = String.format("%s,%s,%s,%s,%s,%s", status, parts[1], parts[2], parts[3], parts[4], parts[5]);
 				          found = 1;
