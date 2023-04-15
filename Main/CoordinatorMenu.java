@@ -3,13 +3,27 @@ package Main;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
+/**
+ * @author Winfred
+ * @version 1.0
+ * @since 15/4/2023
+ */
 
 public class CoordinatorMenu {
+	/**
+	 * Preliminary choice if action is immediately executable
+	 */
 	static int choice;
+	/**
+	 * To be used in secondary Menu if further choice is required
+	 */
 	static int choice2;
-	static String keyword="x";
 	static Scanner sc = new Scanner(System.in);
 	
+	/**
+	 * Displays preliminary menu for given Coordinator class
+	 * @return choice to determine if secondary menu is required
+	 */
 	public static int display() {
 		
 		System.out.println("Supervisor menu page :");
@@ -69,6 +83,13 @@ public class CoordinatorMenu {
 		return choice;
 	}
 	
+	/**
+	 * Executes action depending on action chosen by Coordinator
+	 * @param c Final choice for action 
+	 * @param co This Coordinator Class
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	public static void execution(int c,Coordinator co) throws FileNotFoundException, IOException {
 		
 		switch (c) {

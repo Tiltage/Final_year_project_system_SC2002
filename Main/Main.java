@@ -5,15 +5,40 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
-
+/**
+ * @author Winfred, Melvin
+ * @version 1.0
+ * @since 15/4/2023
+ */
 public class Main {
+	/**
+	 * Main function
+	 * @param args Default constructor
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 
 	public static void main(String[] args) throws FileNotFoundException, IOException 
 	{
+		/**
+		 * To be used in switch case to display different menus depending on User
+		 */
 		int userType;
+		/**
+		 * To store action taken by user
+		 */
 		int menuChoice;
+		/**
+		 * Gatekeep login page unless password and UserID is valid for given userType
+		 */
 		boolean access = false;
+		/**
+		 * Entered password by User
+		 */
 		String password;
+		/**
+		 * FacultyID / StudentID 
+		 */
 		String UserID=null;
 		System.out.println("Enter User type (-1 to quit) ");
 		System.out.println("1. Student");
@@ -137,6 +162,15 @@ public class Main {
 		}
 		System.out.println("Thank you for using the program!");
 	}
+	
+	/**
+	 * Checks if UserID and Password is valid
+	 * @param UserID This user's keyed in UserID
+	 * @param pw This user's keyed in password
+	 * @param choice Determines which csv to look through
+	 * @return True/False depending if login details are valid
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	
 	private static boolean check(String UserID, String pw, int choice) throws IOException
 	{

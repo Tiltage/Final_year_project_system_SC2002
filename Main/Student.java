@@ -9,21 +9,51 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
+/**
+ * @author Winfred
+ * @version 1.0
+ * @since 15/4/2023
+ */
 public class Student implements User{
-	
+	/**
+	 * Enum list for Student's FYP allocation status
+	 */
 	enum Status {Unassigned,Pending,Assigned,Ended}
-	
+	/**
+	 * Student's ID
+	 */
 	private String studentID;
+	/**
+	 * Student's Name
+	 */
 	private String studentName;
+	/**
+	 * Student's Email
+	 */
 	private String studentEmail;
+	/**
+	 * Student's password
+	 */
 	private String password;
+	/**
+	 * Student's project allocation status
+	 */
 	private Status status; 
+	/**
+	 * Student's assigned Project class
+	 */
 	private Project proj; 
 	
 	
 	Scanner sc = new Scanner (System.in);
-	
+	/**
+	 * Creates a new Student with studentID and password.
+	 * Used when logging in.
+	 * @param studentID Student's ID
+	 * @param password Student's password
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	public Student(String studentID, String password) throws FileNotFoundException, IOException 
 	 {
 	  this.studentID = studentID;
@@ -57,6 +87,12 @@ public class Student implements User{
 	        }
 	 }
 	 
+	/**
+	 * Creates a new Student with student name
+	 * @param studName Student's Name
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	 public Student(String studName) throws FileNotFoundException, IOException
 	 {
 	  this.studentName = studName;
@@ -90,6 +126,13 @@ public class Student implements User{
 	         }
 	 }
 	 
+	 /**
+	  * Creates a new Student with student ID
+	  * @param studID Student's ID
+	  * @param dummy Placeholder for method overloading
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	  */
 	 public Student(String studID, int dummy) throws FileNotFoundException, IOException
 	 {
 	  this.studentID = studID;
@@ -123,8 +166,14 @@ public class Student implements User{
 	        }
 	 }
 	
-
-	private Project getProj(String studentID) throws IOException {
+	 /**
+	  * Returns Student's assigned project. 
+	  * Returns NULL if unallocated.
+	  * @param studentID Student's ID
+	  * @return Student's allocated project class
+	  * @throws IOException When the I/O operation is interrupted
+	  */
+	 private Project getProj(String studentID) throws IOException {
 		Filepath f = new Filepath();
 		try(BufferedReader r = new BufferedReader(new FileReader(f.getSTUDFILENAME())))
 		{
@@ -149,12 +198,10 @@ public class Student implements User{
 		return null;
 	}
 	
-	private Status setStatus (String status)
-	{
-		this.status = Status.valueOf(status);
-		return this.status;
-	}
-	
+	/**
+	 * Changes password for this Student
+	 * Overrides the User's changePW() implemented method
+	 */
 	@Override
 	public void changePW() 
 	{
@@ -187,18 +234,10 @@ public class Student implements User{
 		
 	}
 
-	public String getPW() {
-		return this.password;
-	}
-
-	@Override
-	public String getID() 
-	{
-		return this.studentID;
-	}
-	
-
-
+	/**
+	 * Prints out all Projects listed as "Available".
+	 * Looks through project csv file
+	 */
 	public void viewAvailableProjects() {
 	    int count=1;
 	    Filepath f = new Filepath();
@@ -243,7 +282,13 @@ public class Student implements User{
 	    System.out.println();
 	    
 	  }
-
+	/**
+	 * Submits a deallocation / allocation request for a project of their choice
+	 * Ensures Student's current status allows for project allocation / deallocation
+	 * @param req Detemines if it is a allocation / deallocation request
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	  public void reqProj(boolean req) throws FileNotFoundException, IOException {
 
 	    if (req==true)                 //for req project allocation
@@ -260,12 +305,13 @@ public class Student implements User{
 	    }
 	    
 	    if (this.status==Status.Assigned) {
-	      System.out.println("You have been assigned a project."); //sanity check
+	      //System.out.println("You have been assigned a project."); //sanity check
 	      return;
 	    }
 
 	    if (this.status==Status.Ended) {
-	    	System.out.println("You are not allowed to make a selection again as you deregistered your FYP.");
+	    	//System.out.println("You are not allowed to make a selection again as you deregistered your FYP.");
+	    	return;
 	    }
 	    
 	    int count=1;
@@ -439,7 +485,10 @@ public class Student implements User{
 	          }  
 	        }
 	          
-	
+	/**
+	 * Prints out details of Student's allocated project
+	 * Ensures Project exists
+	 */
 	public void viewProject() {
 		
 	    if (this.status==Status.Ended) {
@@ -483,6 +532,9 @@ public class Student implements User{
 		
 	}
 
+	/**
+	 * Prints out pending requests followed by historical requests
+	 */
 	@Override
 	public void viewRequest() {
 			
@@ -570,7 +622,12 @@ public class Student implements User{
 		}
 
 	}
-
+	
+	/**
+	 * Submits a Change Title request for allocated Project
+	 * Ensures Student is currently allocated to a Project
+	 * Ensures no pending deallocation request
+	 */
 	public void reqChangeTitle() {        //if got pending deallocation req, we dont allow
 		
 	    if (this.status==Status.Ended) {
@@ -653,6 +710,10 @@ public class Student implements User{
 		
 	}
 
+	/**
+	 * Updates a Student's password in the csv file
+	 * @param password This student's new password
+	 */
 	private void updateStudent(String password)
 	{	        
         // Read the file into memory
@@ -706,6 +767,15 @@ public class Student implements User{
         	e.printStackTrace();
         }
 	}
+	
+	/**
+	 * Updates a Student's allocation status in the csv file
+	 * Updates Student's Project title and Supervisor Name.
+	 * Will update with relevant NULL values if deallocation request calls this function
+	 * @param projectTitle Allocated Project title. NULL if called by deallocation approval.
+	 * @param supName Allocated Project's Supervisor' Name. NULL if called by deallocation approval.
+	 * @param newStatus Student's new status
+	 */
 	public void updateStudent(String projectTitle, String supName, Status newStatus)
 	{	        
         // Read the file into memory
@@ -753,7 +823,12 @@ public class Student implements User{
         	e.printStackTrace();
         }
 	}
-	
+	/**
+	 * Updates Student's allocated Project's title in the csv file
+	 * @param projectTitle Allocated Project title. NULL if called by deallocation approval.
+	 * @param supName Allocated Project's Supervisor' Name. NULL if called by deallocation approval.
+	 * @param newProjectTitle New Project's title 
+	 */
 	public void updateStudent(String projectTitle, String supName, String newProjectTitle)
 	{	        
         // Read the file into memory
@@ -800,5 +875,33 @@ public class Student implements User{
         	e.printStackTrace();
         }
 	}
+	
+	/**
+	 * Returns Student's current password
+	 */
+	public String getPW() {
+		return this.password;
+	}
+
+	/**
+	 * Returns Student's ID
+	 */
+	@Override
+	public String getID() 
+	{
+		return this.studentID;
+	}
+	 /**
+	  * Converts status from a String to an Enum to be used in constructor.
+	  * @param status Student's allocation status as a String
+	  * @return Student's allocation status as an Enum
+	  */
+	private Status setStatus (String status)
+	{
+		this.status = Status.valueOf(status);
+		return this.status;
+	}
+	
+	
 
 }

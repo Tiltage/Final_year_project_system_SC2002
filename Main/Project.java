@@ -2,18 +2,49 @@ package Main;
 
 import java.io.*;
 import java.util.*;
-
+/**
+ * @author Reyan
+ * @version 1.0
+ * @since 15/4/2023
+ */
 public class Project {
-	
+	/**
+	 * Enum list for Project's current status
+	 */
 	enum Status {Available, Unavailable, Allocated, Reserved}
+	/**
+	 * Assigned Student
+	 */
 	private String studentName;
+	/**
+	 * Project ID
+	 */
 	private int projID;
+	/**
+	 * Name of supervisor that created this project
+	 */
 	private String supervisorName;
+	/**
+	 * Project's Title
+	 */
 	private String projTitle;
+	/**
+	 * Status of Project
+	 */
 	private Status status;
 	
+	/**
+	 * Creates a new Project with Supervisor name, Project Title and Project's Status.
+	 * Default constructor.
+	 * @param supervisorName Project's Supervisor's Name
+	 * @param projTitle This Project's Title
+	 * @param status This Project's Status
+	 */
 	public Project(String supervisorName, String projTitle, Status status) 
 	{
+		/**
+		 * 
+		 */
 		this.supervisorName = supervisorName;
 		this.projTitle = projTitle;
 		this.status = status; // Default status set to available
@@ -38,7 +69,12 @@ public class Project {
             e.printStackTrace();
         }
 	}
-
+	
+	/**
+	 * Creates a new Project with Project Title.
+	 * Looks through Project csv file to assign attributes
+	 * @param projTitle This Project's Title
+	 */
 	public Project(String projTitle) 
 	{
 		Filepath f = new Filepath();
@@ -71,7 +107,9 @@ public class Project {
 	            e.printStackTrace();
 	        }
 	}
-	
+	/**
+	 * Appends a new project to end of csv file when called with its attributes
+	 */
 	public void addProject() 
 	{	
 		Filepath f = new Filepath();
@@ -100,6 +138,14 @@ public class Project {
 	        }
 		
 	}
+	/**
+	 * Returns allocated Student's name by looking through CSV file.
+	 * Returns NULL if not allocated.
+	 * Private method used in constructor
+	 * @return Student's Name or NULL
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	
 	private String getstudentName() throws FileNotFoundException, IOException
 	{
@@ -124,11 +170,20 @@ public class Project {
 		return name;
 	}
 	
+	/**
+	 * Returns allocated Student's name by Project's attribute
+	 * @return This student's name
+	 */
 	public String getStudentName()
 	{
 		return this.studentName;
 	}
 	
+	/**
+	 * Updates Project's status in csv file
+	 * @param projTitle This project's title
+	 * @param status This project's status
+	 */
 	public void editProject(String projTitle, Status status)
 	{	        
         // Read the file into memory
@@ -182,6 +237,12 @@ public class Project {
         }
 	}
 	
+	/**
+	 * Updates Project's Title in csv file
+	 * @param projTitle Original Project Title
+	 * @param newProjTitle New Project Title
+	 */
+	
 	public void editProject(String projTitle, String newProjTitle)
 	{	        
         // Read the file into memory
@@ -234,6 +295,11 @@ public class Project {
         }
 	}
 	
+	/**
+	 * Updates Project's assigned supervisor
+	 * @param projTitle This project Title
+	 * @param newSup New supervisor
+	 */
 	public void editProjectSup(String projTitle, String newSup)
 	{	        
         // Read the file into memory
@@ -288,28 +354,55 @@ public class Project {
         }
 	}
 	
-
+	/**
+	 * @return Project's ID
+	 */
 	public int getProjID() {
 		return projID;
 	}
+	/**
+	 * @param projID Project ID
+	 * Sets Project ID
+	 */
 	public void setProjID(int projID) {
 		this.projID = projID;
 	}
+	/**
+	 * @return Project's Supervisor's Name
+	 */
 	public String getSupervisorName() {
 		return supervisorName;
 	}
+	/**
+	 * Sets Project's new Supervisor's Name
+	 * @param supervisorName Project's Supervisor's name
+	 */
 	public void setSupervisorName(String supervisorName) {
 		this.supervisorName = supervisorName;
 	}
+	/**
+	 * @return Project's Title
+	 */
 	public String getProjTitle() {
 		return projTitle;
 	}
+	/**
+	 * Sets Project's Title
+	 * @param projTitle Project's new title
+	 */
 	public void setProjTitle(String projTitle) {
 		this.projTitle = projTitle;
 	}
+	/**
+	 * @return Project's Status
+	 */
 	public Status getStatus() {
 		return status;
 	}
+	/**
+	 * Sets Project's Status
+	 * @param status Project's new status
+	 */
 	public void setStatus(Status status) {
 		this.status = status;
 	}

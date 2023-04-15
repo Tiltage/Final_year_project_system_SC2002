@@ -3,24 +3,58 @@ import java.io.*;
 import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
+/**
+ * @author Ryan
+ * @version 1.0
+ * @since 15/4/2023
+ */
 public abstract class Request {
+	/**
+	 * Enum list for Request Type
+	 */
 	enum RequestType {ReqAlloc, ReqDeregister, ReqChangeTitle, ReqChangeSup};
+	/**
+	 * Enum list for Request approval status
+	 */
 	enum ApprovalStatus {Pending,Rejected,Approved};
+	/**
+	 * Request Type
+	 */
 	private RequestType type;
+	/**
+	 * Request Approval Status
+	 */
 	private ApprovalStatus approvalStatus;
+	/**
+	 * Student ID of student involved
+	 */
 	private String studentID;
+	/**
+	 * Title of Project involved
+	 */
 	private String projTitle;
 	
+	/**
+	 * Default constructor for Request class
+	 * @param approvalStatus The approval status of the request
+	 * @param studentID The studentID of the student involved
+	 * @param projTitle The title of the project involved
+	 */
 	public Request(ApprovalStatus approvalStatus, String studentID, String projTitle){
 		this.approvalStatus = approvalStatus;
 		this.studentID = studentID;
 		this.projTitle = projTitle;
 	}
-	
+	/**
+	 * Appends a new request to the Request csv file with its attributes
+	 */
 	public abstract void addRequest();
 	
-	
+	/**
+	 * Updates a Request's approval status in the csv file
+	 * @param projTitle The title of the project involved
+	 * @param status The approval status of the request
+	 */
 	public void updateRequest(String projTitle, ApprovalStatus status)
 	{
 		Filepath f = new Filepath();
@@ -72,7 +106,6 @@ public abstract class Request {
         	e.printStackTrace();
         }
 	}
-	
 	public ApprovalStatus isApprovalStatus() {
 		return approvalStatus;
 	}
@@ -97,6 +130,4 @@ public abstract class Request {
 	public void setProjTitle(String projTitle) {
 		this.projTitle = projTitle;
 	}
-	
-	
 }

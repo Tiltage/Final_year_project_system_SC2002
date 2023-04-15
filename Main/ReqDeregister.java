@@ -4,12 +4,32 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
+/**
+ * @author Ryan
+ * @version 1.0
+ * @since 15/4/2023
+ */
 public class ReqDeregister extends Request{
+	/**
+	 * Supervisor's ID
+	 */
 	private String supID;
+	/**
+	 * New Supervisor's Name
+	 */
 	private String newSupName;
+	/**
+	 * Old Supervisor's Name
+	 */
 	private String supervisorName;
-
+	/**
+	 * Constructor for Request Deregister class
+	 * @param approvalStatus The approval status of the request
+	 * @param studentID The studentID of the student involved
+	 * @param projTitle The title of the project involved
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	public ReqDeregister(ApprovalStatus approvalStatus, String studentID, String projTitle) throws FileNotFoundException, IOException{
 		super(approvalStatus, studentID, projTitle);
 		this.setType(RequestType.ReqDeregister);
@@ -20,7 +40,9 @@ public class ReqDeregister extends Request{
 		this.supervisorName = tempsup.getSupervisorName();
 
 	}
-	
+	/**
+	 * Appends a new request to the Request csv file with its attributes
+	 */
 	public void addRequest()
 	{
 		Filepath f = new Filepath();
@@ -37,5 +59,7 @@ public class ReqDeregister extends Request{
 	            e.printStackTrace();
 	        }
 	}
+	
+	
 	
 }

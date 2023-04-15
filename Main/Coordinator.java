@@ -9,32 +9,72 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import Main.Request.ApprovalStatus;
-
+/**
+ * @author Kendrea, Melvin
+ * @version 1.0
+ * @since 15/4/2023
+ */
 public class Coordinator extends Supervisor{
-	
+	/**
+	 * Name of coordinator
+	 */
 	private String coordinatorName;
 	private String coordinatorEmail;
+	/**
+	 * Password of coordinator
+	 */
 	private String password;
+	/**
+	 * Array of Projects created by coordinator
+	 */
 	private Project[] projArr;
+	/**
+	 * Number of Projects created by coordinator
+	 */
 	private int numProj;
+	/**
+	 * Number of created Projects that have been allocated to a Student
+	 */
 	private int numAllocProjs;
 	
 	Scanner sc=new Scanner(System.in);
 	
+	/**
+	 * Creates a new Coordinator with facultyID, Name, Email and number of projects created.
+	 * Default constructor.
+	 * @param facultyID This coordinator's facultyID
+	 * @param supervisorName This coordinator's name
+	 * @param supervisorEmail This coordinator's email
+	 * @param numProj This coordinator's number of created projects
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	public Coordinator(String facultyID, String supervisorName, String supervisorEmail, int numProj) throws FileNotFoundException, IOException 
 	{
 		super(facultyID, supervisorName, supervisorEmail);
 		this.password = getPW();
 	}
-	
+	/**
+	 * Creates a new Coordinator with facultyID, and password.
+	 * Used when logging in.
+	 * Inherited constructor from Supervisor class.
+	 * @param facultyID This coordinator's facultyID
+	 * @param password This coordinator's password
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	public Coordinator (String facultyID, String password) throws FileNotFoundException, IOException
 	{
 		super(facultyID,password);
 		this.password = password;
 		this.coordinatorName = this.getSupervisorName();
 	}
+	/**
+	 * Generates the Coordinator's name from facultyID.
+	 * Looks through COORDFILE.
+	 * @param facultyID This coordinator's facultyID
+	 * @return This coordinator's name
+	 */
 	
 	private static String getCoordName(String facultyID)
 	{
@@ -64,6 +104,16 @@ public class Coordinator extends Supervisor{
     	return coordinatorName;
 	}
 	
+	/**
+	 * Called to approve / reject incoming requests.
+	 * Handles all requests types relevant to Coordinator class.
+	 * Approval edits the project, student and request csv file
+	 * Rejection edits the request csv file.
+	 * Exception: Rejection of Project allocation also edits the student and project file to revert statuses
+	 * @param approve Boolean expression of whether request is to be approved / rejected
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	
 	public void approveReqCoord(Boolean approve) throws FileNotFoundException, IOException 
 	{
@@ -130,6 +180,10 @@ public class Coordinator extends Supervisor{
 									}
 								
 								}
+								else
+								{
+									request.updateRequest(parts[3], Request.ApprovalStatus.Rejected);
+								}
 															
 							} 
 							else
@@ -190,6 +244,10 @@ public class Coordinator extends Supervisor{
 									}
 									System.out.println("Supervisor Changed successfully.");
 								}
+								else
+								{
+									request.updateRequest(parts[3], Request.ApprovalStatus.Rejected);
+								}
 								
 							}
 							System.out.println();	
@@ -240,6 +298,10 @@ public class Coordinator extends Supervisor{
 			}
 		}
 	}
+	
+	/**
+	 * Prints all listed projects regardless of status
+	 */
 
 	public void viewAllProjs() {
 		Filepath f = new Filepath();
@@ -270,6 +332,13 @@ public class Coordinator extends Supervisor{
 		}
 		System.out.println();
 	}
+	
+	/**
+	 * Generates report depending on desired filter.
+	 * Filters: Supervisor name, Student name, Project status, Project Title.
+	 * @throws FileNotFoundException When the csv file cannot be located
+	 * @throws IOException When the I/O operation is interrupted
+	 */
 	
 	public void createReport() throws FileNotFoundException, IOException {
 	    int choice;
@@ -496,7 +565,9 @@ public class Coordinator extends Supervisor{
 	    }
 	  }
 
-	
+	/**
+	 * Prints all pending requests relevant to Coordinator class
+	 */
 	public void viewPendingReqCoord() {
 		Filepath f = new Filepath();
 		int count = 1;
@@ -535,7 +606,9 @@ public class Coordinator extends Supervisor{
 		}
 		System.out.println();
 	}
-	
+	/**
+	 * Prints all approved / rejected requests relevant to Coordinator class
+	 */
 	public void viewReqHistCoord()
 	{
 		int count=1;
@@ -575,6 +648,10 @@ public class Coordinator extends Supervisor{
 		System.out.println();
 	}
 	
+	/**
+	 * Changes password for this coordinator
+	 * Overrides the Supervisor's changePW() implemented method
+	 */
 	@Override
 	public void changePW() {
 		String newPW;
@@ -601,12 +678,11 @@ public class Coordinator extends Supervisor{
 		return;
 		
 	}
-	
-	public String getPW() {
-		return this.password;
-	}
-	
 
+	/**
+	 * Updates the coordinator's csv file with new password
+	 * @param This coordinator's new password
+	 */
 	
 	private void updateCoordinator(String password)
 	{	        
@@ -661,10 +737,14 @@ public class Coordinator extends Supervisor{
         }
 	}
 	
-	public String getCoordinatorName() {
-		return coordinatorName;
-	}
-	
+	/**
+	 * Changes all created projects under this coordinator to Available / Unavailable
+	 * Handles edge cases where approval of Project allocation renders remaining projects Unavailable
+	 * Handles edge cases where approval of Change supervisor renders other projects Available again
+	 * Handles edge cases where approval of Deregistration from Project renders other projects Available again
+	 * @param supName The involved Coordinator's name
+	 * @param mode Determines if remaining projects' statuses are to flip to Available or Unavailable
+	 */
 	private void changeAllOthersToAvailOrUnavail(String supName, int mode)
 	 {
 	  //If mode is 1, change all Available to Unavailable, else change Unavailable to available
@@ -711,5 +791,22 @@ public class Coordinator extends Supervisor{
 	         e.printStackTrace();
 	        }
 	 }
+	
+	/**
+	 * Returns password of this coordinator class
+	 * @return password This coordinator's password
+	 */
+	
+	public String getPW() {
+		return this.password;
+	}
+	/**
+	 * Gets the coordinator's Name
+	 * @return This coordinator's name
+	 */
+	
+	public String getCoordinatorName() {
+		return coordinatorName;
+	}
 }
 
